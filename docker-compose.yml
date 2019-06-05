@@ -1,0 +1,83 @@
+version: '3.1'
+
+services:
+  wordpress:
+    image: wordpress
+    ports:
+     - "80:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 1
+
+    volumes:
+      - ./src:/var/www/html/wp-content/plugins/wp-mapasculturais
+      - wp-uploads:/var/www/html/wp-content/uploads
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db-data:/var/lib/mysql
+
+  mapas-nginx:
+    image: hacklab/mapasculturais-nginx:latest
+    volumes:
+      - mapas-assets:/var/www/html/assets
+      - mapas-public-files:/var/www/html/files
+
+    ports:
+     - "8080:80"
+    depends_on:
+      - mapasculturais
+    links:
+      - mapasculturais
+
+  mapasculturais:
+    image: mapasculturais/mapasculturais:develop
+    ports:
+      - "9000:9000"
+    links:
+      - db-mapas
+    environment:
+      - DB_HOST=db-mapas
+      - DB_NAME=mapas
+      - DB_USER=mapas
+      - DB_PASS=mapas
+      - APP_LCODE=pt_BR
+      - APP_MODE=production
+      - PENDING_PCACHE_RECREATION_INTERVAL=10
+    volumes:
+      - ./compose/local/mapas.config.php:/var/www/html/protected/application/conf/config.d/z.dev.php
+      - mapas-assets:/var/www/html/assets
+      - mapas-public-files:/var/www/html/files
+      - mapas-private-files:/var/www/private-files
+
+    depends_on:
+      - db-mapas
+      
+  db-mapas:
+    image: mdillon/postgis:10
+    environment:
+      - POSTGRES_PASSWORD=mapas
+      - POSTGRES_USER=mapas
+      - POSTGRES_DB=mapas
+    ports:
+      - "5432:5432"
+    volumes:
+      - mapas-db-data:/var/lib/postgresql/data
+      - ./compose/local/mapas.sql:/docker-entrypoint-initdb.d/mapas.sql
+
+volumes:
+  db-data:
+  mapas-db-data:
+  mapas-public-files:
+  mapas-private-files:
+  mapas-assets:
+  wp-uploads:
