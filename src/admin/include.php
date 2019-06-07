@@ -5,7 +5,7 @@ add_action('admin_menu', function(){
 });
 
 function mapasculturais_config_page(){
-    include __DIR__ . '/mapasculturais-config.php';
+    include __DIR__ . '/pages/mapasculturais-config.php';
 }
 
 add_action( 'admin_init', 'mapasculturais_register_settings' );
