@@ -9,9 +9,13 @@ function mapasculturais_config_page(){
 }
 
 add_action( 'admin_init', 'mapasculturais_register_settings' );
-
 function mapasculturais_register_settings(){
     register_setting( 'mapasculturais', 'mapasculturais_url' );
     register_setting( 'mapasculturais', 'mapasculturais_private_key' );
     register_setting( 'mapasculturais', 'mapasculturais_public_key' );
+}
+
+add_action('admin_enqueue_scripts', 'mapasculturais_admin_scripts');
+function mapasculturais_admin_scripts(){
+    wp_enqueue_script('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/js/admin.js');
 }
