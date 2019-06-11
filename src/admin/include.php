@@ -10,9 +10,13 @@ function mapasculturais_config_page(){
 
 add_action( 'admin_init', 'mapasculturais_register_settings' );
 function mapasculturais_register_settings(){
-    register_setting( 'mapasculturais', 'mapasculturais_url' );
-    register_setting( 'mapasculturais', 'mapasculturais_private_key' );
-    register_setting( 'mapasculturais', 'mapasculturais_public_key' );
+    register_setting( 'mapasculturais', 'MAPAS:url' );
+    register_setting( 'mapasculturais', 'MAPAS:private_key' );
+    register_setting( 'mapasculturais', 'MAPAS:public_key' );
+    
+    register_setting( 'mapasculturais', 'MAPAS:agent:import' );
+    register_setting( 'mapasculturais', 'MAPAS:space:import' );
+    register_setting( 'mapasculturais', 'MAPAS:event:import' );
 }
 
 add_action('admin_enqueue_scripts', 'mapasculturais_admin_scripts');
