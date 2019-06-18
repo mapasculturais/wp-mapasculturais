@@ -33,7 +33,8 @@ function mapasculturais_register_post_types() {
 		'hierarchical'       => true,
         'menu_position'      => null,
         'menu_icon'          => 'dashicons-id-alt',
-		'supports'           => [ 'title', 'editor', 'thumbnail', 'excerpt' ]
+		'supports'           => [ 'title', 'editor', 'thumbnail', 'excerpt' ],
+		'taxonomies'         => ['post_tag']
     ];
 
     register_post_type( 'agent', $args_agent );
@@ -70,7 +71,8 @@ function mapasculturais_register_post_types() {
 		'hierarchical'       => true,
         'menu_position'      => null,
         'menu_icon'          => 'dashicons-building',
-		'supports'           => [ 'title', 'editor', 'thumbnail', 'excerpt' ]
+		'supports'           => [ 'title', 'editor', 'thumbnail', 'excerpt' ],
+		'taxonomies'         => ['post_tag']
     ];
 
     register_post_type( 'space', $args_space );
@@ -107,9 +109,75 @@ function mapasculturais_register_post_types() {
 		'hierarchical'       => false,
         'menu_position'      => null,
         'menu_icon'          => 'dashicons-calendar-alt',
-		'supports'           => [ 'title', 'editor', 'thumbnail', 'excerpt' ]
+		'supports'           => [ 'title', 'editor', 'thumbnail', 'excerpt' ],
+		'taxonomies'         => ['post_tag']
     ];
 
-    register_post_type( 'event', $args_event );    
+	register_post_type( 'event', $args_event );    
+	
+
+
+		// Add new taxonomy, make it hierarchical (like categories)
+	$labels = array(
+		'name'              => __( 'Áreas de atuação', 'wp-mapas' ),
+		'singular_name'     => __( 'Área de atuação', 'wp-mapas' ),
+		'search_items'      => __( 'Procurar áreas de atuação', 'wp-mapas' ),
+		'all_items'         => __( 'Todas as áreas de atuação', 'wp-mapas' ),
+		'edit_item'         => __( 'Editar área de atuação', 'wp-mapas' ),
+		'update_item'       => __( 'Atualizar área de atuação', 'wp-mapas' ),
+		'add_new_item'      => __( 'Adicionar nova área de atuação', 'wp-mapas' ),
+		'new_item_name'     => __( 'Nome da nova área de atuação', 'wp-mapas' ),
+		'menu_name'         => __( 'Área de atuação', 'wp-mapas' ),
+	);
+
+	$args = array(
+		'hierarchical'      => false,
+		'labels'            => $labels,
+		'show_admin_column' => true,
+		'show_in_nav_menus' => false,
+		'show_tagcloud'     => false,
+		'query_var'         => true,
+		'rewrite'           => array( 'slug' => 'area' ),
+		'capabilities' => array(
+			'manage_terms' => '',
+			'edit_terms' => '',
+			'delete_terms' => '',
+			'assign_terms' => 'edit_posts'
+		  ),
+	);
+
+	register_taxonomy( 'area', array( 'space', 'agent' ), $args );
+
+
+	// Add new taxonomy, make it hierarchical (like categories)
+	$labels = array(
+		'name'              => __( 'Linguagens', 'wp-mapas' ),
+		'singular_name'     => __( 'Linguagem', 'wp-mapas' ),
+		'search_items'      => __( 'Procurar linguagens', 'wp-mapas' ),
+		'all_items'         => __( 'Todas as linguagens', 'wp-mapas' ),
+		'edit_item'         => __( 'Editar linguagem', 'wp-mapas' ),
+		'update_item'       => __( 'Atualizar linguagem', 'wp-mapas' ),
+		'add_new_item'      => __( 'Adicionar nova linguagem', 'wp-mapas' ),
+		'new_item_name'     => __( 'Nome da nova linguagem', 'wp-mapas' ),
+		'menu_name'         => __( 'Linguagem', 'wp-mapas' ),
+	);
+
+	$args = array(
+		'hierarchical'      => false,
+		'labels'            => $labels,
+		'show_admin_column' => true,
+		'show_in_nav_menus' => false,
+		'show_tagcloud'     => false,
+		'query_var'         => true,
+		'rewrite'           => array( 'slug' => 'linguagem' ),
+		'capabilities' => array(
+			'manage_terms' => '',
+			'edit_terms' => '',
+			'delete_terms' => '',
+			'assign_terms' => 'edit_posts'
+		  ),
+	);
+
+	register_taxonomy( 'linguagem', array( 'event' ), $args );
 }
 
