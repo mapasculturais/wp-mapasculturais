@@ -2,6 +2,7 @@
 namespace WPMapasCulturais;
 
 class Plugin{
+    const POST_TYPES = ['agent', 'space', 'event'];
     
     /**
      * @var \WPMapasCulturais\ApiWrapper
@@ -15,13 +16,25 @@ class Plugin{
      */
     function __construct() {
         // instancia o wrapper
-        $this->api = ApiWrapper::instance();
+        try{
+            $this->api = ApiWrapper::instance();
+        } catch(\Exception $e){
+            return;
+        }
+
+        add_action('wp', [$this, '_import_terms']);
         
         add_filter('query_vars', [$this, 'filter__query_vars'] );
         
         add_action('init', [$this, 'action__rewrite_rules']);
         
         add_action('template_redirect', [$this, 'action__template_redirects']);
+
+        add_action('save_post', [$this, 'action__save_post']);
+
+        add_action('load-post.php', [$this, 'action__edit_post']);
+
+        add_action('wp_insert_post', [$this, 'action__wp_insert_post'], 10, 3);
     }
 
     function output_error($data, $http_status_code = 400){
@@ -38,7 +51,31 @@ class Plugin{
 
         echo json_encode($data);
 
-        wp_die();
+        die;
+    }
+
+    function admin_message($message, $type = 'success'){
+        add_action( 'admin_notices',  function () use($message, $type) {
+            ?>
+            <div class="notice notice-<?php echo $type ?> is-dismissible">
+                <p><?php echo $message; ?></p>
+            </div>
+            <?php
+        } );
+    }
+
+    function _import_terms(){
+        if(!get_option('MAPAS:terms_imported')){
+            try{
+                foreach(['linguagem', 'area'] as $taxonomy_slug){
+                    $terms = $this->api->getTaxonomyTerms($taxonomy_slug);
+                    foreach($terms as $term){
+                        wp_insert_term($term, $taxonomy_slug);
+                    }
+                }
+                add_option('MAPAS:terms_imported', true);
+            } catch(\Exception $e){ }
+        }
     }
 
     public function filter__query_vars( $qvars ) {
@@ -75,7 +112,74 @@ class Plugin{
 
     }
 
+    public function action__save_post($post_id){
+        if ( wp_is_post_revision( $post_id ) ) {
+            return;
+        }
 
+        $post_type = get_post_type($post_id);
+
+        if(!in_array($post_type, self::POST_TYPES)){
+            return;
+        }
+        try{
+            if(get_post_meta($post_id, 'MAPAS:permission_to_modify', true)){
+                switch($post_type){
+                    case 'agent':
+                        $this->api->pushAgent($post_id);
+                        break;
+                    case 'space':
+                        $this->api->pushSpace($post_id);
+                        break;
+                    case 'event':
+                        $this->api->pushEvent($post_id);
+                        break;
+                        
+                }
+
+                delete_post_meta($post_id, 'MAPAS:__push_failed');
+            }
+        } catch (\Exception $e){
+            $this->admin_message(__('Erro ao sincronizar com o Mapas Culturais', 'wp-mapas'), 'error');
+            add_post_meta($post_id, 'MAPAS:__push_failed', 1, true);
+        }
+    }
+
+    public function action__edit_post(){
+        add_action('posts_selection', [$this, 'action__edit_post__post_selection']);
+    }
+
+    public function action__edit_post__post_selection(){
+        $post_type = get_post_type();
+        if(in_array($post_type, self::POST_TYPES)){
+            
+            $post_id = get_the_ID();
+            $entity_id = get_post_meta($post_id, 'MAPAS:entity_id', true);
+            if($entity_id){
+                // $this->api->
+            }
+        }
+    }
+
+    function action__wp_insert_post($post_id, $post, $update){
+        if($update){
+            return;
+        }
+
+        if ( wp_is_post_revision( $post_id ) ) {
+            return;
+        }
+
+        $post_type = get_post_type($post_id);
+
+        if(!in_array($post_type, self::POST_TYPES)){
+            return;
+        }
+
+        add_post_meta($post_id, 'MAPAS:__new_post', 1);
+        add_post_meta($post_id, 'MAPAS:permission_to_modify', 1);
+        
+    }
 }
 
 global $wp_mapasculturais;
