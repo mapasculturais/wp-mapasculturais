@@ -1,4 +1,9 @@
 <?php
+require_once __DIR__ . '/advanced_taxonomy_metabox/class.taxonomy-single-term.php';
+
+$areas = new Advanced_Taxonomy_Metabox( 'area', array( 'agent', 'space' ), 'checkbox' );
+$linguagens = new Advanced_Taxonomy_Metabox( 'linguagem', array( 'event' ), 'checkbox' );
+
 add_action('admin_menu', function(){
     add_menu_page('Mapas Culturais', 'Mapas Culturais', 'manage_options', 'wp-mapasculturais', 'mapasculturais_config_page', 'dashicons-location-alt');
     add_submenu_page('wp-mapasculturais', 'Configurações', 'Configurações', 'manage_options', 'wp-mapasculturais-config', 'mapasculturais_config_page');
