@@ -23,15 +23,15 @@ class ApiWrapper{
     protected $_cache = []; 
 
     /**
-     * Undocumented variable
+     * Instancia do wrapper da api
      *
-     * @var array
+     * @var \WPMapasCulturais\ApiWrapper
      */
     protected static $_instance = null;
 
-    public $agentDescription;
-    public $spaceDescription;
-    public $eventDescription;
+    public $entityDescriptions = [];
+
+    public $entityTypes = [];
 
 
     /**
@@ -59,6 +59,7 @@ class ApiWrapper{
         $this->wpdb = $wpdb;
 
         $this->_populateDescriptions();
+        $this->_populateTypes();
     }
 
     public function getOption($name, $default = null){
@@ -77,18 +78,28 @@ class ApiWrapper{
     protected function _populateDescriptions(){
         $cache_id = 'MAPAS:entity_descriptions';
         if(!($descriptions = get_transient($cache_id))){
-            $descriptions = [
-                'agent' => $this->mapasApi->getEntityDescription('agent'),
-                'space' => $this->mapasApi->getEntityDescription('space'),
-                'event' => $this->mapasApi->getEntityDescription('event'),
-            ];
+            $descriptions = [];
+            foreach(PLugin::POST_TYPES as $class){
+                $descriptions[$class] = $this->mapasApi->getEntityDescription($class);
+            }
 
             set_transient($cache_id, $descriptions, 10 * MINUTE_IN_SECONDS);
         }
 
-        $this->agentDescription = $descriptions['agent']; 
-        $this->spaceDescription = $descriptions['space']; 
-        $this->eventDescription = $descriptions['event'];
+        $this->entityDescriptions = $descriptions;
+    }
+
+    protected function _populateTypes(){
+        $cache_id = 'MAPAS:entity_types';
+        if(!($types = get_transient($cache_id))){
+            $types = [];
+
+            foreach(PLugin::POST_TYPES as $class){
+                $types[$class] = $this->mapasApi->getEntityTypes($class);
+            }
+        }
+        
+        $this->entityTypes = $types;
     }
 
 
@@ -178,26 +189,39 @@ class ApiWrapper{
         $post = get_post($post_id);
         $entity_id = get_post_meta($post_id, 'MAPAS:entity_id', true);
         $is_new = get_post_meta($post_id, 'MAPAS:__new_post', true);
-
+        
+        $terms = [];
+        foreach(['area', 'linguagem', 'post_tag'] as $taxonomy_slug){           
+            $_terms = wp_get_post_terms($post_id, $taxonomy_slug);
+            if($taxonomy_slug == 'post_tag'){
+                $taxonomy_slug = 'tag';
+            }
+            $terms[$taxonomy_slug] = array_map(function($e) { return $e->name; }, $_terms);
+        }
+        
         $data = [
             'name' => $post->post_title,
-            'type' => 1, // @TODO: implementar tipo
+            'type' => $class == 'agent' ? 1 : 10, // @TODO: implementar tipo
             'shortDescription' => $post->post_excerpt,
             'longDescription' => $post->post_content,
-
-            'terms' => [
-                'area' => ['Arquivo']
-            ]
+            'terms' => $terms
         ];
 
-        
+        // die(Var_dump($fields));
 
-        if($is_new){
-            $result = $this->mapasApi->createEntity($class, $data);
-            delete_post_meta($post_id, 'MAPAS:__new_post');
-            add_post_meta($post_id, 'MAPAS:entity_id', $result->id);
-        } else {
-            $result = $this->mapasApi->patchEntity($class, $entity_id, $data);
+        foreach($fields as $field){
+            $data[$field] = get_post_meta($post_id, $field, true);
+        }
+        try{
+            if($is_new){
+                $result = $this->mapasApi->createEntity($class, $data);
+                delete_post_meta($post_id, 'MAPAS:__new_post');
+                add_post_meta($post_id, 'MAPAS:entity_id', $result->id);
+            } else {
+                $result = $this->mapasApi->patchEntity($class, $entity_id, $data);
+            }
+        } catch (\Exception $e){
+            $_SESSION['MAPAS:error:' . $post_id] = $e;
         }
     }
 
@@ -211,14 +235,13 @@ class ApiWrapper{
             $params['@permissions'] = '@control';
         }
 
-        // @TODO: implementar configuração dos campos que devem ser importados e sincronizados.
-        $fields = ['raca'];
+        $fields = Plugin::instance()->getEntityFields('agent');
 
         $this->importNewEntities('agent', $fields, $params);
     }
 
     function pushAgent($post_id){
-        $fields = ['raca', 'location', 'endereco'];
+        $fields = Plugin::instance()->getEntityFields('agent');
         $this->pushEntity('agent', $post_id, $fields);
     }
 
@@ -232,14 +255,13 @@ class ApiWrapper{
             $params['@permissions'] = '@control';
         }
 
-        // @TODO: implementar configuração dos campos que devem ser importados e sincronizados.
-        $fields = ['location', 'endereco'];
+        $fields = Plugin::instance()->getEntityFields('space');
 
         $this->importNewEntities('agent', $fields, $params);
     }
 
     function pushSpace($post_id){
-        $fields = ['location', 'endereco'];
+        $fields = Plugin::instance()->getEntityFields('space');
         $this->pushEntity('space', $post_id, $fields);
     }
 

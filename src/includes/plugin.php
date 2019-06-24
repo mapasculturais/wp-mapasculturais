@@ -3,6 +3,13 @@ namespace WPMapasCulturais;
 
 class Plugin{
     const POST_TYPES = ['agent', 'space', 'event'];
+
+    /**
+     * Instancia do plugin
+     *
+     * @var \WPMapasCulturais\Plugin
+     */
+    protected static $_instance = null;
     
     /**
      * @var \WPMapasCulturais\ApiWrapper
@@ -10,11 +17,25 @@ class Plugin{
     public $api;
 
     /**
+     * Retorna a instância do plugin
+     *
+     * @return \WPMapasCulturais\Plugin
+     */
+    static function instance(){
+        if(is_null(self::$_instance)){
+            $class = get_called_class();
+            self::$_instance = new $class;
+        }
+
+        return self::$_instance;
+    }
+
+    /**
      * inicializa o plugin adicionando as ações e filtros
      *
      * @return void
      */
-    function __construct() {
+    protected function __construct() {
         // instancia o wrapper
         try{
             $this->api = ApiWrapper::instance();
@@ -35,6 +56,46 @@ class Plugin{
         add_action('load-post.php', [$this, 'action__edit_post']);
 
         add_action('wp_insert_post', [$this, 'action__wp_insert_post'], 10, 3);
+    }
+
+    function getEntityMetadataDescription($class){
+        $class_description = $this->api->entityDescriptions[$class];
+
+        $to_remove = [
+            'id', 'name', 'shortDescription', 'longDescription', 'status', 'createTimestamp', 'updateTimestamp',
+            'sentNotification', 'subsite', '_subsiteId', 'user', 'userId', '@file', '_children',
+            'opportunityTabName', 'useOpportunityTab', 'singleUrl',
+
+            'parent', 'location', '_type' // @TODO: implementar esses campos
+        ];
+
+        $result = [];
+
+        foreach($class_description as $key => $description){
+            // if(!isset($description->isEntityRelation)) die(var_dump($description));
+            if( strpos($key, 'geo') === 0 || 
+                strpos($key, '__') === 0 || 
+                in_array($key, $to_remove) ||
+                (isset($description->private) && $description->private)|| 
+                ($description->isEntityRelation && !$description->isOwningSide)
+                ){
+                continue;
+            }
+
+            if(!isset($description->type)){
+                if($description->isEntityRelation){
+                    $description->type = 'entityRelation';
+                }
+            }
+
+            $result[$key] = $description;
+        }
+
+        return $result;
+    }
+
+    function getEntityFields($class){
+        return array_keys($this->getEntityMetadataDescription($class));
     }
 
     function output_error($data, $http_status_code = 400){
@@ -184,4 +245,4 @@ class Plugin{
 
 global $wp_mapasculturais;
 
-$wp_mapasculturais = new Plugin;
+$wp_mapasculturais = Plugin::instance();

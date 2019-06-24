@@ -73,7 +73,7 @@
     <?php submit_button(); ?>
     <button type="button" class="js-mapas--import-new-entities"><?php _e("Importar novas entidades", 'wp-mapas') ?></button>
     <p>
-        <code class="js-mapas--api-output"></code>
+        <pre class="js-mapas--api-output"></pre>
     </p>
 </form>
 </div>
