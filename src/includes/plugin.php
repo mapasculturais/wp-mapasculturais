@@ -51,7 +51,7 @@ class Plugin{
         
         add_action('template_redirect', [$this, 'action__template_redirects']);
 
-        add_action('save_post', [$this, 'action__save_post']);
+        add_action('save_post', [$this, 'action__save_post'], 1000);
 
         add_action('load-post.php', [$this, 'action__edit_post']);
 
@@ -59,6 +59,10 @@ class Plugin{
     }
 
     function getEntityMetadataDescription($class){
+        if(!isset($this->api->entityDescriptions[$class])){
+            return [];
+        }
+
         $class_description = $this->api->entityDescriptions[$class];
 
         $to_remove = [
@@ -66,7 +70,9 @@ class Plugin{
             'sentNotification', 'subsite', '_subsiteId', 'user', 'userId', '@file', '_children',
             'opportunityTabName', 'useOpportunityTab', 'singleUrl',
 
-            'parent', 'location', '_type' // @TODO: implementar esses campos
+            'localizacao', // @TODO: tem que tirar esse campo do mapas, ele não é usado.
+
+            'parent', 'location', '_type', // @TODO: implementar esses campos
         ];
 
         $result = [];
@@ -146,10 +152,13 @@ class Plugin{
 
     public function action__rewrite_rules() {
         add_rewrite_rule('mcapi/([^/]+)/?$', 'index.php?action=wp_mapasculturais_actions&mcaction=$matches[1]', 'top');
+        if(!get_option('MAPAS:permalinks_flushed')){
+            flush_rewrite_rules();
+            add_option('MAPAS:permalinks_flushed', 1);
+        }
     }
 
     public function action__template_redirects(){
-        global $wp_query;
         $action = get_query_var('mcaction');
         if(!$action){
             return;
@@ -240,6 +249,14 @@ class Plugin{
         add_post_meta($post_id, 'MAPAS:__new_post', 1);
         add_post_meta($post_id, 'MAPAS:permission_to_modify', 1);
         
+    }
+
+    function action__activate(){
+        
+    }
+
+    function action__deactivate(){
+        delete_option('MAPAS:permalinks_flushed');
     }
 }
 

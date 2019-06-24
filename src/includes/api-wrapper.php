@@ -70,8 +70,8 @@ class ApiWrapper{
 
     function parseDateFromMapas($date_object){
         $date = new \DateTime($date_object->date . ' ' . $date_object->timezone);
-        $date->setTimezone(date_default_timezone_get());
-
+        $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        
         return $date->format('Y-m-d H:i:s');
     }
 
@@ -109,45 +109,44 @@ class ApiWrapper{
      * @param [type] $class
      * @return void
      */
-    function getLinkedEntitiesIds($class, $regenerate_cache = false){
-        $cache_id = "MAPAS:$class:entity_ids";
-
-        if($regenerate_cache || !($result = get_transient($cache_id))){
-            $meta_key = self::ENTITY_ID_META_KEY;
-            $result = $this->wpdb->get_results("
-                SELECT 
-                    post_id, meta_value 
-                FROM 
-                    {$this->wpdb->postmeta} 
-                WHERE 
-                    meta_key = '{$meta_key}' AND 
-                    post_id IN (
-                        SELECT 
-                            ID 
-                        FROM 
-                            {$this->wpdb->posts} 
-                        WHERE
-                            post_type = '{$class}' AND 
-                            post_status IN ('publish', 'draft')
-                    )");
-
-            set_transient($cache_id, $result, 10 * MINUTE_IN_SECONDS);
-        }
-
-        return $this->_cache[$cache_id];
+    function getLinkedEntitiesIds($class){
+        $result = $this->wpdb->get_results("
+            SELECT 
+                post_id, meta_value AS entity_id
+            FROM 
+                {$this->wpdb->postmeta} 
+            WHERE 
+                meta_key = 'MAPAS:entity_id' AND 
+                post_id IN (
+                    SELECT 
+                        ID 
+                    FROM 
+                        {$this->wpdb->posts} 
+                    WHERE
+                        post_type = '{$class}' AND 
+                        post_status IN ('publish', 'draft')
+                )");
+        return $result;
     }
 
     protected function importNewEntities($class, array $fields, array $params){
+        
         $import_datetime = get_option("MAPAS:{$class}:import_timestamp");
 
         if($import_datetime){
             $params['createTimestamp'] = "GTE({$import_datetime})";
         }
 
+        if($entities_ids = $this->getLinkedEntitiesIds($class)){
+            $ids = implode(',', array_map(function($obj) {return $obj->entity_id; }, $entities_ids));
+            $params['id'] = "!IN($ids)";
+        }
+
         $required_fields = [
-            'id', 'type', 'name', 'shortDescription', 'longDescription', 
+            'id', 'type', 'name', 'terms', 'shortDescription', 'longDescription', 
             'createTimestamp', 'updateTimestamp', 'status', 'permissionTo.modify'
         ];
+
 
         foreach($required_fields as $f){
             if(!in_array($f, $fields)){
@@ -162,16 +161,14 @@ class ApiWrapper{
             '0' => 'draft',
             '1' => 'publish'
         ];
-        // die(var_dump($entities));
+
         foreach($entities as $entity){
+
             $post_id = wp_insert_post([
                 'post_type' => $class,
                 'post_title' => $entity->name,
                 'post_excerpt' => $entity->shortDescription ?: '',
                 'post_content' => $entity->longDescription ?: '',
-                'post_date' => $this->parseDateFromMapas($entity->createTimestamp),
-                'post_modified' => $this->parseDateFromMapas($entity->updateTimestamp ? 
-                                            $entity->updateTimestamp : $entity->createTimestamp),
                 'post_status' => $status[$entity->status]
             ]);
 
@@ -179,10 +176,19 @@ class ApiWrapper{
                 add_post_meta($post_id, 'MAPAS:entity_id', $entity->id);
                 add_post_meta($post_id, 'MAPAS:permission_to_modify', $entity->permissionTo->modify);
                 delete_post_meta($post_id, 'MAPAS:__new_post');
+
+                foreach($entity->terms as $taxonomy => $terms){
+                    if($taxonomy == 'tag'){
+                        wp_set_post_tags($post_id, $terms);
+                    } else {
+                        wp_set_post_terms($post_id, $terms, $taxonomy);
+                    }
+                }
             }
         }
 
         add_option("MAPAS:{$class}:import_timestamp", date('Y-m-d H:i:s'),'', false);
+        $this->importing = false;
     }
 
     function pushEntity($class, $post_id, $fields){
@@ -207,11 +213,15 @@ class ApiWrapper{
             'terms' => $terms
         ];
 
-        // die(Var_dump($fields));
-
         foreach($fields as $field){
-            $data[$field] = get_post_meta($post_id, $field, true);
+            $def = $this->entityDescriptions[$class]->{$field};
+            $val = get_post_meta($post_id, $field, true);
+            if($def->type == 'boolean'){
+                $val = (bool) $val;
+            }
+            $data[$field] = $val;
         }
+
         try{
             if($is_new){
                 $result = $this->mapasApi->createEntity($class, $data);
@@ -257,7 +267,7 @@ class ApiWrapper{
 
         $fields = Plugin::instance()->getEntityFields('space');
 
-        $this->importNewEntities('agent', $fields, $params);
+        $this->importNewEntities('space', $fields, $params);
     }
 
     function pushSpace($post_id){

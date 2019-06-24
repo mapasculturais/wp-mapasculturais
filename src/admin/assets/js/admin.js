@@ -2,7 +2,7 @@
     $(function(){
         $('.js-mapas--import-new-entities').on('click', API.importNewEntities);
 
-        if(mc_errors){
+        if(typeof mc_errors !== 'undefined'){
             for(var prop in mc_errors){
                 $('input#' + prop).css({border: '2px solid red'});
                 var errors = mc_errors[prop].concat(', ');

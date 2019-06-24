@@ -70,9 +70,6 @@ function register_metaboxes(){
 
 
         foreach($metadata_description as $key => $description){
-            if(!isset($description->type)){
-                var_dump($key, $description); die;
-            }
             switch($description->type){
                 case 'string':
                     $cmb->add_field( array(

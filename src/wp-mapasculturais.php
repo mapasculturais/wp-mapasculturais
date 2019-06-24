@@ -26,4 +26,8 @@ if(is_admin()){
     require __DIR__ . '/admin/include.php';
 }
 
+global $wp_mapasculturais;
+register_activation_hook( __FILE__, [$wp_mapasculturais, 'action__activate'] );
+register_deactivation_hook( __FILE__, [$wp_mapasculturais, 'action__deactivate'] );
+
 session_start();
