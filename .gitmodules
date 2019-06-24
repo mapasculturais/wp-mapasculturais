@@ -1,0 +1,12 @@
+[submodule "src/vendor/CMB2"]
+	path = src/vendor/CMB2
+	url = https://github.com/CMB2/CMB2.git
+[submodule "src/vendor/MapasSDK"]
+	path = src/vendor/MapasSDK
+	url = git@github.com:centroculturalsp/MapasSDK
+[submodule "src/vendor/cmb_field_map"]
+	path = src/vendor/cmb_field_map
+	url = https://github.com/mustardBees/cmb_field_map.git
+[submodule "src/vendor/advanced_taxonomy_metabox"]
+	path = src/vendor/advanced_taxonomy_metabox
+	url = git@github.com:rafaelchavesfreitas/advanced_taxonomy_metabox.git
