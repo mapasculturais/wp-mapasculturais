@@ -180,8 +180,19 @@ function mapasculturais_register_post_types() {
 
 	register_taxonomy( 'linguagem', array( 'event' ), $args );
 
-	
+
 	foreach(['agent', 'space', 'event'] as $post_type){
+		// registra o metabox para definição da imagem de header
+		if (class_exists('MultiPostThumbnails')) {
+			new MultiPostThumbnails(
+				array(
+					'label' => __( 'Imagem do header', 'wp-mapas'),
+					'id' => 'header-image',
+					'post_type' => $post_type
+				)
+			);
+		}
+
 		// renomeia o metabox da imagem destacada
 		add_action('do_meta_boxes', function () use ($post_type) {
 			remove_meta_box( 'postimagediv', $post_type, 'side' );

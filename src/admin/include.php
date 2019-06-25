@@ -4,6 +4,8 @@ namespace WPMapasCulturais;
 require_once WP_MAPAS__VENDOR_PATH . 'advanced_taxonomy_metabox/class.taxonomy-single-term.php';
 require_once WP_MAPAS__VENDOR_PATH . 'CMB2/init.php';
 require_once WP_MAPAS__VENDOR_PATH . 'cmb_field_map/cmb-field-map.php';
+require_once WP_MAPAS__VENDOR_PATH . 'multi-post-thumbnails/multi-post-thumbnails.php';
+
 
 
 $areas = new \Advanced_Taxonomy_Metabox( 'area', array( 'agent', 'space' ), 'checkbox' );
