@@ -115,7 +115,7 @@ class ApiWrapper{
         return $result;
     }
 
-    protected function importNewEntities($class, array $fields, array $params){
+    protected function importNewEntities($class, array $entity_fields, array $params){
         
         $import_datetime = get_option("MAPAS:{$class}:import_timestamp");
 
@@ -127,20 +127,22 @@ class ApiWrapper{
             $ids = implode(',', array_map(function($obj) { return $obj->entity_id; }, $entities_ids));
             $params['id'] = "!IN($ids)";
         }
+        
+        $params['@files'] = '(avatar,header,gallery):name,description,url';
 
         $required_fields = [
-            'id', 'type', 'name', 'terms', 'shortDescription', 'longDescription', 
-            'createTimestamp', 'updateTimestamp', 'status', 'permissionTo.modify'
+            'id', 'type', 'name', 'status', 'shortDescription', 'longDescription', 
+            'createTimestamp', 'updateTimestamp', 
+            'terms', 'permissionTo.modify'
         ];
 
-
+        $fields = $entity_fields;
         foreach($required_fields as $f){
             if(!in_array($f, $fields)){
                 $fields[] = $f;
             }
         }
 
-        $params['@files'] = '(avatar,header,gallery):name,description,url';
         
         $entities = $this->mapasApi->findEntities($class, $fields, $params);
         // var_dump($entities) ; die;
@@ -175,6 +177,10 @@ class ApiWrapper{
                     } else {
                         wp_set_post_terms($post_id, $terms, $taxonomy);
                     }
+                }
+                
+                foreach($entity_fields as $field){
+                    add_post_meta($post_id, $field, $entity->$field);
                 }
             }
 
