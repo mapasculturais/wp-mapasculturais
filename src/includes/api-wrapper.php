@@ -143,7 +143,7 @@ class ApiWrapper{
         $params['@files'] = '(avatar,header,gallery):name,description,url';
         
         $entities = $this->mapasApi->findEntities($class, $fields, $params);
-        
+        // var_dump($entities) ; die;
         $status = [
             '-10' => 'trash',
             '0' => 'draft',
@@ -164,6 +164,10 @@ class ApiWrapper{
                 add_post_meta($post_id, 'MAPAS:entity_id', $entity->id);
                 add_post_meta($post_id, 'MAPAS:permission_to_modify', $entity->permissionTo->modify);
                 delete_post_meta($post_id, 'MAPAS:__new_post');
+
+                if(in_array($class, ['agent', 'space'])){
+                    wp_set_post_terms($post_id, [$entity->type->name], $class . '_type');
+                }
 
                 foreach($entity->terms as $taxonomy => $terms){
                     if($taxonomy == 'tag'){
@@ -264,6 +268,7 @@ class ApiWrapper{
         $post = get_post($post_id);
         $entity_id = get_post_meta($post_id, 'MAPAS:entity_id', true);
         $is_new = get_post_meta($post_id, 'MAPAS:__new_post', true);
+        $type = $class == 'space' ? 10 : 1;
         
         $terms = [];
         foreach(['area', 'linguagem', 'post_tag'] as $taxonomy_slug){           
@@ -273,10 +278,18 @@ class ApiWrapper{
             }
             $terms[$taxonomy_slug] = array_map(function($e) { return $e->name; }, $_terms);
         }
+
+        if(in_array($class, ['agent', 'space'])){
+            $_types = wp_get_post_terms($post_id, $class . '_type');
+            if(is_array($_types)){
+                $types = $this->getEntityTypes($class);
+                $type = array_search($_types[0]->name, $types);
+            }
+        }
         
         $data = [
             'name' => $post->post_title,
-            'type' => $class == 'agent' ? 1 : 10, // @TODO: implementar tipo
+            'type' => $type,
             'shortDescription' => $post->post_excerpt,
             'longDescription' => $post->post_content,
             'terms' => $terms
