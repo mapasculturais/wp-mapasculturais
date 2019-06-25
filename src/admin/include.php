@@ -7,10 +7,16 @@ require_once WP_MAPAS__VENDOR_PATH . 'cmb_field_map/cmb-field-map.php';
 require_once WP_MAPAS__VENDOR_PATH . 'multi-post-thumbnails/multi-post-thumbnails.php';
 
 
+$space_type = new \Advanced_Taxonomy_Metabox( 'space_type', array( 'space' ), 'radio' );
+$space_type->set( 'priority', 'core' );
+
+$agent_type = new \Advanced_Taxonomy_Metabox( 'agent_type', array( 'agent' ), 'radio' );
+$agent_type->set( 'priority', 'core' );
 
 $areas = new \Advanced_Taxonomy_Metabox( 'area', array( 'agent', 'space' ), 'checkbox' );
-$linguagens = new \Advanced_Taxonomy_Metabox( 'linguagem', array( 'event' ), 'checkbox' );
 $areas->set( 'priority', 'core' );
+
+$linguagens = new \Advanced_Taxonomy_Metabox( 'linguagem', array( 'event' ), 'checkbox' );
 $linguagens->set( 'priority', 'core' );
 
 add_action('admin_menu', function(){

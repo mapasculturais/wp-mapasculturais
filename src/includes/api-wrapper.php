@@ -59,7 +59,6 @@ class ApiWrapper{
         $this->wpdb = $wpdb;
 
         $this->_populateDescriptions();
-        $this->_populateTypes();
     }
 
     public function getOption($name, $default = null){
@@ -87,19 +86,6 @@ class ApiWrapper{
         }
 
         $this->entityDescriptions = $descriptions;
-    }
-
-    protected function _populateTypes(){
-        $cache_id = 'MAPAS:entity_types';
-        if(!($types = get_transient($cache_id))){
-            $types = [];
-
-            foreach(PLugin::POST_TYPES as $class){
-                $types[$class] = $this->mapasApi->getEntityTypes($class);
-            }
-        }
-        
-        $this->entityTypes = $types;
     }
 
 
@@ -368,6 +354,21 @@ class ApiWrapper{
         if(!isset($this->_cache[$cache_id])){
             $terms = $this->mapasApi->getTaxonomyTerms($taxonomy_slug);
             $this->_cache[$cache_id] = $terms;
+        }
+
+        return $this->_cache[$cache_id];
+        
+    }
+
+    function getEntityTypes($class){
+        $cache_id = __METHOD__ . ':' . $class;
+        if(!isset($this->_cache[$cache_id])){
+            $_types = $this->mapasApi->getEntityTypes($class);
+            $types = [];
+            foreach($_types as $type){
+                $types[$type->id] = $type->name;
+            }
+            $this->_cache[$cache_id] = $types;
         }
 
         return $this->_cache[$cache_id];

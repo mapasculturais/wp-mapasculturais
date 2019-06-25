@@ -132,6 +132,7 @@ class Plugin{
     }
 
     function _import_terms(){
+        
         if(!get_option('MAPAS:terms_imported')){
             try{
                 foreach(['linguagem', 'area'] as $taxonomy_slug){
@@ -141,6 +142,20 @@ class Plugin{
                     }
                 }
                 add_option('MAPAS:terms_imported', true);
+            } catch(\Exception $e){ }
+        }
+
+        if(!get_option('MAPAS:types_imported')){
+            try{
+                foreach(['agent', 'space'] as $class){
+                    $taxonomy_slug = $class . '_type';
+                    $terms = $this->api->getEntityTypes($class);
+                    
+                    foreach($terms as $term){
+                        wp_insert_term($term, $taxonomy_slug);
+                    }
+                }
+                add_option('MAPAS:types_imported', true);
             } catch(\Exception $e){ }
         }
     }

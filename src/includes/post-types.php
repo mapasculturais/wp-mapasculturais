@@ -113,9 +113,70 @@ function mapasculturais_register_post_types() {
 		'taxonomies'         => ['post_tag']
     ];
 
-	register_post_type( 'event', $args_event );    
-	
+	register_post_type( 'event', $args_event );
 
+
+	// TIPOS DE ESPAÇO
+	$labels = array(
+		'name'              => __( 'Tipo de espaço', 'wp-mapas' ),
+		'singular_name'     => __( 'Tipo de espaço', 'wp-mapas' ),
+		'search_items'      => __( 'Procurar tipos de espaço', 'wp-mapas' ),
+		'all_items'         => __( 'Todos os tipos de espaço', 'wp-mapas' ),
+		'edit_item'         => __( 'Editar tipo de espaço', 'wp-mapas' ),
+		'update_item'       => __( 'Atualizar tipo de espaço', 'wp-mapas' ),
+		'add_new_item'      => __( 'Adicionar novo tipo de espaço', 'wp-mapas' ),
+		'new_item_name'     => __( 'Nome do novo tipo de espaço', 'wp-mapas' ),
+		'menu_name'         => __( 'Tipo de espaço', 'wp-mapas' ),
+	);
+
+	$args = array(
+		'hierarchical'      => false,
+		'labels'            => $labels,
+		'show_admin_column' => true,
+		'show_in_nav_menus' => false,
+		'show_tagcloud'     => false,
+		'query_var'         => true,
+		'rewrite'           => array( 'slug' => 'space_type' ),
+		'capabilities' => array(
+			'manage_terms' => '',
+			'edit_terms' => '',
+			'delete_terms' => '',
+			'assign_terms' => 'edit_posts'
+		),
+	);
+	register_taxonomy( 'space_type', 'space', $args );
+
+
+	// TIPOS DE AGENTE
+	$labels = array(
+		'name'              => __( 'Tipo de agente', 'wp-mapas' ),
+		'singular_name'     => __( 'Tipo de agente', 'wp-mapas' ),
+		'search_items'      => __( 'Procurar tipos de agente', 'wp-mapas' ),
+		'all_items'         => __( 'Todos os tipos de agente', 'wp-mapas' ),
+		'edit_item'         => __( 'Editar tipo de agente', 'wp-mapas' ),
+		'update_item'       => __( 'Atualizar tipo de agente', 'wp-mapas' ),
+		'add_new_item'      => __( 'Adicionar novo tipo de agente', 'wp-mapas' ),
+		'new_item_name'     => __( 'Nome do novo tipo de agente', 'wp-mapas' ),
+		'menu_name'         => __( 'Tipo de agente', 'wp-mapas' ),
+	);
+
+	$args = array(
+		'hierarchical'      => false,
+		'labels'            => $labels,
+		'show_admin_column' => true,
+		'show_in_nav_menus' => false,
+		'show_tagcloud'     => false,
+		'query_var'         => true,
+		'rewrite'           => array( 'slug' => 'agent_type' ),
+		'capabilities' => array(
+			'manage_terms' => '',
+			'edit_terms' => '',
+			'delete_terms' => '',
+			'assign_terms' => 'edit_posts'
+		),
+	);
+	register_taxonomy( 'agent_type', 'agent', $args );
+	
 
 		// Add new taxonomy, make it hierarchical (like categories)
 	$labels = array(
