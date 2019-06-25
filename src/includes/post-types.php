@@ -179,5 +179,14 @@ function mapasculturais_register_post_types() {
 	);
 
 	register_taxonomy( 'linguagem', array( 'event' ), $args );
+
+	
+	foreach(['agent', 'space', 'event'] as $post_type){
+		// renomeia o metabox da imagem destacada
+		add_action('do_meta_boxes', function () use ($post_type) {
+			remove_meta_box( 'postimagediv', $post_type, 'side' );
+			add_meta_box('postimagediv', __('Imagem principal', 'wp-mapas'), 'post_thumbnail_meta_box', $post_type, 'normal', 'high');
+		});
+	}
 }
 
