@@ -10,3 +10,6 @@
 [submodule "src/vendor/advanced_taxonomy_metabox"]
 	path = src/vendor/advanced_taxonomy_metabox
 	url = git@github.com:rafaelchavesfreitas/advanced_taxonomy_metabox.git
+[submodule "src/vendor/multi-post-thumbnails"]
+	path = src/vendor/multi-post-thumbnails
+	url = https://github.com/voceconnect/multi-post-thumbnails
