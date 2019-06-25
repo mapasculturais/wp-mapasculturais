@@ -104,10 +104,10 @@ class ApiWrapper{
 
 
     /**
-     * Undocumented function
+     * Retorna os ids dos posts e das entidades 'linkadas'
      *
      * @param [type] $class
-     * @return void
+     * @return array
      */
     function getLinkedEntitiesIds($class){
         $result = $this->wpdb->get_results("
@@ -138,7 +138,7 @@ class ApiWrapper{
         }
 
         if($entities_ids = $this->getLinkedEntitiesIds($class)){
-            $ids = implode(',', array_map(function($obj) {return $obj->entity_id; }, $entities_ids));
+            $ids = implode(',', array_map(function($obj) { return $obj->entity_id; }, $entities_ids));
             $params['id'] = "!IN($ids)";
         }
 
@@ -153,6 +153,8 @@ class ApiWrapper{
                 $fields[] = $f;
             }
         }
+
+        $params['@files'] = '(avatar,header,gallery):name,description,url';
         
         $entities = $this->mapasApi->findEntities($class, $fields, $params);
         
@@ -185,10 +187,91 @@ class ApiWrapper{
                     }
                 }
             }
+
+            $this->importEntityImages($entity, $post_id);
         }
 
         add_option("MAPAS:{$class}:import_timestamp", date('Y-m-d H:i:s'),'', false);
         $this->importing = false;
+    }
+
+    function importEntityImages($entity, $post_id){
+        $attachments = get_posts( [
+            'post_type' => 'attachment',
+            'posts_per_page' => -1,
+            'post_parent' => $post_id
+        ]);
+
+        if(isset($entity->{'@files:avatar'})){
+            $f = $entity->{'@files:avatar'};
+            $attachment_id = $this->insertAttachmentFromUrl($post_id, $f->url, $f->description);
+            if($attachment_id){
+                set_post_thumbnail($post_id, $attachment_id);
+            }
+        }
+
+        if(isset($entity->{'@files:header'})){
+            $f = $entity->{'@files:header'};
+            $attachment_id = $this->insertAttachmentFromUrl($post_id, $f->url, $f->description);
+            if($attachment_id){
+                add_post_meta($post_id, 'agent_header-image_thumbnail_id', $attachment_id);
+            }
+        }
+
+        if(isset($entity->{'@files:gallery'})){
+            $fs = $entity->{'@files:gallery'};
+
+            foreach($fs as $f){
+                $attachment_id = $this->insertAttachmentFromUrl($post_id, $f->url, $f->description);
+            }
+        }
+    }
+
+    function insertAttachmentFromUrl($post_id, $url, $description) {
+        if($attach_id = $this->wpdb->get_var("SELECT post_id FROM {$this->wpdb->postmeta} WHERE meta_key = 'MAPAS:original_file_url' AND meta_value = '$url'")){
+            return $attach_id;
+        }
+
+        $file = wp_remote_get($url, array('timeout' => 120));
+        $response = wp_remote_retrieve_response_code($file);
+        $body = wp_remote_retrieve_body($file);
+        if ($response != 200) {
+            return false;
+        }
+        $upload = wp_upload_bits(basename($url), null, $body);
+        if (!empty($upload['error'])) {
+            return false;
+        }
+        $file_path = $upload['file'];
+        $file_name = basename($file_path);
+        $file_type = wp_check_filetype($file_name, null);
+        $attachment_title = sanitize_file_name(pathinfo($file_name, PATHINFO_FILENAME));
+        $wp_upload_dir = wp_upload_dir();
+        $post_info = [
+            'guid' => $wp_upload_dir['url'] . '/' . $file_name,
+            'post_mime_type' => $file_type['type'],
+            'post_title' => $attachment_title,
+            'post_content' => '',
+            'post_status' => 'inherit',
+        ];
+
+        // Create the attachment
+        $attach_id = wp_insert_attachment($post_info, $file_path, $post_id);
+        // Include image.php
+        require_once ABSPATH . 'wp-admin/includes/image.php' ;
+
+        // Define attachment metadata
+        $attach_data = wp_generate_attachment_metadata($attach_id, $file_path);
+
+        $attach_data['image_meta']['caption'] = $description;
+        $attach_data['image_meta']['title'] = $description;
+
+        // Assign metadata to attachment
+        wp_update_attachment_metadata($attach_id, $attach_data);
+
+        add_post_meta($attach_id, 'MAPAS:original_file_url', $url);
+
+        return $attach_id;
     }
 
     function pushEntity($class, $post_id, $fields){
@@ -230,6 +313,7 @@ class ApiWrapper{
             } else {
                 $result = $this->mapasApi->patchEntity($class, $entity_id, $data);
             }
+
         } catch (\Exception $e){
             $_SESSION['MAPAS:error:' . $post_id] = $e;
         }
