@@ -365,7 +365,23 @@ class ApiWrapper{
     }
 
     function importNewEvents(){
+        $params = [];
+        $_import = $this->getOption('event:import');
+        
+        if($_import == 'mine'){
+            $params['user'] = 'EQ(@me)';
+        } else if($_import == 'control'){
+            $params['@permissions'] = '@control';
+        }
 
+        $fields = Plugin::instance()->getEntityFields('event');
+
+        $this->importNewEntities('event', $fields, $params);
+    }
+
+    function pushEvent($post_id){
+        $fields = Plugin::instance()->getEntityFields('event');
+        $this->pushEntity('event', $post_id, $fields);
     }
 
     function getTaxonomyTerms($taxonomy_slug){
