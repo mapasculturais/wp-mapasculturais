@@ -3,7 +3,7 @@ namespace WPMapasCulturais;
 
 require_once WP_MAPAS__VENDOR_PATH . 'advanced_taxonomy_metabox/class.taxonomy-single-term.php';
 require_once WP_MAPAS__VENDOR_PATH . 'CMB2/init.php';
-require_once WP_MAPAS__VENDOR_PATH . 'cmb_field_map/cmb-field-map.php';
+require_once WP_MAPAS__VENDOR_PATH . 'CMB2-field-Leaflet-Geocoder/cmb-field-leaflet-map.php';
 require_once WP_MAPAS__VENDOR_PATH . 'multi-post-thumbnails/multi-post-thumbnails.php';
 
 
@@ -61,7 +61,7 @@ function register_metaboxes(){
 
     foreach(Plugin::POST_TYPES as $post_type){
         $metadata_description = $wp_mapasculturais->getEntityMetadataDescription($post_type);
-
+        
         /**
          * Initiate the metabox
          */
@@ -116,9 +116,28 @@ function register_metaboxes(){
                         'name'       => $description->label,
                         'id'         => $key,
                         'type' => 'checkbox',
-                        // 'timezone_meta_key' => 'wiki_test_timezone',
-                        // 'date_format' => 'l jS \of F Y',
                     ) );
+                    break;
+
+                case 'point':
+                    $cmb->add_field( array(
+                        'name'       => $description->label,
+                        'id'         => $key,
+                        'type' => 'leaflet_map',
+                        'attributes' => [
+                            'tilelayer'           => 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+                            'searchbox_position'  => 'topright', // topright, bottomright, topleft, bottomleft,
+                            'search'              => __( 'Buscar...', 'wp-mapas' ),
+                            'not_found'           => __( 'Not found', 'wp-mapas' ),
+                            'initial_coordinates' => [
+                                'lat' => -23, // Go Finland!
+                                'lng' => -46  // Go Finland!
+                            ],
+                            'initial_zoom'        => 4, // Zoomlevel when there's no coordinates set,
+                            'default_zoom'        => 13 // Zoomlevel after the coordinates have been set & page saved
+                        ]
+                    ) );
+                
                     break;
                         
 

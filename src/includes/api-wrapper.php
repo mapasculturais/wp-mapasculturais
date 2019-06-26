@@ -203,7 +203,7 @@ class ApiWrapper{
             $attachment_id = $this->insertAttachmentFromUrl($post_id, $f->url, $f->description);
             if($attachment_id){
                 set_post_thumbnail($post_id, $attachment_id);
-                add_post_meta($post_id, 'MAPAS:entity_avatar_attachment_id', $attachment_id);
+                update_post_meta($post_id, 'MAPAS:entity_avatar_attachment_id', $attachment_id);
             }
         }
 
@@ -212,7 +212,7 @@ class ApiWrapper{
             $attachment_id = $this->insertAttachmentFromUrl($post_id, $f->url, $f->description);
             if($attachment_id){
                 add_post_meta($post_id, 'agent_header-image_thumbnail_id', $attachment_id);
-                add_post_meta($post_id, 'MAPAS:entity_header_attachment_id', $attachment_id);
+                update_post_meta($post_id, 'MAPAS:entity_header_attachment_id', $attachment_id);
             }
         }
 
@@ -308,6 +308,12 @@ class ApiWrapper{
             $val = get_post_meta($post_id, $field, true);
             if($def->type == 'boolean'){
                 $val = (bool) $val;
+            } else if ($def->type == 'point'){
+                if(is_array($val)){
+                    $val = [$val['lng'],$val['lat']];
+                } else {
+                    continue;
+                }
             }
             $data[$field] = $val;
         }
