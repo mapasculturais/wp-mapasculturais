@@ -11,6 +11,7 @@ Description: Plugin de integração escrita e leitura com o Mapas Culturais
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 define('WP_MAPAS__BASE_PATH', __DIR__ . '/');
+define('WP_MAPAS__VIEWS_PATH', __DIR__ . '/views/');
 define('WP_MAPAS__VENDOR_PATH', __DIR__ . '/vendor/');
 
 
@@ -29,5 +30,21 @@ if(is_admin()){
 global $wp_mapasculturais;
 register_activation_hook( __FILE__, [$wp_mapasculturais, 'action__activate'] );
 register_deactivation_hook( __FILE__, [$wp_mapasculturais, 'action__deactivate'] );
+
+// [events view="calendar"]
+function events_shortcodes( $atts ) {
+	$a = shortcode_atts( array(
+		'view' => 'calendar'
+	), $atts );
+
+    $filename = WP_MAPAS__VIEWS_PATH . $a['view'] . '.php';
+
+    if(file_exists($filename)){
+        ob_start();
+        include $filename;
+        return ob_get_clean();
+    }
+}
+add_shortcode( 'events', 'events_shortcodes' );
 
 session_start();
