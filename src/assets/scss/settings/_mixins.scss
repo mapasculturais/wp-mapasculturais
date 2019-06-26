@@ -1,0 +1,45 @@
+// Colors //
+
+@mixin primary-color {
+    color: $primary-color;
+    color: var(--primary-color, $primary-color);
+}
+
+@mixin primary-inverted {
+    background-color: $primary-color;
+    background-color: var(--primary-color, $primary-color);
+    color: $primary-icolor;
+    color: var(--primary-inverted, $primary-icolor);
+}
+
+@mixin secondary-color {
+    color: $secondary-color;
+    color: var(--secondary-color, $secondary-color);
+}
+
+@mixin secondary-inverted {
+    background-color: $secondary-color;
+    background-color: var(--secondary-color, $secondary-color);
+    color: $secondary-icolor;
+    color: var(--secondary-inverted, $secondary-icolor);
+}
+
+// Media queries //
+
+@mixin mobile {
+    @media screen and (max-width: 450px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media screen and (max-width: 700px) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media screen and (min-width: 800px) {
+        @content;
+    }
+}
