@@ -59,6 +59,16 @@
         .description {
             max-width: calc(100% - 200px);
 
+            i.fas {
+                width: 18px;
+
+                &:before {
+                    align-items: center;
+                    display: flex;
+                    height: 100%;
+                }
+            }
+
             .name, .place {
                 display: inline-block;
             }
@@ -84,6 +94,10 @@
 
                 .name, .place {
                     width: 50%;
+                }
+
+                i.fas + .name {
+                    width: calc(50% - 18px);
                 }
             }
         }

@@ -50,6 +50,7 @@
                 <div class="mc-w-list--event">
                     <div class="category"><i>Arte indígena</i> | Livre</div>
                     <div class="description">
+                        <i class="fas fa-star"></i>
                         <div class="name">Nome de um primeiro evento com outro nome</div>
                         <div class="place">Grupo Livre Capoeira Regional</div>
                     </div>
@@ -65,6 +66,7 @@
                 <div class="mc-w-list--event">
                     <div class="category"><i>Cinema</i> | 18 anos</div>
                     <div class="description">
+                        <i class="fas fa-check"></i>
                         <div class="name">Nome de um primeiro evento</div>
                         <div class="place">Nome do espaço</div>
                     </div>
