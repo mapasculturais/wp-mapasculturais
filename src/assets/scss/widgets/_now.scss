@@ -1,0 +1,31 @@
+.mc-w-now {
+    &--event {
+
+        @include desktop {
+            border-top: 1px solid var(--secondary-color, $secondary-color);
+            padding: 10px 0;
+        }
+
+        .time {
+            align-items: center;
+            display: flex;
+            width: 110px;
+        }
+
+        .category {
+            width: 250px;
+
+            @include mobile {
+                display: none;
+            }
+        }
+
+        .description {
+            max-width: calc(100% - 360px);
+
+            @include mobile {
+                max-width: calc(100% - 110px);
+            }
+        }
+    }
+}
