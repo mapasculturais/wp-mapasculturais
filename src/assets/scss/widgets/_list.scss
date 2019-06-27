@@ -1,29 +1,4 @@
-@import '../settings/temp';
-
 .mc-w-list {
-    @extend %mc-w;
-    min-width: 100%;
-
-    &--header {
-        margin-bottom: 20px;
-
-        strong {
-            @include primary-color;
-            margin: 0 5px;
-        }
-
-        .previous, .next {
-            @include secondary-inverted;
-            align-items: center;
-            border-radius: 50%;
-            display: inline-flex;
-            height: 25px;
-            justify-content: center;
-            padding: 0;
-            width: 25px;
-        }
-    }
-
     &--content {
         border-collapse: collapse;
         margin: 10px 0;
@@ -54,8 +29,6 @@
     }
 
     &--event {
-        display: flex;
-        margin-bottom: 5px;
 
         .category {
             width: 200px;
@@ -67,42 +40,14 @@
         }
 
         .description {
-            max-width: calc(100% - 200px);
-
-            i.fas {
-                width: 18px;
-
-                &:before {
-                    align-items: center;
-                    display: flex;
-                    height: 100%;
-                }
-            }
-
-            .name, .place {
-                display: inline-block;
-            }
-
-            .name {
-                @include secondary-inverted;
-                border-radius: 5px;
-                margin-right: 5px;
-                padding: 0 5px;
-            }
-
-            .place {
-                @include primary-color;
-                font-weight: bold;
-            }
-
             @include tablet {
                 max-width: 100%;
             }
 
             @include mobile {
-                display: flex;
-
                 .name, .place {
+                    align-items: center;
+                    display: flex;
                     width: 50%;
                 }
 

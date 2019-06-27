@@ -1,0 +1,45 @@
+.mc-w-day {
+    &--label {
+        @include primary-color;
+        font-weight: bold;
+        font-size: 1.2em;
+        width: 100%;
+
+        &:after {
+            @include secondary-inverted;
+            content: '';
+            display: block;
+            float: right;
+            height: 1px;
+            margin-top: 12.5px;
+            width: calc(100% - 65px);
+        }
+    }
+
+    &--events {
+        padding: 10px 0;
+    }
+
+    &--event {
+
+        .time {
+            width: 110px;
+        }
+
+        .category {
+            width: 250px;
+
+            @include mobile {
+                display: none;
+            }
+        }
+
+        .description {
+            max-width: calc(100% - 360px);
+
+            @include mobile {
+                max-width: calc(100% - 110px);
+            }
+        }
+    }
+}

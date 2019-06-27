@@ -1,0 +1,74 @@
+@import '../settings/temp';
+
+.mc-w {
+    @extend %mc-w;
+    border-bottom: 3px solid var(--secondary-color, $secondary-color);
+    min-width: 100%;
+
+    &--header {
+        margin-bottom: 20px;
+
+        strong {
+            @include primary-color;
+            margin: 0 5px;
+        }
+
+        .previous, .next {
+            @include secondary-inverted;
+            align-items: center;
+            border-radius: 50%;
+            display: inline-flex;
+            height: 25px;
+            justify-content: center;
+            padding: 0;
+            width: 25px;
+        }
+    }
+
+    &--event {
+        display: flex;
+        margin-bottom: 5px;
+
+        .description {
+            i.fas {
+                width: 18px;
+
+                &:before {
+                    align-items: center;
+                    display: flex;
+                    height: 100%;
+                }
+            }
+
+            .name, .place {
+                display: inline-block;
+            }
+
+            .name {
+                @include secondary-inverted;
+                border-radius: 5px;
+                margin-right: 5px;
+                padding: 0 5px;
+            }
+
+            .place {
+                @include primary-color;
+                font-weight: bold;
+            }
+
+            @include mobile {
+                display: flex;
+
+                .name, .place {
+                    align-items: center;
+                    display: flex;
+                    width: 50%;
+                }
+
+                i.fas + .name {
+                    width: calc(50% - 18px);
+                }
+            }
+        }
+    }
+}
