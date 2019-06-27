@@ -5,6 +5,8 @@
     min-width: 100%;
 
     &--header {
+        margin-bottom: 20px;
+
         strong {
             @include primary-color;
             margin: 0 5px;
