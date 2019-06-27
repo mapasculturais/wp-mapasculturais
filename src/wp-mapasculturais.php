@@ -49,6 +49,7 @@ add_shortcode( 'events', 'events_shortcodes' );
 
 function mc_enqueue_scripts () {
     wp_enqueue_style('mapasculturais_css', '/wp-content/plugins/wp-mapasculturais/dist/index.css');
+    wp_enqueue_style('fontawesome5', '/wp-content/plugins/wp-mapasculturais/vendor/fontawesome-free/css/all.min.css');
 }
 add_action('wp_enqueue_scripts', 'mc_enqueue_scripts');
 
