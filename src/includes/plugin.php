@@ -1,6 +1,7 @@
 <?php
 namespace WPMapasCulturais;
 
+
 class Plugin{
     const POST_TYPES = ['agent', 'space', 'event'];
 
@@ -72,7 +73,7 @@ class Plugin{
 
             'localizacao', // @TODO: tem que tirar esse campo do mapas, ele não é usado.
 
-            'parent', 'location', '_type', // @TODO: implementar esses campos
+            'parent', '_type', // @TODO: implementar esses campos
         ];
 
         $result = [];
@@ -193,8 +194,6 @@ class Plugin{
                 $this->output_success($result);
                 break;
         }
-        
-
     }
 
     public function action__save_post($post_id){
