@@ -1,8 +1,8 @@
 <div class="mc-w-list">
     <div class="mc-w-list--header">
-        <button class="previous"><</button>
+        <button class="previous"><i class="fas fa-chevron-left"></i></button>
         <strong>Maio 2019</strong>
-        <button class="next">></button>
+        <button class="next"><i class="fas fa-chevron-right"></i></button>
     </div>
     <div class="mc-w-list--content">
         <div class="place mc-w-list--day">
