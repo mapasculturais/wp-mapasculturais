@@ -1,0 +1,104 @@
+.mc-w-agenda {
+
+    &__month {
+        margin-bottom: 20px;
+        position: relative;
+
+        &.minimized {
+            margin-bottom: 40px;
+        }
+    }
+
+    &__label {
+        @include primary-color;
+        font-weight: bold;
+        font-size: 1.2em;
+        width: 100%;
+
+        &:after {
+            @include secondary-inverted;
+            content: '';
+            display: block;
+            float: right;
+            height: 1px;
+            margin-top: 12.5px;
+            width: calc(100% - 100px);
+        }
+    }
+
+    &__collapse {
+        @include secondary-inverted;
+        align-items: center;
+        border-radius: 50%;
+        display: inline-flex;
+        height: 25px;
+        justify-content: center;
+        padding: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 25px;
+    }
+
+    &__content {
+        background-color: #EEE;
+        margin-top: -1.2em;
+    }
+
+    &__no-content {
+        padding: 20px;
+        text-align: center;
+    }
+
+    &__day {
+        border-color: var(--secondary-color, $secondary-color);
+        border-style: solid;
+        border-width: 0 0 1px;
+        display: flex;
+        padding: 10px 0;
+    }
+
+    &__date {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 5px;
+        min-width: 90px;
+
+        .day {
+            @include primary-color;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    }
+
+    &__event {
+
+        .time {
+            align-items: center;
+            display: flex;
+            width: 110px;
+
+            @include mobile {
+                display: none;
+            }
+        }
+
+        .category {
+            width: 250px;
+
+            @include mobile {
+                display: none;
+            }
+        }
+
+        .description {
+            max-width: calc(100% - 360px);
+
+            @include mobile {
+                max-width: 100%;
+            }
+        }
+    }
+}
