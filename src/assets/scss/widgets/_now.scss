@@ -1,5 +1,5 @@
 .mc-w-now {
-    &--event {
+    &__event {
 
         @include desktop {
             border-top: 1px solid var(--secondary-color, $secondary-color);

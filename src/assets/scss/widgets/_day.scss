@@ -1,5 +1,5 @@
 .mc-w-day {
-    &--label {
+    &__label {
         @include primary-color;
         font-weight: bold;
         font-size: 1.1em;
@@ -16,11 +16,11 @@
         }
     }
 
-    &--events {
+    &__events {
         padding: 10px 0;
     }
 
-    &--event {
+    &__event {
 
         .time {
             align-items: center;

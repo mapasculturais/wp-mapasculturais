@@ -5,7 +5,7 @@
     border-bottom: 3px solid var(--secondary-color, $secondary-color);
     min-width: 100%;
 
-    &--header {
+    &__header {
         margin-bottom: 20px;
 
         strong {
@@ -26,7 +26,7 @@
         }
     }
 
-    &--event {
+    &__event {
         display: flex;
         margin-bottom: 5px;
 
