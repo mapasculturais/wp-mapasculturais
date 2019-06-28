@@ -138,3 +138,5 @@
         </div>
     </div>
 </section>
+
+<?php include('_card.php'); ?>

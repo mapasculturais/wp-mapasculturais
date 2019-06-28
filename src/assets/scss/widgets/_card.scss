@@ -1,0 +1,90 @@
+@import '../settings/temp';
+
+.mc-w__card {
+    @extend %mc-w;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #CCC;
+    max-width: 400px !important;
+    width: 100%;
+
+    &-actions {
+        @include secondary-inverse;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: flex;
+        justify-content: flex-end;
+        padding: 5px;
+
+        a {
+            @include secondary-inverse;
+            padding: 0 3px;
+            text-decoration: none;
+        }
+
+        .toolbar {
+            padding: 0 5px;
+
+            & + .toolbar {
+                border-left: 1px solid var(--secondary-inverse, $secondary-icolor);
+            }
+
+            &.faded {
+                a {
+                    color: mix($secondary-icolor, $secondary-color, 75%);
+                }
+            }
+        }
+    }
+
+    &-slot {
+        display: flex;
+        padding-bottom: 5px;
+
+        .icon {
+            min-width: 30px;
+            max-width: 30px;
+        }
+
+        .text {
+            line-height: 1.4;
+
+            &.address {
+                .name {
+                    font-weight: bold;
+                }
+
+                .location {
+                    font-size: 0.9em;
+                }
+            }
+        }
+    }
+
+    &-header {
+        background-position: center;
+        background-size: cover;
+        color: white;
+        padding: 20px;
+        text-shadow: 0 0 5px black;
+
+        .name {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    }
+
+    &-content {
+        padding: 15px;
+
+        .more-info {
+            @include secondary-inverse;
+            border-bottom-right-radius: 10px;
+            display: block;
+            float: right;
+            font-weight: bold;
+            margin-top: -2em;
+            padding: 2.5px 5px;
+            text-decoration: none !important;
+        }
+    }
+}
