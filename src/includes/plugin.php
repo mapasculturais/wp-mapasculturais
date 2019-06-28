@@ -71,19 +71,20 @@ class Plugin{
             'sentNotification', 'subsite', '_subsiteId', 'user', 'userId', '@file', '_children',
             'opportunityTabName', 'useOpportunityTab', 'singleUrl',
 
-            'localizacao', // @TODO: tem que tirar esse campo do mapas, ele não é usado.
+            'localizacao', 'googleplus', // @TODO: tem que tirar esse campo do mapas, ele não é usado.
 
-            'parent', '_type', // @TODO: implementar esses campos
+            'owner', 'parent', '_type', // @TODO: implementar esses campos
         ];
 
         $result = [];
+
 
         foreach($class_description as $key => $description){
             // if(!isset($description->isEntityRelation)) die(var_dump($description));
             if( strpos($key, 'geo') === 0 || 
                 strpos($key, '__') === 0 || 
                 in_array($key, $to_remove) ||
-                (isset($description->private) && $description->private)|| 
+                (isset($description->private) && is_bool($description->private) && $description->private)|| 
                 ($description->isEntityRelation && !$description->isOwningSide)
                 ){
                 continue;

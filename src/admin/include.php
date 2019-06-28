@@ -59,89 +59,124 @@ function register_metaboxes(){
     global $wp_mapasculturais;
     if(false) $wp_mapasculturais = new Plugin;
 
+    
+
     foreach(Plugin::POST_TYPES as $post_type){
         $metadata_description = $wp_mapasculturais->getEntityMetadataDescription($post_type);
-        
-        /**
-         * Initiate the metabox
-         */
-        $cmb = new_cmb2_box( array(
-            'id'            => $post_type . '_metabox',
-            'title'         => __( 'Dados', 'wp-mapas' ),
-            'object_types'  => array( $post_type ), // Post type
-            'context'       => 'normal',
-            'priority'      => 'high',
-            'show_names'    => true, // Show field names on the left
-            // 'cmb_styles' => false, // false to disable the CMB stylesheet
-            // 'closed'     => true, // Keep the metabox closed by default
-        ) );
+        // die(var_dump($post_type, $metadata_description,isset($metadata_description->location)));
+        if(isset($metadata_description['location'])){
+            $metaboxes = [
+                'data' => (object) [
+                        'name' => __( 'Dados', 'wp-mapas' ),
+                        'fn'=> function ($meta_key) { return (!in_array($meta_key, ['location', 'publicLocation', 'endereco'])) && strpos($meta_key, 'En_') === false; }
+                    ], 
+                'location' => (object) [
+                        'name' => __( 'Localização', 'wp-mapas' ),
+                        'fn' => function ($meta_key) { return in_array($meta_key, ['location', 'publicLocation', 'endereco']) || strpos($meta_key, 'En_') !== false; }
+                    ]
+            ];
+        } else {
+            $metaboxes = [ 
+                'data' => (object) [
+                        'name' => __( 'Dados', 'wp-mapas' ),
+                        'fn' => function ($meta_key) { return true; }
+                    ] 
+            ];
+        }
 
+        foreach($metaboxes as $metabox_id => $cfg){
+            
+            /**
+             * Initiate the metabox
+             */
+            $cmb = new_cmb2_box( array(
+                'id'            => "{$post_type}_{$metabox_id}",
+                'title'         => $cfg->name,
+                'object_types'  => array( $post_type ), // Post type
+                'context'       => 'normal',
+                'priority'      => 'high',
+                'show_names'    => true, // Show field names on the left
+                // 'cmb_styles' => false, // false to disable the CMB stylesheet
+                // 'closed'     => true, // Keep the metabox closed by default
+            ) );
 
-        foreach($metadata_description as $key => $description){
-            switch($description->type){
-                case 'string':
-                    $cmb->add_field( array(
-                        'name'       => $description->label,
-                        'id'         => $key,
-                        'type'       => 'text'
-                    ) );
-                    break;
+            $fn = $cfg->fn;
+            foreach($metadata_description as $key => $description){
 
-                case 'select':
-                    $options = [];
-                    foreach($description->optionsOrder as $value){
-                        $options[$value] = $description->options->{$value}; 
-                    }
-                    $cmb->add_field( array(
-                        'name'       => $description->label,
-                        'id'         => $key,
-                        'show_option_none' => true,
-                        'type'       => 'select',
-                        'options'    => $options,
-                    ) );
-                    break;
+                if(!$fn($key)){
+                    continue;
+                }
 
-                case 'date':
-                    $cmb->add_field( array(
-                        'name'       => $description->label,
-                        'id'         => $key,
-                        'type' => 'text_date',
-                        // 'timezone_meta_key' => 'wiki_test_timezone',
-                        // 'date_format' => 'l jS \of F Y',
-                    ) );
-                    break;
+                if($key === 'public' && empty($description->label)){
+                    $description->label = __('Publicação Livre', 'wp-mapas');
+                }
 
-                case 'boolean':
-                    $cmb->add_field( array(
-                        'name'       => $description->label,
-                        'id'         => $key,
-                        'type' => 'checkbox',
-                    ) );
-                    break;
+                switch($description->type){
+                    case 'text':
+                    case 'string':
+                        $cmb->add_field( array(
+                            'name'       => $description->label,
+                            'id'         => $key,
+                            'type'       => 'text'
+                        ) );
+                        break;
 
-                case 'point':
-                    $cmb->add_field( array(
-                        'name'       => $description->label,
-                        'id'         => $key,
-                        'type' => 'leaflet_map',
-                        'attributes' => [
-                            'tilelayer'           => 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-                            'searchbox_position'  => 'topright', // topright, bottomright, topleft, bottomleft,
-                            'search'              => __( 'Buscar...', 'wp-mapas' ),
-                            'not_found'           => __( 'Not found', 'wp-mapas' ),
-                            'initial_coordinates' => [
-                                'lat' => -23, // Go Finland!
-                                'lng' => -46  // Go Finland!
-                            ],
-                            'initial_zoom'        => 4, // Zoomlevel when there's no coordinates set,
-                            'default_zoom'        => 13 // Zoomlevel after the coordinates have been set & page saved
-                        ]
-                    ) );
-                
-                    break;
-                        
+                    case 'select':
+                        $options = [];
+                        foreach($description->optionsOrder as $value){
+                            $options[$value] = $description->options->{$value}; 
+                        }
+                        $cmb->add_field( array(
+                            'name'       => $description->label,
+                            'id'         => $key,
+                            'show_option_none' => true,
+                            'type'       => 'select',
+                            'options'    => $options,
+                        ) );
+                        break;
 
-            }
+                    case 'date':
+                        $cmb->add_field( array(
+                            'name'       => $description->label,
+                            'id'         => $key,
+                            'type' => 'text_date',
+                            // 'timezone_meta_key' => 'wiki_test_timezone',
+                            // 'date_format' => 'l jS \of F Y',
+                        ) );
+                        break;
+
+                    case 'boolean':
+                        $cmb->add_field( array(
+                            'name'       => $description->label,
+                            'id'         => $key,
+                            'type' => 'checkbox',
+                        ) );
+                        break;
+
+                    case 'point':
+                        $cmb->add_field( array(
+                            'name'       => $description->label,
+                            'id'         => $key,
+                            'type' => 'leaflet_map',
+                            'attributes' => [
+                                'tilelayer'           => 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+                                'searchbox_position'  => 'topright', // topright, bottomright, topleft, bottomleft,
+                                'search'              => __( 'Buscar...', 'wp-mapas' ),
+                                'not_found'           => __( 'Not found', 'wp-mapas' ),
+                                'initial_coordinates' => [
+                                    'lat' => -23, // Go Finland!
+                                    'lng' => -46  // Go Finland!
+                                ],
+                                'initial_zoom'        => 4, // Zoomlevel when there's no coordinates set,
+                                'default_zoom'        => 13 // Zoomlevel after the coordinates have been set & page saved
+                            ]
+                        ) );
+                    
+                        break;
+                            
+
+                }
+            }   
         }
     }
 }
