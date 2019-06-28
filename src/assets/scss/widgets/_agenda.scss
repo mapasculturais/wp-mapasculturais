@@ -4,6 +4,10 @@
         margin-bottom: 20px;
         position: relative;
 
+        &.maximized {
+            border-bottom: 3px solid var(--secondary-color, $secondary-color);
+        }
+
         &.minimized {
             margin-bottom: 40px;
         }
