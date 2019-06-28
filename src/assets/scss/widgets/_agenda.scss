@@ -20,7 +20,7 @@
         width: 100%;
 
         &:after {
-            @include secondary-inverted;
+            @include secondary-inverse;
             content: '';
             display: block;
             float: right;
@@ -31,7 +31,7 @@
     }
 
     &__collapse {
-        @include secondary-inverted;
+        @include secondary-inverse;
         align-items: center;
         border-radius: 50%;
         display: inline-flex;

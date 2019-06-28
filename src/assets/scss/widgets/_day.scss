@@ -6,7 +6,7 @@
         width: 100%;
 
         &:after {
-            @include secondary-inverted;
+            @include secondary-inverse;
             content: '';
             display: block;
             float: right;
