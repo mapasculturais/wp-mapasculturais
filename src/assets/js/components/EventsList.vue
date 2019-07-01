@@ -1,10 +1,6 @@
 <template>
     <section class="mc-w mc-w-list">
-        <div class="mc-w__header">
-            <button class="previous"><i class="fas fa-chevron-left"></i></button>
-            <strong>Maio 2019</strong>
-            <button class="next"><i class="fas fa-chevron-right"></i></button>
-        </div>
+        <WidgetHeader previous="#" next="#">Maio de 2019</WidgetHeader>
         <div class="mc-w-list__content">
             <div class="mc-w-list__day">
                 <div class="mc-w-list__date">
@@ -92,3 +88,14 @@
         </div>
     </section>
 </template>
+
+<script>
+    import WidgetHeader from './WidgetHeader.vue'
+
+    export default {
+        name: 'EventsList',
+        components: {
+            WidgetHeader
+        }
+    }
+</script>

@@ -1,10 +1,6 @@
 <template>
     <section class="mc-w mc-w-day">
-        <div class="mc-w__header mc-w-day__header">
-            <button class="previous"><i class="fas fa-chevron-left"></i></button>
-            <strong>1 de Maio de 2019</strong>
-            <button class="next"><i class="fas fa-chevron-right"></i></button>
-        </div>
+        <WidgetHeader previous="#" next="#">1 de Maio de 2019</WidgetHeader>
         <div class="mc-w-day__content">
             <div class="mc-w-day__period">
                 <div class="mc-w-day__label">Manhã</div>
@@ -140,3 +136,14 @@
         </div>
     </section>
 </template>
+
+<script>
+    import WidgetHeader from './WidgetHeader.vue'
+
+    export default {
+        name: 'DailyEvents',
+        components: {
+            WidgetHeader
+        }
+    }
+</script>

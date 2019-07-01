@@ -1,8 +1,6 @@
 <template>
     <section class="mc-w mc-w-agenda">
-        <div class="mc-w__header mc-w-agenda__header">
-            <strong>Minha agenda</strong>
-        </div>
+        <WidgetHeader>Minha agenda</WidgetHeader>
         <div class="mc-w-agenda__month maximized">
             <div class="mc-w-agenda__label">Maio</div>
             <button class="mc-w-agenda__collapse"><i class="fas fa-arrow-up"></i></button>
@@ -205,3 +203,14 @@
         </div>
     </section>
 </template>
+
+<script>
+    import WidgetHeader from './WidgetHeader.vue'
+
+    export default {
+        name: 'MyAgenda',
+        components: {
+            WidgetHeader
+        }
+    }
+</script>

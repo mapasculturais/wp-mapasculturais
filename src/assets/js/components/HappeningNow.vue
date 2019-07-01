@@ -1,8 +1,6 @@
 <template>
     <section class="mc-w mc-w-now">
-        <div class="mc-w__header mc-w-now__header">
-            <strong>Agora</strong>
-        </div>
+        <WidgetHeader>Agora</WidgetHeader>
         <div class="mc-w-now__content">
             <div class="mc-w-now__events">
                 <div class="mc-w__event mc-w-now__event">
@@ -67,3 +65,14 @@
         </div>
     </section>
 </template>
+
+<script>
+    import WidgetHeader from './WidgetHeader.vue'
+
+    export default {
+        name: 'HappeningNow',
+        components: {
+            WidgetHeader
+        }
+    }
+</script>
