@@ -42,7 +42,7 @@
                 }
             }
 
-            .name, .place {
+            .name, .space {
                 display: inline-block;
             }
 
@@ -53,15 +53,15 @@
                 padding: 0 5px;
             }
 
-            .place {
+            .space {
                 @include primary-color;
                 font-weight: bold;
             }
 
-            @include mobile {
+            @include tablet {
                 display: flex;
 
-                .name, .place {
+                .name, .space {
                     align-items: center;
                     display: flex;
                     width: 50%;

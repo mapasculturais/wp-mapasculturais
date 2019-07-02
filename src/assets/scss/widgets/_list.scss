@@ -34,7 +34,7 @@
             width: 200px;
             max-width: 40%;
 
-            @include mobile {
+            @include tablet {
                 display: none;
             }
         }
@@ -42,18 +42,6 @@
         .description {
             @include tablet {
                 max-width: 100%;
-            }
-
-            @include mobile {
-                .name, .place {
-                    align-items: center;
-                    display: flex;
-                    width: 50%;
-                }
-
-                i.fas + .name {
-                    width: calc(50% - 18px);
-                }
             }
         }
     }
