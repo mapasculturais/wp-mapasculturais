@@ -8,27 +8,18 @@
                     <div class="weekday">Quinta</div>
                 </div>
                 <div class="mc-w-list__events">
-                    <div class="mc-w__event mc-w-list__event">
-                        <div class="category"><i>Artes circense</i> | Livre</div>
-                        <div class="description">
-                            <div class="name">Nome de um primeiro evento com nome grande</div>
-                            <div class="place">Condomínio Cultural</div>
-                        </div>
-                    </div>
-                    <div class="mc-w__event mc-w-list__event">
-                        <div class="category"><i>Música erudita</i> | 12 anos</div>
-                        <div class="description">
-                            <div class="name">Nome de um segundo evento</div>
-                            <div class="place">Museu das Bandeiras</div>
-                        </div>
-                    </div>
-                    <div class="mc-w__event mc-w-list__event">
-                        <div class="category"><i>Cinema</i> | 12 anos</div>
-                        <div class="description">
-                            <div class="name">Outro nome de um segundo evento</div>
-                            <div class="place">Biblioteca Monteiro Lobato</div>
-                        </div>
-                    </div>
+                    <EventRow class="mc-w-list__event"
+                        category="Artes circenses" rating="Livre"
+                        name="Nome de um primeiro evento com nome grande"
+                        space="Condomínio Cultural"/>
+                    <EventRow class="mc-w-list__event"
+                        category="Música erudita" rating="12 anos"
+                        name="Nome de um segundo evento"
+                        space="Museu das Bandeiras"/>
+                    <EventRow class="mc-w-list__event"
+                        category="Cinema" rating="12 anos"
+                        name="Outro nome de um segundo evento"
+                        space="Biblioteca Monteiro Lobato"/>
                 </div>
             </div>
             <div class="mc-w-list__day">
@@ -37,21 +28,14 @@
                     <div class="weekday">Sexta</div>
                 </div>
                 <div class="mc-w-list__events">
-                    <div class="mc-w__event mc-w-list__event">
-                        <div class="category"><i>Artes visuais</i> | Livre</div>
-                        <div class="description">
-                            <div class="name">Nome de um primeiro evento</div>
-                            <div class="place">Biblioteca Itinerante de Quadrinhos</div>
-                        </div>
-                    </div>
-                    <div class="mc-w__event mc-w-list__event">
-                        <div class="category"><i>Arte indígena</i> | Livre</div>
-                        <div class="description">
-                            <i class="fas fa-star"></i>
-                            <div class="name">Nome de um primeiro evento com outro nome</div>
-                            <div class="place">Grupo Livre Capoeira Regional</div>
-                        </div>
-                    </div>
+                    <EventRow class="mc-w-list__event"
+                        category="Artes visuais" rating="Livre"
+                        name="Nome de um primeiro evento"
+                        space="Biblioteca Itinerante de Quadrinhos"/>
+                    <EventRow class="mc-w-list__event"
+                        star category="Arte indígena" rating="Livre"
+                        name="Nome de um primeiro evento com outro nome"
+                        space="Grupo Livre Capoeira Regional"/>
                 </div>
             </div>
             <div class="mc-w-list__day">
@@ -60,14 +44,10 @@
                     <div class="weekday">Segunda</div>
                 </div>
                 <div class="mc-w-list__events">
-                    <div class="mc-w__event mc-w-list__event">
-                        <div class="category"><i>Cinema</i> | 18 anos</div>
-                        <div class="description">
-                            <i class="fas fa-check"></i>
-                            <div class="name">Nome de um primeiro evento</div>
-                            <div class="place">Nome do espaço</div>
-                        </div>
-                    </div>
+                    <EventRow class="mc-w-list__event"
+                        check category="Cinema" rating="18 anos"
+                        name="Nome de um primeiro evento"
+                        space="Nome do espaço"/>
                 </div>
             </div>
             <div class="mc-w-list__day">
@@ -76,13 +56,10 @@
                     <div class="weekday">Sábado</div>
                 </div>
                 <div class="mc-w-list__events">
-                    <div class="mc-w__event mc-w-list__event">
-                        <div class="category"><i>Hip hop</i> | Livre</div>
-                        <div class="description">
-                            <div class="name">Nome de um primeiro evento</div>
-                            <div class="place">Livraria Dom Bosco</div>
-                        </div>
-                    </div>
+                    <EventRow class="mc-w-list__event"
+                        category="Hip hop" rating="Livre"
+                        name="Nome de um primeiro evento"
+                        space="Livraria Dom Bosco"/>
                 </div>
             </div>
         </div>
@@ -90,11 +67,13 @@
 </template>
 
 <script>
+    import EventRow from './EventRow.vue'
     import WidgetHeader from './WidgetHeader.vue'
 
     export default {
         name: 'EventsList',
         components: {
+            EventRow,
             WidgetHeader
         }
     }

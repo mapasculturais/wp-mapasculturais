@@ -11,24 +11,14 @@
                         <div class="weekday">Quinta</div>
                     </div>
                     <div class="mc-w-agenda__events">
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">00:00 - 02:30</div>
-                            <div class="category"><i>Cinema</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-check"></i>
-                                <div class="name">Nome de um primeiro com nome grande</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">02:00 - 06:30</div>
-                            <div class="category"><i>Música clássica</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-star"></i>
-                                <div class="name">Nome de um primeiro evento</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
+                        <EventRow class="mc-w-agenda__event"
+                            check time="00:00 - 02:30" category="Cinema" rating="Livre"
+                            name="Nome de um primeiro com nome grande"
+                            space="Nome do espaço"/>
+                        <EventRow class="mc-w-agenda__event"
+                            star time="02:00 - 06:30" category="Música clássica" rating="Livre"
+                            name="Nome de um primeiro evento"
+                            space="Nome do espaço"/>
                     </div>
                 </div>
                 <div class="mc-w-agenda__day">
@@ -37,42 +27,22 @@
                         <div class="weekday">Terça</div>
                     </div>
                     <div class="mc-w-agenda__events">
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">00:00 - 02:30</div>
-                            <div class="category"><i>Artes visuais</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-check"></i>
-                                <div class="name">Nome de um primeiro evento com nome</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">02:00 - 06:30</div>
-                            <div class="category"><i>Artes circenses</i> | 12 anos</div>
-                            <div class="description">
-                                <i class="fas fa-star"></i>
-                                <div class="name">Nome de um primeiro com nome grande</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">02:00 - 06:30</div>
-                            <div class="category"><i>Cultura digital</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-star"></i>
-                                <div class="name">Nome de um primeiro evento</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">02:00 - 06:30</div>
-                            <div class="category"><i>Audiovisual</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-star"></i>
-                                <div class="name">Nome de um primeiro evento com nome grande</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
+                        <EventRow class="mc-w-agenda__event"
+                            check time="00:00 - 02:30" category="Artes visuais" rating="Livre"
+                            name="Nome de um primeiro evento com nome"
+                            space="Nome do espaço"/>
+                        <EventRow class="mc-w-agenda__event"
+                            star time="02:00 - 06:30" category="Artes circenses" rating="12 anos"
+                            name="Nome de um primeiro com nome grande"
+                            space="Nome do espaço"/>
+                        <EventRow class="mc-w-agenda__event"
+                            star time="02:00 - 06:30" category="Cultura digital" rating="Livre"
+                            name="Nome de um primeiro evento"
+                            space="Nome do espaço"/>
+                        <EventRow class="mc-w-agenda__event"
+                            star time="02:00 - 06:30" category="Audiovisual" rating="Livre"
+                            name="Nome de um primeiro evento com nome grande"
+                            space="Nome do espaço"/>
                     </div>
                 </div>
                 <div class="mc-w-agenda__day">
@@ -81,15 +51,10 @@
                         <div class="weekday">Sábado</div>
                     </div>
                     <div class="mc-w-agenda__events">
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">00:00 - 02:30</div>
-                            <div class="category"><i>Artes integradas</i> | 18 anos</div>
-                            <div class="description">
-                                <i class="fas fa-check"></i>
-                                <div class="name">Nome de um primeiro com nome grande</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
+                        <EventRow class="mc-w-agenda__event"
+                            check time="00:00 - 02:30" category="Artes integradas" rating="18 anos"
+                            name="Nome de um primeiro com nome grande"
+                            space="Nome do espaço"/>
                     </div>
                 </div>
             </div>
@@ -104,24 +69,14 @@
                         <div class="weekday">Sábado</div>
                     </div>
                     <div class="mc-w-agenda__events">
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">00:00 - 02:30</div>
-                            <div class="category"><i>Livro e literatura</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-check"></i>
-                                <div class="name">Nome de um primeiro evento nome grande</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">02:00 - 06:30</div>
-                            <div class="category"><i>Música popular</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-star"></i>
-                                <div class="name">Nome de um primeiro com nome grande</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
+                        <EventRow class="mc-w-agenda__event"
+                            check time="00:00 - 02:30" category="Livro e literatura" rating="Livre"
+                            name="Nome de um primeiro evento nome grande"
+                            space="Nome do espaço"/>
+                        <EventRow class="mc-w-agenda__event"
+                            star time="02:00 - 06:30" category="Música popular" rating="Livre"
+                            name="Nome de um primeiro evento nome grande"
+                            space="Nome do espaço"/>
                     </div>
                 </div>
                 <div class="mc-w-agenda__day">
@@ -130,42 +85,22 @@
                         <div class="weekday">Terça</div>
                     </div>
                     <div class="mc-w-agenda__events">
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">00:00 - 02:30</div>
-                            <div class="category"><i>Exposição</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-check"></i>
-                                <div class="name">Nome de um primeiro evento com nome grande</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">02:00 - 06:30</div>
-                            <div class="category"><i>Cultura indígena</i> | 12 anos</div>
-                            <div class="description">
-                                <i class="fas fa-star"></i>
-                                <div class="name">Nome de um primeiro evento</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">02:00 - 06:30</div>
-                            <div class="category"><i>Rádio</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-star"></i>
-                                <div class="name">Nome de um primeiro evento com nome</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">02:00 - 06:30</div>
-                            <div class="category"><i>Teatro</i> | Livre</div>
-                            <div class="description">
-                                <i class="fas fa-star"></i>
-                                <div class="name">Nome de um primeiro evento com nome grande</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
+                        <EventRow class="mc-w-agenda__event"
+                            check time="00:00 - 02:30" category="Exposição" rating="Livre"
+                            name="Nome de um primeiro evento com nome grande"
+                            space="Nome do espaço"/>
+                        <EventRow class="mc-w-agenda__event"
+                            star time="02:00 - 06:30" category="Cultura indígena" rating="12 anos"
+                            name="Nome de um primeiro evento"
+                            space="Nome do espaço"/>
+                        <EventRow class="mc-w-agenda__event"
+                            star time="02:00 - 06:30" category="Rádio" rating="Livre"
+                            name="Nome de um primeiro evento com nome"
+                            space="Nome do espaço"/>
+                        <EventRow class="mc-w-agenda__event"
+                            star time="02:00 - 06:30" category="Teatro" rating="Livre"
+                            name="Nome de um primeiro evento com nome grande"
+                            space="Nome do espaço"/>
                     </div>
                 </div>
                 <div class="mc-w-agenda__day">
@@ -174,15 +109,10 @@
                         <div class="weekday">Quarta</div>
                     </div>
                     <div class="mc-w-agenda__events">
-                        <div class="mc-w__event mc-w-agenda__event">
-                            <div class="time">00:00 - 02:30</div>
-                            <div class="category"><i>Outros</i> | 18 anos</div>
-                            <div class="description">
-                                <i class="fas fa-check"></i>
-                                <div class="name">Nome de um primeiro evento</div>
-                                <div class="place">Nome do espaço</div>
-                            </div>
-                        </div>
+                        <EventRow class="mc-w-agenda__event"
+                            check time="00:00 - 02:30" category="Outros" rating="18 anos"
+                            name="Nome de um primeiro evento"
+                            space="Nome do espaço"/>
                     </div>
                 </div>
             </div>
@@ -205,11 +135,13 @@
 </template>
 
 <script>
+    import EventRow from './EventRow.vue'
     import WidgetHeader from './WidgetHeader.vue'
 
     export default {
         name: 'MyAgenda',
         components: {
+            EventRow,
             WidgetHeader
         }
     }
