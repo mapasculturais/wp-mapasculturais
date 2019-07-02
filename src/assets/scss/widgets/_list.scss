@@ -31,8 +31,8 @@
     &__event {
 
         .category {
-            width: 200px;
-            max-width: 40%;
+            min-width: 200px;
+            max-width: 200px;
 
             @include tablet {
                 display: none;
