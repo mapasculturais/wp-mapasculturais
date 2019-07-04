@@ -20,8 +20,6 @@ class ApiWrapper{
      */
     public $wpdb;
 
-    protected $_cache = []; 
-
     /**
      * Instancia do wrapper da api
      *
@@ -32,6 +30,13 @@ class ApiWrapper{
     public $entityDescriptions = [];
 
     public $entityTypes = [];
+
+    /**
+     * Cache
+     *
+     * @var \WPMapasCulturais\Cache
+     */
+    public $cache = null;
 
 
     /**
@@ -53,12 +58,15 @@ class ApiWrapper{
         $private_key = get_option('MAPAS:private_key');
         $public_key = get_option('MAPAS:public_key');
 
+        $this->cache = new Cache(__CLASS__);
+
         $this->mapasApi = new MapasSDK($url, $public_key, $private_key);
 
         global $wpdb;
         $this->wpdb = $wpdb;
 
         $this->_populateDescriptions();
+
     }
 
     public function getOption($name, $default = null){
@@ -76,13 +84,15 @@ class ApiWrapper{
 
     protected function _populateDescriptions(){
         $cache_id = 'MAPAS:entity_descriptions';
-        if(!($descriptions = get_transient($cache_id))){
+
+        if($this->cache->exists($cache_id)){
+            $descriptions = $this->cache->get($cache_id);
+        } else {
             $descriptions = [];
             foreach(PLugin::POST_TYPES as $class){
                 $descriptions[$class] = $this->mapasApi->getEntityDescription($class);
             }
-
-            set_transient($cache_id, $descriptions, 10 * MINUTE_IN_SECONDS);
+            $this->cache->add($cache_id, $descriptions, Cache::DAY );
         }
 
         $this->entityDescriptions = $descriptions;
@@ -96,6 +106,8 @@ class ApiWrapper{
      * @return array
      */
     function getLinkedEntitiesIds($class){
+        // @TODO: utilizar cache e apagar sempre que uma nova entidade for criada ou importada
+
         $result = $this->wpdb->get_results("
             SELECT 
                 post_id, meta_value AS entity_id
@@ -410,27 +422,35 @@ class ApiWrapper{
 
     function getTaxonomyTerms($taxonomy_slug){
         $cache_id = __METHOD__ . ':' . $taxonomy_slug;
-        if(!isset($this->_cache[$cache_id])){
-            $terms = $this->mapasApi->getTaxonomyTerms($taxonomy_slug);
-            $this->_cache[$cache_id] = $terms;
+        if($this->cache->exists($cache_id)){
+            return $this->cache->get($cache_id);
         }
 
-        return $this->_cache[$cache_id];
+        $terms = $this->mapasApi->getTaxonomyTerms($taxonomy_slug);
+        
+        $this->cache->add($cache_id, $terms, Cache::DAY);
+
+        return $terms;
         
     }
 
     function getEntityTypes($class){
         $cache_id = __METHOD__ . ':' . $class;
-        if(!isset($this->_cache[$cache_id])){
-            $_types = $this->mapasApi->getEntityTypes($class);
-            $types = [];
-            foreach($_types as $type){
-                $types[$type->id] = $type->name;
-            }
-            $this->_cache[$cache_id] = $types;
-        }
 
-        return $this->_cache[$cache_id];
+        if($this->cache->exists($cache_id)){
+            return $this->cache->get($cache_id);
+        }
+        
+        $_types = $this->mapasApi->getEntityTypes($class);
+        $types = [];
+        foreach($_types as $type){
+            $types[$type->id] = $type->name;
+        }
+        
+        $this->cache->add($cache_id, $types, Cache::DAY);
+        
+        return $types;        
+
         
     }
 }

@@ -17,6 +17,8 @@ define('WP_MAPAS__VENDOR_PATH', __DIR__ . '/vendor/');
 
 require WP_MAPAS__VENDOR_PATH . 'MapasSDK/vendor/autoload.php';
 
+require __DIR__ . '/includes/cache.php';
+
 require __DIR__ . '/includes/post-types.php';
 
 require __DIR__ . '/includes/api-wrapper.php';
