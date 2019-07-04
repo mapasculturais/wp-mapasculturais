@@ -102,8 +102,25 @@ class Plugin{
         return $result;
     }
 
-    function getEntityFields($class){
-        return array_keys($this->getEntityMetadataDescription($class));
+    /**
+     * Retorna um array com os campos da entidade da classe informada
+     *
+     * @param string $class (agent|space|event)
+     * @param boolean $include_base_fields incluir os campos básicos da entidade? default: false
+     * @param boolean $include_extra_fields includer os campos extras da entidade? default: false
+     * @return array
+     */
+    function getEntityFields($class, $include_base_fields = false, $include_extra_fields = false, $exclude_fields = []){
+        $result = array_keys($this->getEntityMetadataDescription($class));
+        if($include_base_fields){
+            $result = array_merge($this->api->getBaseEntityFields(), $result);
+        }
+
+        if($include_extra_fields){
+            $result = array_merge($result, $this->api->getExtraEntityFields());
+        }
+
+        return array_diff($result, $exclude_fields);
     }
 
     function output_error($data, $http_status_code = 400){
@@ -164,11 +181,15 @@ class Plugin{
 
     public function filter__query_vars( $qvars ) {
         $qvars[] = 'mcaction';
+        $qvars[] = 'mcarg1';
+        $qvars[] = 'mcarg2';
         return $qvars;
     }
 
     public function action__rewrite_rules() {
         add_rewrite_rule('mcapi/([^/]+)/?$', 'index.php?action=wp_mapasculturais_actions&mcaction=$matches[1]', 'top');
+        add_rewrite_rule('mcapi/([^/]+)/([^/]+)/?$', 'index.php?action=wp_mapasculturais_actions&mcaction=$matches[1]&mcarg1=$matches[2]', 'top');
+        add_rewrite_rule('mcapi/([^/]+)/([^/]+)/([^/]+)/?$', 'index.php?action=wp_mapasculturais_actions&mcaction=$matches[1]&mcarg1=$matches[2]&mcarg2=$matches[3]', 'top');
         if(!get_option('MAPAS:permalinks_flushed')){
             flush_rewrite_rules();
             add_option('MAPAS:permalinks_flushed', 1);
@@ -194,6 +215,25 @@ class Plugin{
                 $result['events'] = $events;
                 $this->output_success($result);
                 break;
+            
+            case 'agent':
+            case 'space':
+            case 'event':
+                $arg1 = get_query_var('mcarg1');
+                $result = [];
+                if(empty($arg1)){
+                    // busca
+                    $result = $this->api->find($action, $_GET);
+                } else if(is_int($arg1)){
+
+                }
+                $this->output_success($result);
+
+            case 'eventOccurrence':
+                $result = $this->api->findEventOccurrences($_GET);
+                $this->output_success($result);
+                break;
+
         }
     }
 

@@ -69,6 +69,8 @@ class ApiWrapper{
 
     }
 
+
+
     public function getOption($name, $default = null){
         $option_name = 'MAPAS:' . $name;
 
@@ -127,6 +129,75 @@ class ApiWrapper{
         return $result;
     }
 
+    /**
+     * Retorna os IDs dos posts dados os ids das entidades
+     *
+     * @param string $class
+     * @param array $entity_id
+     * @return array
+     */
+    function getPostIdsByEntityIds($class, array $entity_ids){
+        $ids = implode("','", $entity_ids);
+
+        $cache_id = __METHOD__ . ":$class:$ids";
+
+        if($this->cache->exists($cache_id)){
+            return $this->cache->get($cache_id);
+        }
+        
+        $_result = $this->wpdb->get_results("
+            SELECT 
+                post_id, meta_value AS entity_id
+            FROM 
+                {$this->wpdb->postmeta} 
+            WHERE 
+                meta_value IN ('$ids') AND
+                meta_key = 'MAPAS:entity_id' AND 
+                post_id IN (
+                    SELECT 
+                        ID 
+                    FROM 
+                        {$this->wpdb->posts} 
+                    WHERE
+                        post_type = '{$class}' AND 
+                        post_status IN ('publish', 'draft')
+                )");
+
+        $result = [];
+        
+        foreach($_result as $r){
+            $result[$r->entity_id] = $r->post_id;
+        }
+        
+        $this->cache->add($cache_id,$result,Cache::DAY);
+
+        return $result;
+    }
+
+    /**
+     * Retorna o id da entidade 
+     *
+     * @param string $class
+     * @param int $entity_id
+     * @return int 
+     */
+    function getPostIdByEntityId($class, $entity_id){
+        $post_id = $this->getPostIdsByEntityIds($class, [$entity_id]);
+        
+        return isset($post_id[$entity_id]) ? $post_id[$entity_id] : null;
+    }
+
+    public function getBaseEntityFields(){
+        return [
+            'id', 'type', 'name', 'status', 'shortDescription', 'longDescription', 
+            'createTimestamp', 'updateTimestamp'
+        ];
+    }
+
+    public function getExtraEntityFields(){
+        return ['terms', 'permissionTo.modify'];
+    }
+
     protected function importNewEntities($class, array $entity_fields, array $params){
         
         $import_datetime = get_option("MAPAS:{$class}:import_timestamp");
@@ -142,14 +213,13 @@ class ApiWrapper{
         
         $params['@files'] = '(avatar,header,gallery):name,description,url';
 
-        $required_fields = [
-            'id', 'type', 'name', 'status', 'shortDescription', 'longDescription', 
-            'createTimestamp', 'updateTimestamp', 
-            'terms', 'permissionTo.modify'
-        ];
+        $_fields = array_merge(
+            $this->getBaseEntityFields(),
+            $this->getExtraEntityFields()
+        );
 
         $fields = $entity_fields;
-        foreach($required_fields as $f){
+        foreach($_fields as $f){
             if(!in_array($f, $fields)){
                 $fields[] = $f;
             }
@@ -450,7 +520,69 @@ class ApiWrapper{
         $this->cache->add($cache_id, $types, Cache::DAY);
         
         return $types;        
+    }
 
+    function find($class, $params){
+        switch($class){
+            case 'event':
+                return $this->findEvents($params);
+                break;
+            case 'agent':
+                return $this->findAgents($params);
+                break;
+            case 'space':
+                return $this->findSpaces($params);
+                break;
+            case 'eventOccurrences':
+                return $this->findEventOccurrences($params);
+                break;
+        }
+    }
+
+    function findEventOccurrences($query_vars){
+        $params = [];
+
+        $from = isset($query_vars['from']) ? $query_vars['from'] : date('Y-m-d');
+        $to = isset($query_vars['to']) ? $query_vars['to'] : date('Y-m-d', strtotime('+1 month', strtotime($from)));
+
+        $space_fields = Plugin::instance()->getEntityFields('space', true, true, ['permissionTo.modify', 'longDescription']);
+        $event_fields = Plugin::instance()->getEntityFields('event', true, true, ['permissionTo.modify', 'longDescription']);
+
+        $params['space:@select'] = implode(',', $space_fields);
+        $params['@select'] = implode(',', $event_fields);
+
+        $result = $this->mapasApi->findEventOccurrences($from, $to, $params);
+        foreach($result as &$event){
+            $this->parseEntity('event', $event);
+            $this->parseEntity('space', $event->space);
+        }
+
+        return $result;
+    }
+
+    function parseEntity($class, &$entity){
+        $entity_post_id = $this->getPostIdByEntityId($class, $entity->id);
         
+        if($entity_post_id){
+            $cache_id = __METHOD__ . ':' . $class . ':' . $entity_post_id;
+
+            if($this->cache->exists($cache_id, false)){
+                $entity_data = $this->cache->get($cache_id, false);
+            } else {
+                $entity_data = (object)[
+                    'permalink' => get_permalink($entity_post_id),
+                    'avatar' => [
+                        'original' => get_the_post_thumbnail_url($entity_post_id),
+                        'small' => get_the_post_thumbnail_url($entity_post_id, 'thumbnail'),
+                        'medium' => get_the_post_thumbnail_url($entity_post_id, 'medium'),
+                        'large' => get_the_post_thumbnail_url($entity_post_id, 'large'),
+                    ]
+                ];
+
+                $this->cache->add($cache_id, $entity_data, false);
+            }
+            $entity->permalink = $entity_data->permalink;
+            $entity->avatar = $entity_data->avatar;
+        }
     }
 }
