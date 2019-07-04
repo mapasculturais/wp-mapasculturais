@@ -15,13 +15,14 @@
         }
 
         .previous, .next {
-            @include secondary-inverted;
+            @include secondary-inverse;
             align-items: center;
             border-radius: 50%;
             display: inline-flex;
             height: 25px;
             justify-content: center;
             padding: 0;
+            text-decoration: none !important;
             width: 25px;
         }
     }
@@ -41,26 +42,26 @@
                 }
             }
 
-            .name, .place {
+            .name, .space {
                 display: inline-block;
             }
 
             .name {
-                @include secondary-inverted;
+                @include secondary-inverse;
                 border-radius: 5px;
                 margin-right: 5px;
                 padding: 0 5px;
             }
 
-            .place {
+            .space {
                 @include primary-color;
                 font-weight: bold;
             }
 
-            @include mobile {
+            @include tablet {
                 display: flex;
 
-                .name, .place {
+                .name, .space {
                     align-items: center;
                     display: flex;
                     width: 50%;

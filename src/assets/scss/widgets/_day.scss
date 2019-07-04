@@ -6,7 +6,7 @@
         width: 100%;
 
         &:after {
-            @include secondary-inverted;
+            @include secondary-inverse;
             content: '';
             display: block;
             float: right;
@@ -25,22 +25,22 @@
         .time {
             align-items: center;
             display: flex;
-            width: 110px;
+            width: 100px;
         }
 
         .category {
-            width: 250px;
+            width: 200px;
 
-            @include mobile {
+            @include tablet {
                 display: none;
             }
         }
 
         .description {
-            max-width: calc(100% - 360px);
+            max-width: calc(100% - 300px);
 
-            @include mobile {
-                max-width: calc(100% - 110px);
+            @include tablet {
+                max-width: calc(100% - 100px);
             }
         }
     }

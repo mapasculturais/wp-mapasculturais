@@ -5,11 +5,11 @@
     color: var(--primary-color, $primary-color);
 }
 
-@mixin primary-inverted {
+@mixin primary-inverse {
     background-color: $primary-color;
     background-color: var(--primary-color, $primary-color);
     color: $primary-icolor;
-    color: var(--primary-inverted, $primary-icolor);
+    color: var(--primary-inverse, $primary-icolor);
 }
 
 @mixin secondary-color {
@@ -17,11 +17,11 @@
     color: var(--secondary-color, $secondary-color);
 }
 
-@mixin secondary-inverted {
+@mixin secondary-inverse {
     background-color: $secondary-color;
     background-color: var(--secondary-color, $secondary-color);
     color: $secondary-icolor;
-    color: var(--secondary-inverted, $secondary-icolor);
+    color: var(--secondary-inverse, $secondary-icolor);
 }
 
 // Media queries //
@@ -33,13 +33,13 @@
 }
 
 @mixin tablet {
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: 900px) {
         @content;
     }
 }
 
 @mixin desktop {
-    @media screen and (min-width: 800px) {
+    @media screen and (min-width: 900px) {
         @content;
     }
 }

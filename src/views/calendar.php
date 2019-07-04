@@ -1,2 +1,1 @@
-<?php echo __FILE__ ?>
-<h1>Calendário</h1>
+<mc-w-calendar></mc-w-calendar>
