@@ -22,7 +22,7 @@
 
     import EventRow from './EventRow.vue'
     import WidgetHeader from './WidgetHeader.vue'
-    import WidgetMixin from './WidgetMixin'
+    import WidgetMixin from './mixins/WidgetMixin'
 
     export default {
         name: 'EventsList',
