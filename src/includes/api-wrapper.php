@@ -539,11 +539,12 @@ class ApiWrapper{
         }
     }
 
-    function findEventOccurrences($query_vars){
-        $params = [];
+    function findEventOccurrences($params){
+        
+        $from = isset($params['from']) ? $params['from'] : date('Y-m-d');
+        $to = isset($params['to']) ? $params['to'] : date('Y-m-d', strtotime('+1 month', strtotime($from)));
 
-        $from = isset($query_vars['from']) ? $query_vars['from'] : date('Y-m-d');
-        $to = isset($query_vars['to']) ? $query_vars['to'] : date('Y-m-d', strtotime('+1 month', strtotime($from)));
+        unset($params['to'], $params['from']);
 
         $space_fields = Plugin::instance()->getEntityFields('space', true, true, ['permissionTo.modify', 'longDescription']);
         $event_fields = Plugin::instance()->getEntityFields('event', true, true, ['permissionTo.modify', 'longDescription']);
@@ -553,7 +554,7 @@ class ApiWrapper{
 
         $result = $this->mapasApi->findEventOccurrences($from, $to, $params);
         foreach($result as &$event){
-            $this->parseEntity('event', $event);
+            $this->parseEntity('eventOccurrence', $event);
             $this->parseEntity('space', $event->space);
         }
 
@@ -561,6 +562,11 @@ class ApiWrapper{
     }
 
     function parseEntity($class, &$entity){
+        $is_event_occurrence = false;
+        if($class == 'eventOccurrence'){
+            $class = 'event';
+            $is_event_occurrence = true;
+        }
         $entity_post_id = $this->getPostIdByEntityId($class, $entity->id);
         
         if($entity_post_id){
@@ -584,5 +590,32 @@ class ApiWrapper{
             $entity->permalink = $entity_data->permalink;
             $entity->avatar = $entity_data->avatar;
         }
+
+        if($is_event_occurrence){
+            $rule = $entity->rule;
+            unset($entity->rule);
+            $ends_on = $entity->ends_on ?: $entity->starts_on;
+            $entity->occurrence = (object) [
+                'id' => $entity->occurrence_id,
+                'description' => $rule->description,
+                'price' => $rule->price,
+                'duration' => $rule->duration,
+                'starts' => $entity->starts_on . ' ' . $entity->starts_at,
+                'starts_on' => $entity->starts_on,
+                'starts_at' => $entity->starts_at,
+
+                'ends' => $ends_on . ' ' . $entity->ends_at,
+                'ends_on' => $ends_on,
+                'ends_at' => $entity->ends_at,
+            ];
+
+            unset($entity->occurrence_id, $entity->event_id, $entity->starts_at, $entity->starts_on, $entity->ends_at, $entity->ends_on);
+        }
+
+        if(isset($entity->createTimestamp)){
+            $entity->createTimestamp = $this->parseDateFromMapas($entity->createTimestamp);
+            $entity->updateTimestamp = $this->parseDateFromMapas($entity->updateTimestamp);
+        }
+        
     }
 }
