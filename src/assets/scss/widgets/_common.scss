@@ -22,8 +22,11 @@
             height: 25px;
             justify-content: center;
             padding: 0;
-            text-decoration: none !important;
             width: 25px;
+
+            &[disabled] {
+                opacity: 0.5;
+            }
         }
     }
 
@@ -44,6 +47,7 @@
 
             .name, .space {
                 display: inline-block;
+                text-decoration: none;
             }
 
             .name {

@@ -1,8 +1,12 @@
 <template>
     <div class="mc-w__header">
-        <a v-if="previous" :href="previous" class="previous"><i class="fas fa-chevron-left"></i></a>
+        <button v-if="showArrows" class="previous" :disabled="!previous" @click="$emit('previous')" aria-label="Mês anterior">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+        </button>
         <strong><slot/></strong>
-        <a v-if="next" :href="next" class="next"><i class="fas fa-chevron-right"></i></a>
+        <button v-if="showArrows" class="next" :disabled="!next" @click="$emit('next')" title="Próximo mês">
+            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </button>
     </div>
 </template>
 
@@ -10,8 +14,9 @@
     export default {
         name: 'WidgetHeader',
         props: {
-            previous: { type: String, default: null },
-            next: { type: String, default: null },
+            next: { type: Boolean, default: true },
+            previous: { type: Boolean, default: true },
+            showArrows: { type: Boolean, default: true },
         }
     }
 </script>
