@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-now">
-        <WidgetHeader>Agora</WidgetHeader>
+        <WidgetHeader :showArrows="false">Agora</WidgetHeader>
         <div class="mc-w-now__content">
             <div class="mc-w-now__events">
                 <EventRow class="mc-w-now__event"
@@ -17,7 +17,7 @@
                     space="Nome do espaço"/>
                 <EventRow class="mc-w-now__event"
                     star time="15:00 - 16:30" category="Cinema" rating="Livre"
-                    name="ome de um primeiro evento"
+                    name="Nome de um primeiro evento"
                     space="Nome do espaço"/>
                 <EventRow class="mc-w-now__event"
                     time="15:30 - 18:30" category="Show" rating="Livre"

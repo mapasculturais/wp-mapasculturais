@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-day">
-        <WidgetHeader previous="#" next="#">1 de Maio de 2019</WidgetHeader>
+        <WidgetHeader>1 de Maio de 2019</WidgetHeader>
         <div class="mc-w-day__content">
             <div class="mc-w-day__period">
                 <div class="mc-w-day__label">Manhã</div>

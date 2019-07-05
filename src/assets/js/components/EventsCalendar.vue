@@ -1,6 +1,6 @@
 <template>
     <div class="mc-w mc-w-calendar">
-        <WidgetHeader previous="#" next="#">Maio de 2019</WidgetHeader>
+        <WidgetHeader>Maio de 2019</WidgetHeader>
         <p>TODO</p>
     </div>
 </template>

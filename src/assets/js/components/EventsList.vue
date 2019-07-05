@@ -10,7 +10,7 @@
                     <div class="weekday">{{ weekdayString(eventsOnDay[0].occurrence.starts) }}</div>
                 </div>
                 <div class="mc-w-list__events">
-                    <EventRow class="mc-w-list__event" v-for="event in eventsOnDay" :key="event.id" :event="event" :showTime="false" />
+                    <EventRow class="mc-w-list__event" v-for="event in eventsOnDay" :key="event.id" :event="event" :showTime="false"/>
                 </div>
             </div>
         </div>
