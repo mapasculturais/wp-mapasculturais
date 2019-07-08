@@ -47,8 +47,8 @@
                     'Tarde': [],
                     'Noite': []
                 }
-                const midday = new Date(this.currentYear, this.currentMonth, this.currentDay, 12)
-                const sixPM = new Date(this.currentYear, this.currentMonth, this.currentDay, 18)
+                const midday = new Date(this.currentYear, this.currentMonth - 1, this.currentDay, 12)
+                const sixPM = new Date(this.currentYear, this.currentMonth - 1, this.currentDay, 18)
                 for (const event of this.events) {
                     const beginning = new Date(event.occurrence.starts)
                     if (beginning <= midday) {
