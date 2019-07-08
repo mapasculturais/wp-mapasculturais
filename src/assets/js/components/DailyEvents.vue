@@ -77,7 +77,6 @@
             },
             nextDay () {
                 const date = new Date(this.currentYear, this.currentMonth - 1, this.currentDay + 1)
-                console.log(date)
                 this.currentDay = date.getDate()
                 this.currentMonth = date.getMonth() + 1
                 this.currentYear = date.getFullYear()
@@ -85,7 +84,6 @@
             },
             previousDay () {
                 const date = new Date(this.currentYear, this.currentMonth - 1, this.currentDay - 1)
-                console.log(date)
                 this.currentDay = date.getDate()
                 this.currentMonth = date.getMonth() + 1
                 this.currentYear = date.getFullYear()
