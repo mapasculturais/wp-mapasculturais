@@ -6,6 +6,10 @@
 
         &.maximized {
             border-bottom: 3px solid var(--secondary-color, $secondary-color);
+
+            &:last-of-type {
+                border-bottom: 0;
+            }
         }
 
         &.minimized {

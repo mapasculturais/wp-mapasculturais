@@ -1,7 +1,7 @@
 <template>
     <div class="mc-w-agenda__month" :class="maximized ? 'maximized' : 'minimized'">
         <div class="mc-w-agenda__label">{{ monthString }}</div>
-        <button class="mc-w-agenda__collapse" @click="maximized = !maximized"><i class="fas fa-arrow-up" :class="maximized ? 'fa-arrow-up' : 'fa-arrow-down'"></i></button>
+        <button class="mc-w-agenda__collapse" @click="maximized = !maximized"><i class="fas" :class="maximized ? 'fa-arrow-up' : 'fa-arrow-down'"></i></button>
         <div class="mc-w-agenda__content" v-show="maximized">
             <div class="mc-w-agenda__day" v-for="(eventsOnDay, day) in eventsByDay" :key="day">
                 <div class="mc-w-agenda__date">
