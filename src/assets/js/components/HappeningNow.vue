@@ -13,8 +13,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
-
     import EventRow from './EventRow.vue'
     import WidgetHeader from './WidgetHeader.vue'
 
@@ -33,11 +31,9 @@
         },
         created () {
             const today = new Date().toISOString().slice(0, 10)
-            axios.get('/mcapi/eventOccurrence/', {
-                params: {
-                    from: today,
-                    to: today
-                }
+            this.$mc.EventOccurrences.find({
+                from: today,
+                to: today
             }).then(response => {
                 this.eventsToday = response.data
                 this.getEventsNow()

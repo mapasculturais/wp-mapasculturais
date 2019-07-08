@@ -6,8 +6,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
-
     import AgendaMonth from './AgendaMonth.vue'
     import WidgetHeader from './WidgetHeader.vue'
     import WidgetMixin from './mixins/WidgetMixin'
@@ -42,11 +40,9 @@
             }
         },
         created () {
-            axios.get('/mcapi/eventOccurrence/', {
-                params: {
-                    from: new Date().toISOString().slice(0, 10),
-                    to: `${new Date().getFullYear()}-12-31`
-                }
+            this.$mc.EventOccurrences.find({
+                from: new Date().toISOString().slice(0, 10),
+                to: `${new Date().getFullYear()}-12-31`
             }).then(response => {
                 this.events = response.data
             })

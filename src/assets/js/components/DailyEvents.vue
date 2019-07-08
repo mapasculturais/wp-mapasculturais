@@ -18,8 +18,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
-
     import EventRow from './EventRow.vue'
     import WidgetHeader from './WidgetHeader.vue'
     import WidgetMixin from './mixins/WidgetMixin'
@@ -70,11 +68,9 @@
         },
         methods: {
             fetchEvents () {
-                axios.get('/mcapi/eventOccurrence/', {
-                    params: {
-                        from: this.isoDate,
-                        to: this.isoDate
-                    }
+                this.$mc.EventOccurrences.find({
+                    from: this.isoDate,
+                    to: this.isoDate
                 }).then(response => {
                     this.events = response.data
                 })

@@ -21,8 +21,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
-
     import EventRow from './EventRow.vue'
     import WidgetHeader from './WidgetHeader.vue'
     import WidgetMixin from './mixins/WidgetMixin'
@@ -58,11 +56,9 @@
                 handler: function currentMonthWatchHandler () {
                     const firstDay = new Date(this.currentYear, this.currentMonth - 1, 1)
                     const lastDay = new Date(this.currentYear, this.currentMonth, 0)
-                    axios.get('/mcapi/eventOccurrence/', {
-                        params: {
-                            from: firstDay.toISOString().slice(0, 10),
-                            to: lastDay.toISOString().slice(0, 10)
-                        }
+                    this.$mc.EventOccurrences.find({
+                        from: firstDay.toISOString().slice(0, 10),
+                        to: lastDay.toISOString().slice(0, 10)
                     }).then(response => {
                         this.events = response.data
                     })
