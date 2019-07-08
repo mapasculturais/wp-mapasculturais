@@ -7,8 +7,8 @@
 
 <script>
     import AgendaMonth from './AgendaMonth.vue'
+    import DateMixin from './mixins/DateMixin'
     import WidgetHeader from './WidgetHeader.vue'
-    import WidgetMixin from './mixins/WidgetMixin'
 
     export default {
         name: 'MyAgenda',
@@ -16,7 +16,9 @@
             AgendaMonth,
             WidgetHeader
         },
-        mixins: [WidgetMixin],
+        mixins: [
+            DateMixin
+        ],
         data () {
             return {
                 events: []

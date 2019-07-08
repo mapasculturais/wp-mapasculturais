@@ -10,20 +10,23 @@
                     <div class="weekday">{{ weekdayString(eventsOnDay[0].occurrence.starts) }}</div>
                 </div>
                 <div class="mc-w-list__events">
-                    <EventRow class="mc-w-list__event" v-for="event in eventsOnDay" :key="event.id" :event="event" :showTime="false"/>
+                    <EventRow class="mc-w-list__event" v-for="event in eventsOnDay" :key="event.id" :event="event" :showTime="false" @selectEvent="openEventModal" @selectSpace="openSpaceModal"/>
                 </div>
             </div>
             <div class="mc-w-list__no-content" v-if="events.length === 0">
                 Nenhum evento ocorrendo nesse mês
             </div>
+            <EventModal v-if="modalEvent" :event="modalEvent" @close="closeEventModal"/>
+            <SpaceModal v-if="modalSpace" :space="modalSpace" @close="closeSpaceModal"/>
         </div>
     </section>
 </template>
 
 <script>
+    import DateMixin from './mixins/DateMixin'
     import EventRow from './EventRow.vue'
+    import ModalMixin from './mixins/ModalMixin'
     import WidgetHeader from './WidgetHeader.vue'
-    import WidgetMixin from './mixins/WidgetMixin'
 
     export default {
         name: 'EventsList',
@@ -31,7 +34,10 @@
             EventRow,
             WidgetHeader
         },
-        mixins: [WidgetMixin],
+        mixins: [
+            DateMixin,
+            ModalMixin
+        ],
         data () {
             return {
                 events: []

@@ -7,20 +7,23 @@
             <div class="mc-w-day__period" v-for="(eventsOnPeriod, period) in eventsByPeriod" :key="period">
                 <div class="mc-w-day__label">{{ period }}</div>
                 <div class="mc-w-day__events" v-if="eventsOnPeriod.length > 0">
-                    <EventRow class="mc-w-day__event" v-for="event in eventsOnPeriod" :key="event.id" :event="event"/>
+                    <EventRow class="mc-w-day__event" v-for="event in eventsOnPeriod" :key="event.id" :event="event" @selectEvent="openEventModal" @selectSpace="openSpaceModal"/>
                 </div>
                 <div class="mc-w-day__no-content" v-else>
                     Nenhum evento ocorrendo nesse período
                 </div>
             </div>
         </div>
+        <EventModal v-if="modalEvent" :event="modalEvent" @close="closeEventModal"/>
+        <SpaceModal v-if="modalSpace" :space="modalSpace" @close="closeSpaceModal"/>
     </section>
 </template>
 
 <script>
+    import DateMixin from './mixins/DateMixin'
     import EventRow from './EventRow.vue'
+    import ModalMixin from './mixins/ModalMixin'
     import WidgetHeader from './WidgetHeader.vue'
-    import WidgetMixin from './mixins/WidgetMixin'
 
     export default {
         name: 'DailyEvents',
@@ -28,7 +31,10 @@
             EventRow,
             WidgetHeader
         },
-        mixins: [WidgetMixin],
+        mixins: [
+            DateMixin,
+            ModalMixin
+        ],
         props: {
             day: { type: Number, default: () => new Date().getDate() }
         },

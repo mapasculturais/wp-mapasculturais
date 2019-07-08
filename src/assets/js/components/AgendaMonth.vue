@@ -9,26 +9,32 @@
                     <div class="weekday">{{ weekdayString(eventsOnDay[0].occurrence.starts) }}</div>
                 </div>
                 <div class="mc-w-agenda__events">
-                    <EventRow class="mc-w-agenda__event" v-for="event in eventsOnDay" :key="event.id" :event="event" :showTime="false"/>
+                    <EventRow class="mc-w-agenda__event" v-for="event in eventsOnDay" :key="event.id" :event="event" :showTime="false" @selectEvent="openEventModal" @selectSpace="openSpaceModal"/>
                 </div>
             </div>
             <div class="mc-w-agenda__no-content" v-if="events.length === 0">
                 Você ainda não possui eventos agendados nesse mês
             </div>
+            <EventModal v-if="modalEvent" :event="modalEvent" @close="closeEventModal"/>
+            <SpaceModal v-if="modalSpace" :space="modalSpace" @close="closeSpaceModal"/>
         </div>
     </div>
 </template>
 
 <script>
+    import DateMixin from './mixins/DateMixin'
     import EventRow from './EventRow.vue'
-    import WidgetMixin from './mixins/WidgetMixin'
+    import ModalMixin from './mixins/ModalMixin'
 
     export default {
         name: 'AgendaMonth',
         components: {
             EventRow
         },
-        mixins: [WidgetMixin],
+        mixins: [
+            DateMixin,
+            ModalMixin
+        ],
         props: {
             events: { type: Array, required: true }
         },

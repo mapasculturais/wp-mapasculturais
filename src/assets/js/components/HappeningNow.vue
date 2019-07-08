@@ -3,17 +3,20 @@
         <WidgetHeader :showArrows="false">Agora</WidgetHeader>
         <div class="mc-w-now__content">
             <div class="mc-w-now__events" v-if="eventsNow.length > 0">
-                <EventRow class="mc-w-now__event" v-for="event in eventsNow" :key="event.id" :event="event"/>
+                <EventRow class="mc-w-now__event" v-for="event in eventsNow" :key="event.id" :event="event" @selectEvent="openEventModal" @selectSpace="openSpaceModal"/>
             </div>
             <div class="mc-w-now__no-content" v-else>
                 Nenhum evento ocorrendo no momento
             </div>
         </div>
+        <EventModal v-if="modalEvent" :event="modalEvent" @close="closeEventModal"/>
+        <SpaceModal v-if="modalSpace" :space="modalSpace" @close="closeSpaceModal"/>
     </section>
 </template>
 
 <script>
     import EventRow from './EventRow.vue'
+    import ModalMixin from './mixins/ModalMixin'
     import WidgetHeader from './WidgetHeader.vue'
 
     export default {
@@ -22,6 +25,9 @@
             EventRow,
             WidgetHeader
         },
+        mixins: [
+            ModalMixin
+        ],
         data () {
            return {
                eventsToday: [],

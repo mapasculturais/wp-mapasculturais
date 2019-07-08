@@ -11,8 +11,8 @@
             <i v-if="star" class="fas fa-star"></i>
             <i v-else-if="check" class="fas fa-check"></i>
             -->
-            <a class="name" :href="event.permalink">{{ event.name }}</a>
-            <a class="space" :href="event.space.permalink">{{ event.space.name }}</a>
+            <a class="name" role="button" @click="$emit('selectEvent', event)">{{ event.name }}</a>
+            <a class="space" role="button" @click="$emit('selectSpace', event.space)">{{ event.space.name }}</a>
         </div>
     </div>
 </template>
