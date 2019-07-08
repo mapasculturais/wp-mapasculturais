@@ -1,7 +1,7 @@
 <template>
     <section class="mc-w mc-w-agenda">
         <WidgetHeader :showArrows="false">Minha agenda</WidgetHeader>
-        <AgendaMonth v-for="i in (12 - currentMonth + 1)" :key="currentMonth + i - 1" :events="eventsByMonth[currentMonth + i - 1] || []" :month="currentMonth + i - 1"/>
+        <AgendaMonth v-for="month in months" :key="month" :events="eventsByMonth[month] || []" :month="month"/>
     </section>
 </template>
 
@@ -36,6 +36,9 @@
                     }
                 })
                 return months
+            },
+            months () {
+                return [...Array(13).keys()].slice(this.currentMonth)
             }
         },
         created () {
