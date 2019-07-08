@@ -1,7 +1,7 @@
 <template>
     <div class="mc-w__event">
         <div class="time" v-if="showTime">
-            {{ event.occurrence.starts_at }} - {{ event.occurrence.ends_at }}
+            {{ event.occurrence.starts_at.slice(0, 5) }} - {{ event.occurrence.ends_at.slice(0, 5) }}
         </div>
         <div class="category">
             <i>{{ event.terms.linguagem[0] }}</i> | {{ event.classificacaoEtaria }}
