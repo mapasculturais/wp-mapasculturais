@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-list">
-        <WidgetHeader :previous="!beforeCurrentMonth(new Date(currentYear, currentMonth - 1, 1))" @previous="previousMonth" @next="nextMonth">
+        <WidgetHeader @previous="previousMonth" @next="nextMonth">
             {{ monthString }} de {{ currentYear }}
         </WidgetHeader>
         <div class="mc-w-list__content">
@@ -12,6 +12,9 @@
                 <div class="mc-w-list__events">
                     <EventRow class="mc-w-list__event" v-for="event in eventsOnDay" :key="event.id" :event="event" :showTime="false"/>
                 </div>
+            </div>
+            <div class="mc-w-list__no-content" v-if="events.length === 0">
+                Nenhum evento ocorrendo nesse mês
             </div>
         </div>
     </section>

@@ -15,11 +15,6 @@ export default {
         }
     },
     methods: {
-        beforeCurrentMonth (date) {
-            const today = new Date()
-            const fistDayOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1)
-            return date <= fistDayOfCurrentMonth
-        },
         nextMonth () {
             if (this.currentMonth === 12) {
                 this.currentMonth = 1
