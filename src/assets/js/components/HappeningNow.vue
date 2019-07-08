@@ -5,7 +5,7 @@
             <div class="mc-w-now__events" v-if="eventsNow.length > 0">
                 <EventRow class="mc-w-now__event" v-for="event in eventsNow" :key="event.id" :event="event"/>
             </div>
-            <div class="mc-w-now__no-content" v-if="eventsNow.length === 0">
+            <div class="mc-w-now__no-content" v-else>
                 Nenhum evento ocorrendo no momento
             </div>
         </div>
