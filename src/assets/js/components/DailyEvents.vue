@@ -1,76 +1,16 @@
 <template>
     <section class="mc-w mc-w-day">
-        <WidgetHeader>1 de Maio de 2019</WidgetHeader>
+        <WidgetHeader @previous="previousDay" @next="nextDay">
+            {{ currentDay }} de {{ monthString }} de {{ currentYear }}
+        </WidgetHeader>
         <div class="mc-w-day__content">
-            <div class="mc-w-day__period">
-                <div class="mc-w-day__label">Manhã</div>
-                <div class="mc-w-day__events">
-                    <EventRow class="mc-w-day__event"
-                        check time="00:00 - 02:30" category="Artes circenses" rating="Livre"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        time="02:00 - 06:30" category="Cultura tradicional" rating="Livre"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        time="06:00 - 08:30" category="Arte digital" rating="Livre"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        star time="08:00 - 09:00" category="Curso ou oficina" rating="12 anos"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        time="10:00 - 16:30" category="Dança" rating="Livre"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
+            <div class="mc-w-day__period" v-for="(eventsOnPeriod, period) in eventsByPeriod" :key="period">
+                <div class="mc-w-day__label">{{ period }}</div>
+                <div class="mc-w-day__events" v-if="eventsOnPeriod.length > 0">
+                    <EventRow class="mc-w-day__event" v-for="event in eventsOnPeriod" :key="event.id" :event="event"/>
                 </div>
-            </div>
-            <div class="mc-w-day__period">
-                <div class="mc-w-day__label">Tarde</div>
-                <div class="mc-w-day__events">
-                    <EventRow class="mc-w-day__event"
-                        time="12:00 - 13:30" category="Cinema" rating="Livre"
-                        name="Nome de um primeiro evento"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        time="13:00 - 14:30" category="Música erudita" rating="18 anos"
-                        name="Nome de um evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        time="15:00 - 22:30" category="Artes visuais" rating="18 anos"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        time="16:00 - 17:30" category="Cultura indígena" rating="Livre"
-                        name="Nome de um primeiro evento"
-                        space="Nome do espaço"/>
-                </div>
-            </div>
-            <div class="mc-w-day__period">
-                <div class="mc-w-day__label">Noite</div>
-                <div class="mc-w-day__events">
-                    <EventRow class="mc-w-day__event"
-                        check time="18:00 - 22:30" category="Livro e  literatura" rating="Livre"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        time="19:00 - 21:30" category="Teatro" rating="Livre"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        time="20:00 - 20:30" category="Hip hop" rating="Livre"
-                        name="ome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        star time="21:00 - 22:30" category="Rádio" rating="12 anos"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
-                    <EventRow class="mc-w-day__event"
-                        time="21:00 - 23:30" category="Outros" rating="Livre"
-                        name="Nome de um primeiro evento com nome grande"
-                        space="Nome do espaço"/>
+                <div class="mc-w-day__no-content" v-else>
+                    Nenhum evento ocorrendo nesse período
                 </div>
             </div>
         </div>
@@ -78,14 +18,83 @@
 </template>
 
 <script>
+    import axios from 'axios'
+
     import EventRow from './EventRow.vue'
     import WidgetHeader from './WidgetHeader.vue'
+    import WidgetMixin from './mixins/WidgetMixin'
 
     export default {
         name: 'DailyEvents',
         components: {
             EventRow,
             WidgetHeader
+        },
+        mixins: [WidgetMixin],
+        props: {
+            day: { type: Number, default: () => new Date().getDate() }
+        },
+        data () {
+            return {
+                currentDay: this.$props.day,
+                events: []
+            }
+        },
+        computed: {
+            eventsByPeriod () {
+                const periods = {
+                    'Manhã': [],
+                    'Tarde': [],
+                    'Noite': []
+                }
+                const midday = new Date(this.currentYear, this.currentMonth, this.currentDay, 12)
+                const sixPM = new Date(this.currentYear, this.currentMonth, this.currentDay, 18)
+                for (const event of this.events) {
+                    const beginning = new Date(event.occurrence.starts)
+                    if (beginning <= midday) {
+                        periods['Manhã'].push(event)
+                    } else if (beginning <= sixPM) {
+                        periods['Tarde'].push(event)
+                    } else {
+                        periods['Noite'].push(event)
+                    }
+                }
+                return periods
+            },
+            isoDate () {
+                return `${this.currentYear}-${String(this.currentMonth).padStart(2, '0')}-${String(this.currentDay).padStart(2, '0')}`
+            }
+        },
+        created () {
+            this.fetchEvents()
+        },
+        methods: {
+            fetchEvents () {
+                axios.get('/mcapi/eventOccurrence/', {
+                    params: {
+                        from: this.isoDate,
+                        to: this.isoDate
+                    }
+                }).then(response => {
+                    this.events = response.data
+                })
+            },
+            nextDay () {
+                const date = new Date(this.currentYear, this.currentMonth - 1, this.currentDay + 1)
+                console.log(date)
+                this.currentDay = date.getDate()
+                this.currentMonth = date.getMonth() + 1
+                this.currentYear = date.getFullYear()
+                this.fetchEvents()
+            },
+            previousDay () {
+                const date = new Date(this.currentYear, this.currentMonth - 1, this.currentDay - 1)
+                console.log(date)
+                this.currentDay = date.getDate()
+                this.currentMonth = date.getMonth() + 1
+                this.currentYear = date.getFullYear()
+                this.fetchEvents()
+            }
         }
     }
 </script>
