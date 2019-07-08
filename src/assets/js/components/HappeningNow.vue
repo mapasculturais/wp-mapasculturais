@@ -2,41 +2,19 @@
     <section class="mc-w mc-w-now">
         <WidgetHeader :showArrows="false">Agora</WidgetHeader>
         <div class="mc-w-now__content">
-            <div class="mc-w-now__events">
-                <EventRow class="mc-w-now__event"
-                    check time="12:00 - 23:30" category="Artes circenses" rating="Livre"
-                    name="Nome de um primeiro evento com nome grande"
-                    space="Nome do espaço"/>
-                <EventRow class="mc-w-now__event"
-                    time="14:00 - 16:30" category="Teatro" rating="12 anos"
-                    name="Nome de um segundo evento"
-                    space="Nome do espaço"/>
-                <EventRow class="mc-w-now__event"
-                    time="14:30 - 18:30" category="Show" rating="12 anos"
-                    name="Outro nome de um segundo evento"
-                    space="Nome do espaço"/>
-                <EventRow class="mc-w-now__event"
-                    star time="15:00 - 16:30" category="Cinema" rating="Livre"
-                    name="Nome de um primeiro evento"
-                    space="Nome do espaço"/>
-                <EventRow class="mc-w-now__event"
-                    time="15:30 - 18:30" category="Show" rating="Livre"
-                    name="Nome de um primeiro evento com outro nome"
-                    space="Nome do espaço"/>
-                <EventRow class="mc-w-now__event"
-                    time="15:30 - 18:30" category="Teatro" rating="18 anos"
-                    name="Nome de um primeiro evento"
-                    space="Nome do espaço"/>
-                <EventRow class="mc-w-now__event"
-                    time="15:40 - 18:30" category="Ao ar livre" rating="Livre"
-                    name="Nome de um primeiro evento"
-                    space="Nome do espaço"/>
+            <div class="mc-w-now__events" v-if="eventsNow.length > 0">
+                <EventRow class="mc-w-now__event" v-for="event in eventsNow" :key="event.id" :event="event"/>
+            </div>
+            <div class="mc-w-now__no-content" v-if="eventsNow.length === 0">
+                Nenhum evento ocorrendo no momento
             </div>
         </div>
     </section>
 </template>
 
 <script>
+    import axios from 'axios'
+
     import EventRow from './EventRow.vue'
     import WidgetHeader from './WidgetHeader.vue'
 
@@ -45,6 +23,41 @@
         components: {
             EventRow,
             WidgetHeader
+        },
+        data () {
+           return {
+               eventsToday: [],
+               eventsNow: [],
+               eventsNow$: null
+           }
+        },
+        created () {
+            const today = new Date().toISOString().slice(0, 10)
+            axios.get('/mcapi/eventOccurrence/', {
+                params: {
+                    from: today,
+                    to: today
+                }
+            }).then(response => {
+                this.eventsToday = response.data
+                this.getEventsNow()
+            })
+        },
+        mounted () {
+            this.eventsNow$ = window.setInterval(this.getEventsNow, 60000)
+        },
+        beforeDestroy () {
+            window.clearInterval(this.eventsNow$)
+        },
+        methods: {
+            getEventsNow () {
+                const now = new Date()
+                this.eventsNow = this.eventsToday.filter(event => {
+                    const beginning = new Date(event.occurrence.starts)
+                    const end = new Date(event.occurrence.ends)
+                    return beginning < now && end > now
+                })
+            }
         }
     }
 </script>

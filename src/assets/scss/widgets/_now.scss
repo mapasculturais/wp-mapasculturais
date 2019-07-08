@@ -1,4 +1,8 @@
 .mc-w-now {
+    &__no-content {
+        padding-bottom: 20px;
+    }
+
     &__event {
 
         @include desktop {
