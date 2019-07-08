@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="mc-w-agenda__no-content" v-if="events.length === 0">
-                Você ainda não possui eventos agendados neste mês
+                Você ainda não possui eventos agendados nesse mês
             </div>
         </div>
     </div>
