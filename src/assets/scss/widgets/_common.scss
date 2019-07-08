@@ -10,8 +10,8 @@
 
         strong {
             @include primary-color;
-            font-size: 1.1em;
-            margin: 0 5px;
+            font-size: 1.2em;
+            line-height: 1;
         }
 
         .previous, .next {
@@ -27,6 +27,14 @@
             &[disabled] {
                 opacity: 0.5;
             }
+        }
+
+        .previous {
+            margin-right: 7.5px;
+        }
+
+        .next {
+            margin-left: 7.5px;
         }
     }
 
