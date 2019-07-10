@@ -64,9 +64,9 @@ class ApiWrapper{
     }
 
     protected function __construct() {
-        $url = get_option('MAPAS:url');
-        $private_key = get_option('MAPAS:private_key');
-        $public_key = get_option('MAPAS:public_key');
+        $url = $this->getOption('url');
+        $private_key = $this->getOption('private_key');
+        $public_key = $this->getOption('public_key');
 
         $this->cache = new Cache(__CLASS__);
 
@@ -234,9 +234,16 @@ class ApiWrapper{
         return ['terms', 'permissionTo.modify'];
     }
 
-    protected function importNewEntities($class, array $entity_fields, array $params){
-        
-        $import_datetime = get_option("MAPAS:{$class}:import_timestamp");
+    /**
+     * Importa novas entidades da classe informada trazendo os campos informados
+     *
+     * @param string $class (event|agent|space)
+     * @param array $entity_fields
+     * @return void
+     */
+    protected function importNewEntities($class, array $entity_fields){
+        $params = [];
+        $import_datetime = $this->getOption("{$class}:import_timestamp");
 
         if($import_datetime){
             $params['createTimestamp'] = "GTE({$import_datetime})";
@@ -262,8 +269,8 @@ class ApiWrapper{
         }
 
         
-        $entities = $this->mapasApi->findEntities($class, $fields, $params);
-        // var_dump($entities) ; die;
+        $entities = $this->mapasApi->find($class, $params, $fields);
+        
         $status = [
             '-10' => 'trash',
             '0' => 'draft',
@@ -495,18 +502,8 @@ class ApiWrapper{
      * @return void
      */
     function importNewAgents(){
-        $params = [];
-        $_import = $this->getOption('agent:import');
-        
-        if($_import == 'mine'){
-            $params['user'] = 'EQ(@me)';
-        } else if($_import == 'control'){
-            $params['@permissions'] = '@control';
-        }
-
         $fields = Plugin::instance()->getEntityFields('agent');
-
-        $this->importNewEntities('agent', $fields, $params);
+        $this->importNewEntities('agent', $fields);
     }
 
     /**
@@ -526,18 +523,8 @@ class ApiWrapper{
      * @return void
      */
     function importNewSpaces(){
-        $params = [];
-        $_import = $this->getOption('space:import');
-        
-        if($_import == 'mine'){
-            $params['user'] = 'EQ(@me)';
-        } else if($_import == 'control'){
-            $params['@permissions'] = '@control';
-        }
-
         $fields = Plugin::instance()->getEntityFields('space');
-
-        $this->importNewEntities('space', $fields, $params);
+        $this->importNewEntities('space', $fields);
     }
 
     /**
@@ -557,18 +544,8 @@ class ApiWrapper{
      * @return void
      */
     function importNewEvents(){
-        $params = [];
-        $_import = $this->getOption('event:import');
-        
-        if($_import == 'mine'){
-            $params['user'] = 'EQ(@me)';
-        } else if($_import == 'control'){
-            $params['@permissions'] = '@control';
-        }
-
         $fields = Plugin::instance()->getEntityFields('event');
-
-        $this->importNewEntities('event', $fields, $params);
+        $this->importNewEntities('event', $fields);
     }
 
     /**
@@ -626,21 +603,123 @@ class ApiWrapper{
         return $types;        
     }
 
-    function find($class, $params){
+    /**
+     * Prepara os parâmetros para a api de eventos adicionando os filtros configurados
+     *
+     * @param array $params
+     * @return array
+     */
+    function prepareEventParams(array $params){
+        return $params;
+    }
+    
+    /**
+     * Prepara os parâmetros para a api de agentes adicionando os filtros configurados
+     *
+     * @param array $params
+     * @return array
+     */
+    function prepareAgentParams(array $params){
+
+        // @TODO: implementar os filtros no admin
+        $_import = $this->getOption('agent:import');
+        
+        if($_import == 'mine'){
+            $params['user'] = 'EQ(@me)';
+        } else if($_import == 'control'){
+            $params['@permissions'] = '@control';
+        }
+
+        return $params;
+    }
+    
+    /**
+     * Prepara os parâmetros para a api de espaços adicionando os filtros configurados
+     *
+     * @param array $params
+     * @return array
+     */
+    function prepareSpaceParams(array $params){
+        // @TODO: implementar os filtros no admin
+        $_import = $this->getOption('space:import');
+        
+        if($_import == 'mine'){
+            $params['user'] = 'EQ(@me)';
+        } else if($_import == 'control'){
+            $params['@permissions'] = '@control';
+        }
+
+        return $params;
+    }
+    
+    /**
+     * Prepara os parâmetros para a api de ocurrências de eventos adicionando os filtros configurados
+     *
+     * @param array $params
+     * @return array
+     */
+    function prepareEventOccurrenceParams(array $params){
+        // @TODO: implementar os filtros no admin
+        $_import = $this->getOption('space:import');
+        
+        if($_import == 'mine'){
+            $params['user'] = 'EQ(@me)';
+        } else if($_import == 'control'){
+            $params['@permissions'] = '@control';
+        }
+
+        return $params;
+    }
+
+    /**
+     * Busca entidades da classe informada na api do mapas culturais
+     * aos parâmetros informados serão adicionados os filtros configurados
+     *
+     * @param string $class classe da entidade (event|agent|space)
+     * @param array $params 
+     * @return array
+     */
+    function find($class, array $params){
         switch($class){
             case 'event':
-                return $this->findEvents($params);
+                $params = $this->prepareEventParams($params);
+                return $this->findEntities($class, $params);
                 break;
             case 'agent':
-                return $this->findAgents($params);
+                $params = $this->prepareAgentParams($params);
+                return $this->findEntities($class, $params);
                 break;
             case 'space':
-                return $this->findSpaces($params);
+                $params = $this->prepareSpaceParams($params);
+                return $this->findEntities($class, $params);
                 break;
             case 'eventOccurrences':
+                $params = $this->prepareEventOccurrenceParams($params);
                 return $this->findEventOccurrences($params);
                 break;
+            default: 
+                throw new \Exception(__('Classe inválida: ') . $class);
+                break;
         }
+    }
+
+    /**
+     * Busca entidades da classe informada na api do mapas culturais
+     *
+     * @param string $class classe da entidade (event|agent|space)
+     * @param array $params
+     * @param array $fields
+     * @return void
+     */
+    protected function findEntities($class, array $params, array $fields = []){
+        if(empty($fields)){
+            $fields = Plugin::instance()->getEntityFields($class, true, true, ['permissionTo.modify', 'longDescription']);
+        }
+        $entities = $this->mapasApi->findEntities($class, $fields, $params);
+        foreach($entities as &$entity){
+            $this->parseEntity($class, $entity);
+        }
+        return $entities;
     }
 
     /**
@@ -668,7 +747,7 @@ class ApiWrapper{
             $this->parseEntity('space', $event->space);
         }
 
-        return $result;
+        return $result; 
     }
  
     /**
@@ -731,8 +810,9 @@ class ApiWrapper{
 
         if(isset($entity->createTimestamp)){
             $entity->createTimestamp = $this->parseDateFromMapas($entity->createTimestamp);
+        } 
+        if(isset($entity->updateTimestamp)){
             $entity->updateTimestamp = $this->parseDateFromMapas($entity->updateTimestamp);
         }
-        
     }
 }
