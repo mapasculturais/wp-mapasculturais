@@ -8,5 +8,15 @@ export default {
     },
     props: {
         showFilters: { type: Boolean, default: true }
+    },
+    data () {
+        return {
+            filters: {}
+        }
+    },
+    methods: {
+        updateFilters (filters) {
+            this.filters = params
+        }
     }
 }

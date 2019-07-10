@@ -56,6 +56,9 @@ function mc_enqueue_scripts () {
     wp_enqueue_style('fontawesome5', '/wp-content/plugins/wp-mapasculturais/vendor/fontawesome-free/css/all.min.css');
 
     wp_enqueue_script('wp-mapasculturais', '/wp-content/plugins/wp-mapasculturais/dist/index.js', [], false, true);
+
+    $languages = WPMapasCulturais\Plugin::instance()->api->getTaxonomyTerms('linguagem');
+    wp_localize_script('wp-mapasculturais', 'mcTaxonomies', ['languages' => $languages]);
 }
 add_action('wp_enqueue_scripts', 'mc_enqueue_scripts');
 

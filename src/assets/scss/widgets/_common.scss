@@ -38,6 +38,70 @@
         }
     }
 
+    &__filters {
+        @include secondary-inverse;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        padding: 10px;
+
+        $multiselect-height: 47px;
+
+        &-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            label {
+                display: flex;
+
+                span {
+                    line-height: $multiselect-height;
+                    padding-right: 5px;
+                }
+            }
+
+            > * {
+                margin: 3px;
+            }
+        }
+
+        input, button {
+            border-radius: 5px !important;
+            height: $multiselect-height;
+        }
+
+        input::placeholder {
+            color: #ADADAD;
+        }
+
+        .multiselect {
+            min-width: 225px;
+            width: auto;
+
+            &__single {
+                line-height: 30px;
+            }
+
+            &__element {
+                font-size: 14px;
+            }
+
+            &__tags {
+                height: 47px;
+            }
+
+            &__tag {
+                @include secondary-inverse;
+            }
+        }
+
+        button {
+            @include primary-inverse;
+            font-size: 1rem;
+            padding: 5px 10px;
+        }
+    }
+
     &__event {
         display: flex;
         margin-bottom: 5px;

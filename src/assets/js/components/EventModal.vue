@@ -1,5 +1,5 @@
 <template>
-    <CardModal :name="event.name" :category="event.terms.linguagem[0]" :link="event.permalink" @close="$emit('close')">
+    <CardModal :name="event.name" :category="event.terms.linguagem[0]" :background="backgroundImage" :link="event.permalink" @close="$emit('close')">
         <template #content>
             <div class="mc-w__card-slot">
                 <div class="icon"></div>
@@ -48,6 +48,9 @@
                     [space.En_Nome_Logradouro, space.En_Numero, space.En_Complemento, space.En_Bairro, space.En_CEP].filter(Boolean).join(', '),
                     [space.En_Municipio, space.En_Estado].filter(Boolean).join(', ')
                 ].filter(Boolean).join(' - ')
+            },
+            backgroundImage () {
+                return this.event.avatar.medium ? `url: ('${this.event.avatar.medium}')` : ''
             },
             datetime () {
                 const startDate = new Date(this.event.occurrence.starts).toLocaleDateString('pt-BR')
