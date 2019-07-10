@@ -706,6 +706,8 @@ class ApiWrapper{
         $fields = $fields = Plugin::instance()->getEntityFields($class, true, true, ['permissionTo.modify', 'longDescription']);
         $entity = $this->mapasApi->findEntity($class, $entity_id, $fields);
 
+        $this->parseEntity($class, $entity);
+
         return $entity;
     }
 
