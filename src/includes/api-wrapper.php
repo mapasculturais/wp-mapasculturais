@@ -823,6 +823,20 @@ class ApiWrapper{
 
         return $result; 
     }
+
+    /**
+     * Retorna o conteúdo do post após aplicar o filtro `the_content`
+     *
+     * @param int $post_id
+     * @return string
+     */
+    function get_the_content($post_id){
+        $post = get_post($post_id);
+        $content = $post->post_content;
+        $content = apply_filters('the_content', $content);
+        $content = str_replace(']]>', ']]&gt;', $content);
+        return $content;
+    }
  
     /**
      * Parseia o a entidade da classe informada
@@ -843,6 +857,10 @@ class ApiWrapper{
         $entity_post_id = $this->getPostIdByEntityId($class, $entity->id);
         $entity->post_id = $entity_post_id;
         if($entity_post_id){
+            $entity->name = get_the_title($entity_post_id);
+            $entity->shortDescription = get_the_excerpt($entity_post_id);
+            $entity->longDescription = $this->get_the_content($entity_post_id);
+            
             $cache_id = __METHOD__ . ':' . $class . ':' . $entity_post_id;
 
             if($this->cache->exists($cache_id, false)){
