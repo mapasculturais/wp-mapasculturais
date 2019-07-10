@@ -216,6 +216,17 @@ class Plugin{
                 $result['events'] = $events;
                 $this->output_success($result);
                 break;
+            case 'entity':
+                $post_id = get_query_var('mcarg1');
+                $entity = $this->api->getEntityClassAndIdByPostId($post_id);
+                if(isset($entity->class) && isset($entity->entity_id)){
+                    $result = $this->api->findOne($entity->class, $entity->entity_id);
+                    $result->entityClass = $entity->class;
+                    $this->output_success($result);
+                } else {
+                    $this->output_error(__('Entidade não encontrada', 'wp-mapas'), 404);
+                }
+                break;
             
             case 'agent':
             case 'space':
@@ -223,10 +234,12 @@ class Plugin{
                 $arg1 = get_query_var('mcarg1');
                 $result = [];
                 if(empty($arg1)){
-                    // busca
                     $result = $this->api->find($action, $_GET);
-                } else if(is_int($arg1)){
-
+                } else if(is_numeric($arg1)){
+                    $result = $this->api->findOne($action, $arg1);
+                    if(!$result){
+                        $this->output_error(__('Entidade não encontrada', 'wp-mapas'), 404);
+                    }
                 }
                 $this->output_success($result);
 

@@ -201,6 +201,38 @@ class ApiWrapper{
     }
 
     /**
+     * Retorna objeto contendo a classe e id da entidade dado o post_id
+     * ex: {class: 'agent', entity_id: 332}
+     * 
+     * @param int $post_id
+     * @return object
+     */
+    function getEntityClassAndIdByPostId($post_id){
+        $post_id = (int) $post_id;
+        $cache_id = __METHOD__ . ':' . $post_id;
+        if($this->cache->exists($cache_id)){
+            $result = $this->cache->get($cache_id);
+        } else {
+            $result = (object) $this->wpdb->get_row("
+                SELECT 
+                    p.post_type as class,
+                    m.meta_value as entity_id
+                FROM 
+                    wp_postmeta m,
+                    wp_posts p
+                WHERE 
+                    p.ID = m.post_id AND 
+                    m.meta_key = 'MAPAS:entity_id' AND
+                    m.post_id = '$post_id'");
+
+            if($result){
+                $this->cache->add($cache_id, $result, Cache::DAY);
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Retorna o id da entidade 
      *
      * @param string $class classe da entidade (event|agent|space)
@@ -267,9 +299,8 @@ class ApiWrapper{
                 $fields[] = $f;
             }
         }
-
         
-        $entities = $this->mapasApi->find($class, $params, $fields);
+        $entities = $this->find($class, $params, $fields);
         
         $status = [
             '-10' => 'trash',
@@ -671,6 +702,13 @@ class ApiWrapper{
         return $params;
     }
 
+    function findOne($class, $entity_id){
+        $fields = $fields = Plugin::instance()->getEntityFields($class, true, true, ['permissionTo.modify', 'longDescription']);
+        $entity = $this->mapasApi->findEntity($class, $entity_id, $fields);
+
+        return $entity;
+    }
+
     /**
      * Busca entidades da classe informada na api do mapas culturais
      * aos parâmetros informados serão adicionados os filtros configurados
@@ -679,19 +717,19 @@ class ApiWrapper{
      * @param array $params 
      * @return array
      */
-    function find($class, array $params){
+    function find($class, array $params, array $fields = []){
         switch($class){
             case 'event':
                 $params = $this->prepareEventParams($params);
-                return $this->findEntities($class, $params);
+                return $this->findEntities($class, $params, $fields);
                 break;
             case 'agent':
                 $params = $this->prepareAgentParams($params);
-                return $this->findEntities($class, $params);
+                return $this->findEntities($class, $params, $fields);
                 break;
             case 'space':
                 $params = $this->prepareSpaceParams($params);
-                return $this->findEntities($class, $params);
+                return $this->findEntities($class, $params, $fields);
                 break;
             case 'eventOccurrences':
                 $params = $this->prepareEventOccurrenceParams($params);
@@ -813,6 +851,10 @@ class ApiWrapper{
         } 
         if(isset($entity->updateTimestamp)){
             $entity->updateTimestamp = $this->parseDateFromMapas($entity->updateTimestamp);
+        }
+
+        if(isset($entity->location) && is_object($entity->location)){
+            $entity->location = ['lat' => $entity->location->latitude, 'lng' => $entity->location->longitude];
         }
     }
 }
