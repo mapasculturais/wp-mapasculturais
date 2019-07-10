@@ -6,8 +6,11 @@ export const EventOccurrences = {
     }
 }
 
+export const Taxonomies = window.mcTaxonomies
+
 const mcapi = {
-    EventOccurrences
+    EventOccurrences,
+    Taxonomies
 }
 
 export default mcapi
