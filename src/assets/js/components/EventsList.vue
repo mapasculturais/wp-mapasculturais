@@ -59,19 +59,23 @@
             }
         },
         watch: {
-            currentMonth: {
-                handler: function currentMonthWatchHandler () {
-                    const firstDay = new Date(this.currentYear, this.currentMonth - 1, 1)
-                    const lastDay = new Date(this.currentYear, this.currentMonth, 0)
-                    this.$mc.EventOccurrences.find({
-                        ...this.filters,
-                        from: firstDay.toISOString().slice(0, 10),
-                        to: lastDay.toISOString().slice(0, 10)
-                    }).then(response => {
-                        this.events = response.data
-                    })
-                },
-                immediate: true
+            currentMonth: 'fetchEvents',
+            filters: 'fetchEvents'
+        },
+        created () {
+            this.fetchEvents()
+        },
+        methods: {
+            fetchEvents () {
+                const firstDay = new Date(this.currentYear, this.currentMonth - 1, 1)
+                const lastDay = new Date(this.currentYear, this.currentMonth, 0)
+                this.$mc.EventOccurrences.find({
+                    ...this.filters,
+                    from: firstDay.toISOString().slice(0, 10),
+                    to: lastDay.toISOString().slice(0, 10)
+                }).then(response => {
+                    this.events = response.data
+                })
             }
         }
     }

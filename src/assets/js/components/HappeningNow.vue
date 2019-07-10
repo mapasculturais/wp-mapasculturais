@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-now">
-        <FiltersBar v-if="showFilters" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" :showDates="false" @change="updateFilters"/>
         <WidgetHeader :showArrows="false">Agora</WidgetHeader>
         <div class="mc-w-now__content">
             <div class="mc-w-now__events" v-if="eventsNow.length > 0">
@@ -32,34 +32,40 @@
         data () {
            return {
                eventsToday: [],
-               eventsNow: [],
-               eventsNow$: null
+               fetchEvents$: null
            }
         },
-        created () {
-            const today = new Date().toISOString().slice(0, 10)
-            this.$mc.EventOccurrences.find({
-                ...this.filters,
-                from: today,
-                to: today
-            }).then(response => {
-                this.eventsToday = response.data
-                this.getEventsNow()
-            })
-        },
-        mounted () {
-            this.eventsNow$ = window.setInterval(this.getEventsNow, 60000)
-        },
-        beforeDestroy () {
-            window.clearInterval(this.eventsNow$)
-        },
-        methods: {
-            getEventsNow () {
+        computed: {
+            eventsNow () {
                 const now = new Date()
-                this.eventsNow = this.eventsToday.filter(event => {
+                return this.eventsToday.filter(event => {
                     const beginning = new Date(event.occurrence.starts)
                     const end = new Date(event.occurrence.ends)
                     return beginning < now && end > now
+                })
+            }
+        },
+        watch: {
+            filters: 'fetchEvents'
+        },
+        created () {
+            this.fetchEvents()
+        },
+        mounted () {
+            this.fetchEvents$ = window.setInterval(this.fetchEvents,  5 * 60 * 1000)
+        },
+        beforeDestroy () {
+            window.clearInterval(this.fetchEvents$)
+        },
+        methods: {
+            fetchEvents () {
+                const today = new Date().toISOString().slice(0, 10)
+                this.$mc.EventOccurrences.find({
+                    ...this.filters,
+                    from: today,
+                    to: today
+                }).then(response => {
+                    this.eventsToday = response.data
                 })
             }
         }
