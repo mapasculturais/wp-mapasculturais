@@ -1,1 +1,1 @@
-<mc-w-list></mc-w-list>
+<mc-w-list :show-filters="<?= $filters ? 'true' : 'false' ?>"></mc-w-list>

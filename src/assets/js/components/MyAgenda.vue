@@ -1,5 +1,6 @@
 <template>
     <section class="mc-w mc-w-agenda">
+        <FiltersBar v-if="showFilters"/>
         <WidgetHeader :showArrows="false">Minha agenda</WidgetHeader>
         <AgendaMonth v-for="month in months" :key="month" :events="eventsByMonth[month] || []" :month="month"/>
     </section>
@@ -8,16 +9,16 @@
 <script>
     import AgendaMonth from './AgendaMonth.vue'
     import DateMixin from './mixins/DateMixin'
-    import WidgetHeader from './WidgetHeader.vue'
+    import WidgetMixin from './mixins/WidgetMixin'
 
     export default {
         name: 'MyAgenda',
         components: {
-            AgendaMonth,
-            WidgetHeader
+            AgendaMonth
         },
         mixins: [
-            DateMixin
+            DateMixin,
+            WidgetMixin
         ],
         data () {
             return {

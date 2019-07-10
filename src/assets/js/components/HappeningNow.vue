@@ -1,5 +1,6 @@
 <template>
     <section class="mc-w mc-w-now">
+        <FiltersBar v-if="showFilters"/>
         <WidgetHeader :showArrows="false">Agora</WidgetHeader>
         <div class="mc-w-now__content">
             <div class="mc-w-now__events" v-if="eventsNow.length > 0">
@@ -17,16 +18,16 @@
 <script>
     import EventRow from './EventRow.vue'
     import ModalMixin from './mixins/ModalMixin'
-    import WidgetHeader from './WidgetHeader.vue'
+    import WidgetMixin from './mixins/WidgetMixin'
 
     export default {
         name: 'HappeningNow',
         components: {
-            EventRow,
-            WidgetHeader
+            EventRow
         },
         mixins: [
-            ModalMixin
+            ModalMixin,
+            WidgetMixin
         ],
         data () {
            return {

@@ -1,1 +1,1 @@
-<mc-w-calendar></mc-w-calendar>
+<mc-w-calendar :show-filters="<?= $filters ? 'true' : 'false' ?>"></mc-w-calendar>

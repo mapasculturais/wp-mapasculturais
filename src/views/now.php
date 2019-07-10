@@ -1,1 +1,1 @@
-<mc-w-now></mc-w-now>
+<mc-w-now :show-filters="<?= $filters ? 'true' : 'false' ?>"></mc-w-now>

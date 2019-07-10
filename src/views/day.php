@@ -1,1 +1,1 @@
-<mc-w-day></mc-w-day>
+<mc-w-day :show-filters="<?= $filters ? 'true' : 'false' ?>"></mc-w-day>

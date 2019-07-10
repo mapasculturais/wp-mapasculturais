@@ -1,5 +1,6 @@
 <template>
     <section class="mc-w mc-w-list">
+        <FiltersBar v-if="showFilters"/>
         <WidgetHeader @previous="previousMonth" @next="nextMonth">
             {{ monthString }} de {{ currentYear }}
         </WidgetHeader>
@@ -26,17 +27,17 @@
     import DateMixin from './mixins/DateMixin'
     import EventRow from './EventRow.vue'
     import ModalMixin from './mixins/ModalMixin'
-    import WidgetHeader from './WidgetHeader.vue'
+    import WidgetMixin from './mixins/WidgetMixin'
 
     export default {
         name: 'EventsList',
         components: {
-            EventRow,
-            WidgetHeader
+            EventRow
         },
         mixins: [
             DateMixin,
-            ModalMixin
+            ModalMixin,
+            WidgetMixin
         ],
         data () {
             return {

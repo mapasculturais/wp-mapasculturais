@@ -1,1 +1,1 @@
-<mc-w-agenda></mc-w-agenda>
+<mc-w-agenda :show-filters="<?= $filters ? 'true' : 'false' ?>"></mc-w-agenda>
