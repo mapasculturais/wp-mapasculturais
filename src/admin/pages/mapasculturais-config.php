@@ -45,7 +45,7 @@
                 <strong><?php _e('Importar', 'wp-mapas') ?></strong><br>
                 <label><input type="radio" name="MAPAS:space:import" value="mine" <?php if($sync == 'mine') echo 'checked="checked"' ?>/> <?php _e('Somente os meus espaços', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:space:import" value="control" <?php if($sync == 'control') echo 'checked="checked"' ?>/> <?php _e('Somente os espaços que tenho permissão para editar', 'wp-mapas') ?></label><br>
-                <label><input type="radio" name="MAPAS:space:import" value="agents" <?php if($sync == 'all') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os espaços publicados pelos agentes importados', 'wp-mapas') ?></label><br>
+                <label><input type="radio" name="MAPAS:space:import" value="agents" <?php if($sync == 'agents') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os espaços publicados pelos agentes importados', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:space:import" value="all" <?php if($sync == 'all') echo 'checked="checked"' ?>/> <?php _e('Todos os espaços', 'wp-mapas') ?> (<?php _e('não recomentado se não combinado com outros filtros', 'wp-mapas') ?>)</label>
             </td>
         </tr>
@@ -60,9 +60,9 @@
                 <strong><?php _e('Importar', 'wp-mapas') ?></strong><br>
                 <label><input type="radio" name="MAPAS:event:import" value="mine" <?php if($sync == 'mine') echo 'checked="checked"' ?>/> <?php _e('Somente os meus eventos', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:event:import" value="control" <?php if($sync == 'control') echo 'checked="checked"' ?>/> <?php _e('Somente os eventos que tenho permissão para editar', 'wp-mapas') ?></label><br>
-                <label><input type="radio" name="MAPAS:event:import" value="agents" <?php if($sync == 'control') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os eventos publicados pelos agentes importados', 'wp-mapas') ?></label><br>
-                <label><input type="radio" name="MAPAS:event:import" value="spaces" <?php if($sync == 'control') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os eventos publicados pelos agentes importados e que acontecem nos espaços importados', 'wp-mapas') ?></label><br>
-                <label><input type="radio" name="MAPAS:event:import" value="agents-spaces" <?php if($sync == 'control') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os eventos que acontecem nos espaços importados', 'wp-mapas') ?></label><br>
+                <label><input type="radio" name="MAPAS:event:import" value="agents" <?php if($sync == 'agents') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os eventos publicados pelos agentes importados', 'wp-mapas') ?></label><br>
+                <label><input type="radio" name="MAPAS:event:import" value="spaces" <?php if($sync == 'spaces') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os eventos publicados pelos agentes importados e que acontecem nos espaços importados', 'wp-mapas') ?></label><br>
+                <label><input type="radio" name="MAPAS:event:import" value="agents-spaces" <?php if($sync == 'agents-spaces') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os eventos que acontecem nos espaços importados', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:event:import" value="all" <?php if($sync == 'all') echo 'checked="checked"' ?>/> <?php _e('Todos os eventos', 'wp-mapas') ?> (<?php _e('não recomentado se não combinado com outros filtros', 'wp-mapas') ?>)</label>
             </td>
         </tr>
