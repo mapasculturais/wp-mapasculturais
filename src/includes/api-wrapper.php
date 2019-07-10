@@ -807,7 +807,7 @@ class ApiWrapper{
             $is_event_occurrence = true;
         }
         $entity_post_id = $this->getPostIdByEntityId($class, $entity->id);
-        
+        $entity->post_id = $entity_post_id;
         if($entity_post_id){
             $cache_id = __METHOD__ . ':' . $class . ':' . $entity_post_id;
 
