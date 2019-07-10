@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-day">
-        <FiltersBar v-if="showFilters" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" :showDates="false" @change="updateFilters"/>
         <WidgetHeader @previous="previousDay" @next="nextDay">
             {{ currentDay }} de {{ monthString }} de {{ currentYear }}
         </WidgetHeader>
@@ -69,6 +69,9 @@
             isoDate () {
                 return `${this.currentYear}-${String(this.currentMonth).padStart(2, '0')}-${String(this.currentDay).padStart(2, '0')}`
             }
+        },
+        watch: {
+            filters: 'fetchEvents'
         },
         created () {
             this.fetchEvents()

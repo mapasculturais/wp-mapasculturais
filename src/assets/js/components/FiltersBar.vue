@@ -2,11 +2,11 @@
     <div class="mc-w__filters">
         <div class="mc-w__filters-row">
             <input v-model="keyword" type="text" aria-label="Buscar evento" placeholder="Buscar evento">
-            <label>
+            <label v-if="showDates">
                 <span>de</span>
                 <input type="date" v-model="from">
             </label>
-            <label for="">
+            <label v-if="showDates">
                 <span>até</span>
                 <input type="date" v-model="to">
             </label>
@@ -26,6 +26,9 @@
         name: 'FiltersBar',
         components: {
             Multiselect
+        },
+        props: {
+            showDates: { type: Boolean, default: true }
         },
         data () {
             return {

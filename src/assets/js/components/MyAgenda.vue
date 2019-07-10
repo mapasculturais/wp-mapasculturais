@@ -42,14 +42,22 @@
                 return [...Array(13).keys()].slice(this.currentMonth)
             }
         },
+        watch: {
+            filters: 'fetchEvents'
+        },
         created () {
-            this.$mc.EventOccurrences.find({
-                ...this.filters,
-                from: new Date().toISOString().slice(0, 10),
-                to: `${new Date().getFullYear()}-12-31`
-            }).then(response => {
-                this.events = response.data
-            })
+            this.fetchEvents()
+        },
+        methods: {
+            fetchEvents () {
+                this.$mc.EventOccurrences.find({
+                    from: new Date().toISOString().slice(0, 10),
+                    to: `${new Date().getFullYear()}-12-31`,
+                    ...this.filters
+                }).then(response => {
+                    this.events = response.data
+                })
+            }
         }
     }
 </script>
