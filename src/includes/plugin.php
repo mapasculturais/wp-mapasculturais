@@ -221,7 +221,6 @@ class Plugin{
                 $entity = $this->api->getEntityClassAndIdByPostId($post_id);
                 if(isset($entity->class) && isset($entity->entity_id)){
                     $result = $this->api->findOne($entity->class, $entity->entity_id);
-                    $result->entityClass = $entity->class;
                     $this->output_success($result);
                 } else {
                     $this->output_error(__('Entidade não encontrada', 'wp-mapas'), 404);

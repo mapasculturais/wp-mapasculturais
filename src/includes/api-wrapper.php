@@ -374,7 +374,7 @@ class ApiWrapper{
             $f = $entity->{'@files:header'};
             $attachment_id = $this->insertAttachmentFromUrl($post_id, $f->url, $f->description);
             if($attachment_id){
-                add_post_meta($post_id, 'agent_header-image_thumbnail_id', $attachment_id);
+                add_post_meta($post_id, $entity->entityClass . '_header-image_thumbnail_id', $attachment_id);
                 update_post_meta($post_id, 'MAPAS:entity_header_attachment_id', $attachment_id);
             }
         }
@@ -797,6 +797,9 @@ class ApiWrapper{
      */
     function parseEntity($class, &$entity){
         $is_event_occurrence = false;
+
+        $entity->entityClass = $class;
+
         if($class == 'eventOccurrence'){
             $class = 'event';
             $is_event_occurrence = true;
