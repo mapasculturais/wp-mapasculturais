@@ -11,7 +11,7 @@
                 <input type="date" v-model="to">
             </label>
             <Multiselect v-model="languages" :options="$mc.Taxonomies.languages" :searchable="false" :multiple="true" :taggable="true" placeholder="Linguagens" select-label="Selecionar" selected-label="Opção selecionada" deselect-label="Remover"/>
-            <Multiselect v-model="rates" :options="[]" :searchable="false" :multiple="false" :taggable="true" placeholder="Classificação Etária" select-label="Aperte Enter para selecionar" selected-label="Opção selecionada" deselect-label="Aperte Enter para remover"/>
+            <Multiselect v-model="rate" :options="['Livre', '18 anos', '16 anos', '14 anos', '12 anos', '10 anos']" :searchable="false" :multiple="false" :taggable="true" placeholder="Classificação Etária" select-label="Aperte Enter para selecionar" selected-label="Opção selecionada" deselect-label="Aperte Enter para remover"/>
             <button aria-label="Filtrar" @click="$emit('changed', params)">
                 <i class="fas fa-search" aria-hidden="true"></i>
             </button>
@@ -32,7 +32,7 @@
                 from: null,
                 keyword: '',
                 languages: [],
-                rates: [],
+                rate: null,
                 to: null
             }
         },
@@ -40,10 +40,10 @@
             params () {
                 return {
                     'from': this.from || undefined,
-                    'to': this.from || undefined,
+                    'to': this.to || undefined,
                     '@keyword': this.keyword || undefined,
-                    'term:linguagem': this.languages && `IN(${this.languages.map(language => language.replace(`,`, `\,`)).join(',')})`,
-                    'classificacaoEtaria': this.classificacaoEtaria && `EQ(${this.classificacaoEtaria.replace(`,`, `\,`)})`
+                    'term:linguagem': this.languages.length > 0 && `IN(${this.languages.map(language => language.replace(`,`, `\\,`)).join(',')})`,
+                    'classificacaoEtaria': this.rate && `EQ(${this.rate})`
                 }
             }
         }
