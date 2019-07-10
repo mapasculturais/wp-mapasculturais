@@ -40,13 +40,15 @@
 
     &__filters {
         @include secondary-inverse;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         padding: 10px;
 
         $multiselect-height: 47px;
 
         &-row {
             display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
 
             label {
                 display: flex;
@@ -58,7 +60,7 @@
             }
 
             > * {
-                margin: 0 3px;
+                margin: 3px;
             }
         }
 
@@ -72,6 +74,8 @@
         }
 
         .multiselect {
+            min-width: 150px;
+            width: auto;
 
             &__tag {
                 @include secondary-inverse;
