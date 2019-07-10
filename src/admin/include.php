@@ -20,8 +20,8 @@ $linguagens = new \Advanced_Taxonomy_Metabox( 'linguagem', array( 'event' ), 'ch
 $linguagens->set( 'priority', 'core' );
 
 add_action('admin_menu', function(){
+    add_submenu_page('wp-mapasculturais', 'Configurações', 'Configurações', 'manage_options', 'wp-mapasculturais', 'WPMapasCulturais\\config_page');
     add_menu_page('Mapas Culturais', 'Mapas Culturais', 'manage_options', 'wp-mapasculturais', 'WPMapasCulturais\\config_page', 'dashicons-location-alt');
-    add_submenu_page('wp-mapasculturais', 'Configurações', 'Configurações', 'manage_options', 'wp-mapasculturais-config', 'WPMapasCulturais\\config_page');
 });
 
 function config_page(){
@@ -94,7 +94,7 @@ function register_metaboxes(){
                 'title'         => $cfg->name,
                 'object_types'  => array( $post_type ), // Post type
                 'context'       => 'normal',
-                'priority'      => 'high',
+                'priority'      => 'low',
                 'show_names'    => true, // Show field names on the left
                 // 'cmb_styles' => false, // false to disable the CMB stylesheet
                 // 'closed'     => true, // Keep the metabox closed by default

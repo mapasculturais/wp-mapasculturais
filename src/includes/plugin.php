@@ -71,6 +71,7 @@ class Plugin{
             'sentNotification', 'subsite', '_subsiteId', 'user', 'userId', '@file', '_children',
             'opportunityTabName', 'useOpportunityTab', 'singleUrl',
 
+            'rules', 'price', 'project', // verificar
             'localizacao', 'googleplus', // @TODO: tem que tirar esse campo do mapas, ele não é usado.
 
             'owner', 'parent', '_type', // @TODO: implementar esses campos
