@@ -1,18 +1,18 @@
 <template>
     <div class="mc-w__filters">
         <div class="mc-w__filters-row">
-            <input type="text" aria-label="Buscar evento" placeholder="Buscar evento">
+            <input v-model="keyword" type="text" aria-label="Buscar evento" placeholder="Buscar evento">
             <label>
                 <span>de</span>
-                <input type="date">
+                <input type="date" v-model="from">
             </label>
             <label for="">
                 <span>até</span>
-                <input type="date">
+                <input type="date" v-model="to">
             </label>
-            <Multiselect v-model="languages" :options="$mc.Taxonomies.languages" :searchable="false" :multiple="true" :taggable="true" placeholder="Linguagens" select-label="Aperte Enter para selecionar" selected-label="Opção selecionada" deselect-label="Aperte Enter para remover"/>
-            <Multiselect v-model="rates" :options="[]" :searchable="false" :multiple="true" :taggable="true" placeholder="Classificação Etária" select-label="Aperte Enter para selecionar" selected-label="Opção selecionada" deselect-label="Aperte Enter para remover"/>
-            <button aria-label="Filtrar">
+            <Multiselect v-model="languages" :options="$mc.Taxonomies.languages" :searchable="false" :multiple="true" :taggable="true" placeholder="Linguagens" select-label="Selecionar" selected-label="Opção selecionada" deselect-label="Remover"/>
+            <Multiselect v-model="rates" :options="[]" :searchable="false" :multiple="false" :taggable="true" placeholder="Classificação Etária" select-label="Aperte Enter para selecionar" selected-label="Opção selecionada" deselect-label="Aperte Enter para remover"/>
+            <button aria-label="Filtrar" @click="$emit('changed', params)">
                 <i class="fas fa-search" aria-hidden="true"></i>
             </button>
         </div>
@@ -29,8 +29,22 @@
         },
         data () {
             return {
+                from: null,
+                keyword: '',
                 languages: [],
-                rates: []
+                rates: [],
+                to: null
+            }
+        },
+        computed: {
+            params () {
+                return {
+                    'from': this.from || undefined,
+                    'to': this.from || undefined,
+                    '@keyword': this.keyword || undefined,
+                    'term:linguagem': this.languages && `IN(${this.languages.map(language => language.replace(`,`, `\,`)).join(',')})`,
+                    'classificacaoEtaria': this.classificacaoEtaria && `EQ(${this.classificacaoEtaria.replace(`,`, `\,`)})`
+                }
             }
         }
     }

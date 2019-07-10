@@ -36,7 +36,8 @@
             ModalMixin
         ],
         props: {
-            events: { type: Array, required: true }
+            events: { type: Array, required: true },
+            filters: { type: Object, required: true }
         },
         data () {
             return {

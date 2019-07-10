@@ -75,8 +75,12 @@
         }
 
         .multiselect {
-            min-width: 150px;
+            min-width: 225px;
             width: auto;
+
+            &__element {
+                font-size: 14px;
+            }
 
             &__tag {
                 @include secondary-inverse;

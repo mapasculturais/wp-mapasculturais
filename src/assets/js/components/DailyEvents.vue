@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-day">
-        <FiltersBar v-if="showFilters"/>
+        <FiltersBar v-if="showFilters" @change="updateFilters"/>
         <WidgetHeader @previous="previousDay" @next="nextDay">
             {{ currentDay }} de {{ monthString }} de {{ currentYear }}
         </WidgetHeader>
@@ -76,6 +76,7 @@
         methods: {
             fetchEvents () {
                 this.$mc.EventOccurrences.find({
+                    ...this.filters,
                     from: this.isoDate,
                     to: this.isoDate
                 }).then(response => {
