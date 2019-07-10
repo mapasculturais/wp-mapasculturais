@@ -130,28 +130,48 @@ class ApiWrapper{
     /**
      * Retorna os ids dos posts e das entidades 'linkadas'
      *
-     * @param [type] $class
+     * @param string $class (event|agent|space)
+     * @param bool $only_entity_ids retornar somente os ids das entidades, sem os ids dos posts? default: false
      * @return array
      */
-    function getLinkedEntitiesIds($class){
+    function getLinkedEntitiesIds($class, $only_entity_ids = false){
         // @TODO: utilizar cache e apagar sempre que uma nova entidade for criada ou importada
+        if($only_entity_ids){
+            $result = $this->wpdb->get_col("
+                SELECT 
+                    meta_value AS entity_id
+                FROM 
+                    {$this->wpdb->postmeta} 
+                WHERE 
+                    meta_key = 'MAPAS:entity_id' AND 
+                    post_id IN (
+                        SELECT 
+                            ID 
+                        FROM 
+                            {$this->wpdb->posts} 
+                        WHERE
+                            post_type = '{$class}' AND 
+                            post_status IN ('publish', 'draft')
+                    )");
+        } else {
+            $result = $this->wpdb->get_results("
+                SELECT 
+                    post_id, meta_value AS entity_id
+                FROM 
+                    {$this->wpdb->postmeta} 
+                WHERE 
+                    meta_key = 'MAPAS:entity_id' AND 
+                    post_id IN (
+                        SELECT 
+                            ID 
+                        FROM 
+                            {$this->wpdb->posts} 
+                        WHERE
+                            post_type = '{$class}' AND 
+                            post_status IN ('publish', 'draft')
+                    )");
+        }
 
-        $result = $this->wpdb->get_results("
-            SELECT 
-                post_id, meta_value AS entity_id
-            FROM 
-                {$this->wpdb->postmeta} 
-            WHERE 
-                meta_key = 'MAPAS:entity_id' AND 
-                post_id IN (
-                    SELECT 
-                        ID 
-                    FROM 
-                        {$this->wpdb->posts} 
-                    WHERE
-                        post_type = '{$class}' AND 
-                        post_status IN ('publish', 'draft')
-                )");
         return $result;
     }
 
@@ -641,6 +661,17 @@ class ApiWrapper{
      * @return array
      */
     function prepareEventParams(array $params){
+        $_import = $this->getOption('event:import');
+        
+        if($_import == 'mine'){
+            $params['user'] = 'EQ(@me)';
+        } else if($_import == 'control'){
+            $params['@permissions'] = '@control';
+        } else if($_import == 'agents'){
+            $agents = $this->getLinkedEntitiesIds('agent', true);
+            $params['owner'] = 'IN(' . implode(',', $agents) . ')';
+        }
+
         return $params;
     }
     
@@ -678,6 +709,9 @@ class ApiWrapper{
             $params['user'] = 'EQ(@me)';
         } else if($_import == 'control'){
             $params['@permissions'] = '@control';
+        } else if($_import == 'agents'){
+            $agents = $this->getLinkedEntitiesIds('agent', true);
+            $params['owner'] = 'IN(' . implode(',', $agents) . ')';
         }
 
         return $params;
