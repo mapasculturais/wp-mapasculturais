@@ -32,7 +32,8 @@
         data () {
            return {
                eventsToday: [],
-               fetchEvents$: null
+               fetchEvents$: null,
+               today: null
            }
         },
         computed: {
@@ -52,7 +53,13 @@
             this.fetchEvents()
         },
         mounted () {
-            this.fetchEvents$ = window.setInterval(this.fetchEvents,  5 * 60 * 1000)
+            const fetchEventsOnInterval = function () {
+                const today = new Date().toISOString().slice(0, 10)
+                if (this.today !== today) {
+                    this.fetchEvents()
+                }
+            }
+            this.fetchEvents$ = window.setInterval(fetchEventsOnInterval,  5 * 60 * 1000)
         },
         beforeDestroy () {
             window.clearInterval(this.fetchEvents$)
@@ -66,6 +73,7 @@
                     to: today
                 }).then(response => {
                     this.eventsToday = response.data
+                    this.today = today
                 })
             }
         }
