@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 define('WP_MAPAS__BASE_PATH', __DIR__ . '/');
 define('WP_MAPAS__VIEWS_PATH', __DIR__ . '/views/');
+define('WP_MAPAS__SINGLES_PATH', __DIR__ . '/singles/');
 define('WP_MAPAS__VENDOR_PATH', __DIR__ . '/vendor/');
 
 
