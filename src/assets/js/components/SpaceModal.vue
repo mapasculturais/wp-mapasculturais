@@ -50,7 +50,7 @@
                 ].filter(Boolean).join(' - ')
             },
             backgroundImage () {
-                return this.space.avatar.medium ? `url: ('${this.space.avatar.medium}')` : ''
+                return typeof this.space.avatar.medium === 'string' ? `url('${this.space.avatar.medium}')` : ''
             }
         }
     }

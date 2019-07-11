@@ -50,7 +50,7 @@
                 ].filter(Boolean).join(' - ')
             },
             backgroundImage () {
-                return this.event.avatar.medium ? `url: ('${this.event.avatar.medium}')` : ''
+                return typeof this.event.avatar.medium === 'string' ? `url('${this.event.avatar.medium}')` : ''
             },
             datetime () {
                 const startDate = new Date(this.event.occurrence.starts).toLocaleDateString('pt-BR')
