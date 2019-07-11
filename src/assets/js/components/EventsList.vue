@@ -70,9 +70,9 @@
                 const firstDay = new Date(this.currentYear, this.currentMonth - 1, 1)
                 const lastDay = new Date(this.currentYear, this.currentMonth, 0)
                 this.$mc.EventOccurrences.find({
-                    ...this.filters,
                     from: firstDay.toISOString().slice(0, 10),
-                    to: lastDay.toISOString().slice(0, 10)
+                    to: lastDay.toISOString().slice(0, 10),
+                    ...this.filters
                 }).then(response => {
                     this.events = response.data
                 })

@@ -1,3 +1,6 @@
+@import '~vue-multiselect/dist/vue-multiselect.min.css';
+@import '~vue-cal/dist/vuecal.css';
+
 @import 'settings/variables';
 @import 'settings/mixins';
 @import 'settings/base';
@@ -5,6 +8,7 @@
 @import 'widgets/common';
 @import 'widgets/card';
 @import 'widgets/agenda';
+@import 'widgets/calendar';
 @import 'widgets/day';
 @import 'widgets/list';
 @import 'widgets/now';
