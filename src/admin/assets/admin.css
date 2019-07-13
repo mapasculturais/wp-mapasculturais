@@ -1,0 +1,18 @@
+.taxonomy-selector {
+    margin-top:1em;
+}
+.checkbox-selector { 
+    padding:.3em; 
+    display:inline-block; 
+    color:#666;
+    margin:1px;
+    border:1px dotted #999;
+}
+.checkbox-selector.selected { 
+    background-color:#ddd; 
+    font-weight: bold;
+    color:black;
+}
+.checkbox-selector input { 
+    display:none; 
+}

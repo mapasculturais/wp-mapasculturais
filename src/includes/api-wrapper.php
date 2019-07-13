@@ -84,7 +84,7 @@ class ApiWrapper{
      *
      * @param string $name
      * @param mixed $default
-     * @return void
+     * @return mixed
      */
     public function getOption($name, $default = null){
         $option_name = 'MAPAS:' . $name;
@@ -654,6 +654,14 @@ class ApiWrapper{
         return $types;        
     }
 
+    function prepareInParam(array $array){
+        $array = array_map(function($el){
+            return str_replace(',', '\\,', $el);
+        }, $array);
+        $array = 'IN(' . implode(',', $array) . ')';
+    }
+
+
     /**
      * Prepara os parâmetros para a api de eventos adicionando os filtros configurados
      *
@@ -670,6 +678,16 @@ class ApiWrapper{
         } else if($_import == 'agents'){
             $agents = $this->getLinkedEntitiesIds('agent', true);
             $params['owner'] = 'IN(' . implode(',', $agents) . ')';
+        }
+        
+
+        $_terms = $this->getOption('event:linguagens');
+        if($_terms){
+           $_terms = $this->prepareInParam($_terms);
+
+            if(isset($params['term:linguagem'])){
+                $params['term:linguagem'] = 'AND(' . $_terms . ',' . $params['term:linguagem'] . ')';
+            }
         }
 
         return $params;
@@ -692,6 +710,15 @@ class ApiWrapper{
             $params['@permissions'] = '@control';
         }
 
+        $_terms = $this->getOption('agent:areas');
+        if($_terms){
+           $_terms = $this->prepareInParam($_terms);
+
+            if(isset($params['term:area'])){
+                $params['term:area'] = 'AND(' . $_terms . ',' . $params['term:area'] . ')';
+            }
+        }
+
         return $params;
     }
     
@@ -706,12 +733,21 @@ class ApiWrapper{
         $_import = $this->getOption('space:import');
         
         if($_import == 'mine'){
-            $params['user'] = 'EQ(@me)';
+            $params['user'] = 'EQ(@me)';    
         } else if($_import == 'control'){
             $params['@permissions'] = '@control';
         } else if($_import == 'agents'){
             $agents = $this->getLinkedEntitiesIds('agent', true);
             $params['owner'] = 'IN(' . implode(',', $agents) . ')';
+        }
+
+        $_terms = $this->getOption('space:areas');
+        if($_terms){
+           $_terms = $this->prepareInParam($_terms);
+
+            if(isset($params['term:area'])){
+                $params['term:area'] = 'AND(' . $_terms . ',' . $params['term:area'] . ')';
+            }
         }
 
         return $params;

@@ -37,6 +37,23 @@
     </table>
 
 
+    <div class="taxonomy-selector">
+        <?php $types = get_option('MAPAS:agent:types') ?: []; ?>
+        <strong><?php _e('Selecione os tipos de agente que deseja utilizar em seu site. Para utilizar todos, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
+        <?php foreach(WPMapasCulturais\Plugin::instance()->api->mapasApi->getEntityTypes('agent') as $type): ?>
+            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:agent:types[]" value="<?php echo $type->id ?>" <?php if(in_array($type->id, $types)) echo 'checked' ?> ><?php echo $type->name ?></label>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="taxonomy-selector">
+        <?php $areas = get_option('MAPAS:agent:areas') ?: []; ?>
+        <strong><?php _e('Selecione as áreas de atuação que deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
+        <?php foreach(WPMapasCulturais\Plugin::instance()->api->getTaxonomyTerms('area') as $area): ?>
+            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:agent:areas[]" value="<?php echo $area ?>" <?php if(in_array($area, $areas)) echo 'checked' ?> ><?php echo $area ?></label>
+        <?php endforeach; ?>
+    </div>
+
+
     <hr><h2><?php _e('Sincronização e filtros de espaços', 'wp-mapas') ?></h2>
     <table class="form-table">
         <tr valign="top">
@@ -50,6 +67,23 @@
             </td>
         </tr>
     </table>
+
+
+    <div class="taxonomy-selector">
+        <?php $types = get_option('MAPAS:space:types') ?: []; ?>
+        <strong><?php _e('Selecione os tipos de espaço que deseja utilizar em seu site. Para utilizar todos, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
+        <?php foreach(WPMapasCulturais\Plugin::instance()->api->mapasApi->getEntityTypes('space') as $type): ?>
+            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:space:types[]" value="<?php echo $type->id ?>" <?php if(in_array($type->id, $types)) echo 'checked' ?> ><?php echo $type->name ?></label>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="taxonomy-selector">
+        <?php $areas = get_option('MAPAS:space:areas') ?: []; ?>
+        <strong><?php _e('Selecione as áreas de atuação que deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
+        <?php foreach(WPMapasCulturais\Plugin::instance()->api->getTaxonomyTerms('area') as $area): ?>
+            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:space:areas[]" value="<?php echo $area ?>" <?php if(in_array($area, $areas)) echo 'checked' ?> ><?php echo $area ?></label>
+        <?php endforeach; ?>
+    </div>
 
 
     <hr><h2><?php _e('Sincronização e filtros de eventos', 'wp-mapas') ?></h2>
@@ -67,6 +101,14 @@
             </td>
         </tr>
     </table>
+
+    <div class="taxonomy-selector">
+        <?php $linguagens = get_option('MAPAS:event:linguagens') ?: []; ?>
+        <strong><?php _e('Selecione as linguagens deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
+        <?php foreach(WPMapasCulturais\Plugin::instance()->api->getTaxonomyTerms('linguagem') as $area): ?>
+            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:event:linguagens[]" value="<?php echo $area ?>" <?php if(in_array($area, $linguagens)) echo 'checked' ?> ><?php echo $area ?></label>
+        <?php endforeach; ?>
+    </div>
 
 
 

@@ -37,11 +37,21 @@ function register_settings(){
     register_setting( 'mapasculturais', 'MAPAS:agent:import' );
     register_setting( 'mapasculturais', 'MAPAS:space:import' );
     register_setting( 'mapasculturais', 'MAPAS:event:import' );
+
+
+    register_setting( 'mapasculturais', 'MAPAS:agent:areas' );
+    register_setting( 'mapasculturais', 'MAPAS:space:areas' );
+    register_setting( 'mapasculturais', 'MAPAS:event:linguagens' );
+
+    register_setting( 'mapasculturais', 'MAPAS:agent:types' );
+    register_setting( 'mapasculturais', 'MAPAS:space:types' );
+    
 }
 
 add_action('admin_enqueue_scripts', 'WPMapasCulturais\\admin_scripts');
 function admin_scripts(){
-    wp_enqueue_script('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/js/admin.js');
+    wp_enqueue_script('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.js');
+    wp_enqueue_style('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.css');
     
     if(isset($_GET['post']) && isset($_SESSION['MAPAS:error:' . $_GET['post']])){
         $e = $_SESSION['MAPAS:error:' . $_GET['post']];
@@ -59,7 +69,6 @@ function register_metaboxes(){
     global $wp_mapasculturais;
     if(false) $wp_mapasculturais = new Plugin;
 
-    
 
     foreach(Plugin::POST_TYPES as $post_type){
         $metadata_description = $wp_mapasculturais->getEntityMetadataDescription($post_type);
@@ -162,19 +171,17 @@ function register_metaboxes(){
                                 'tilelayer'           => 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
                                 'searchbox_position'  => 'topright', // topright, bottomright, topleft, bottomleft,
                                 'search'              => __( 'Buscar...', 'wp-mapas' ),
-                                'not_found'           => __( 'Not found', 'wp-mapas' ),
+                                'not_found'           => __( 'Não encontrado', 'wp-mapas' ),
                                 'initial_coordinates' => [
-                                    'lat' => -23, // Go Finland!
-                                    'lng' => -46  // Go Finland!
+                                    'lat' => -23, 
+                                    'lng' => -46 
                                 ],
-                                'initial_zoom'        => 4, // Zoomlevel when there's no coordinates set,
-                                'default_zoom'        => 13 // Zoomlevel after the coordinates have been set & page saved
+                                'initial_zoom' => 4, // Zoomlevel when there's no coordinates set,
+                                'default_zoom' => 13 // Zoomlevel after the coordinates have been set & page saved
                             ]
                         ) );
                     
                         break;
-                            
-
                 }
             }   
         }

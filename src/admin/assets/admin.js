@@ -9,6 +9,17 @@
                 $('input#' + prop).after("<br><em>" + errors + '</em>');
             }
         }
+
+        function checkLabel(evt){
+            var $el = $(this);
+            if($el.is(':checked')){
+                $el.parents(".checkbox-selector").addClass('selected');
+            } else {
+                $el.parents(".checkbox-selector").removeClass('selected');
+            }
+        }   
+        $('.checkbox-selector input:checked').each(checkLabel);
+        $('.checkbox-selector input').on('change', checkLabel);
     });
 
     var API = {
