@@ -27,7 +27,7 @@ require __DIR__ . '/includes/api-wrapper.php';
 require __DIR__ . '/includes/plugin.php';
 
 if(is_admin()){
-    require __DIR__ . '/admin/include.php';
+    require __DIR__ . '/admin/admin.php';
 }
 
 global $wp_mapasculturais;
