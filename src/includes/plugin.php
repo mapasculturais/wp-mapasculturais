@@ -76,7 +76,23 @@ class Plugin{
         return get_option($option_name, $default);
     }
 
-    function getEntityMetadataDescription($class){
+    /**
+     * Retorna as opções de um metadado de seleção única ou seleção múltipla
+     *
+     * @param string $class (agent|space|event)
+     * @param string $metadata_key
+     * @return array|null
+     */
+    function getEntityMetadataOptions($class, $metadata_key){
+        $metadata_description = $this->getEntityMetadataDescription($class, $metadata_key);
+        if($metadata_description && isset($metadata_description->options)){
+            return (array) $metadata_description->options;
+        } else {
+            return null;
+        }
+    }
+
+    function getEntityMetadataDescription($class, $metadata_key = null){
         if(!isset($this->api->entityDescriptions[$class])){
             return [];
         }
@@ -117,7 +133,15 @@ class Plugin{
             $result[$key] = $description;
         }
 
-        return $result;
+        if($metadata_key){
+            if(isset($result[$metadata_key])){
+                return $result[$metadata_key];
+            } else {
+                return null;
+            }
+        } else {
+            return $result;
+        }
     }
 
     /**
