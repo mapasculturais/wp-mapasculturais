@@ -277,7 +277,7 @@ class Plugin{
                 $this->output_success($result);
 
             case 'eventOccurrence':
-                $result = $this->api->findEventOccurrences($_GET);
+                $result = $this->api->find($action, $_GET);
                 $this->output_success($result);
                 break;
 

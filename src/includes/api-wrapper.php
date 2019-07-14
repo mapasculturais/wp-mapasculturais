@@ -652,11 +652,20 @@ class ApiWrapper{
         return $types;        
     }
 
-    function prepareInParam(array $array){
+    protected function prepareInParam(array $array){
         $array = array_map(function($el){
             return str_replace(',', '\\,', $el);
         }, $array);
-        $array = 'IN(' . implode(',', $array) . ')';
+        $param = 'IN(' . implode(',', $array) . ')';
+        return $param;
+    }
+
+    protected function addParam(array &$params, $key, $value){
+        if(isset($params[$key])){
+            $params[$key] = 'AND(' . $value . ',' . $params[$key] . ')';
+        } else {
+            $params[$key] = $value;
+        }
     }
 
 
@@ -678,14 +687,18 @@ class ApiWrapper{
             $params['owner'] = 'IN(' . implode(',', $agents) . ')';
         }
         
+        if($_terms = $this->getOption('event:linguagens')){
+            $_terms = $this->prepareInParam($_terms);
+            $this->addParam($params, 'term:linguagem', $_terms);
+        }
 
-        $_terms = $this->getOption('event:linguagens');
-        if($_terms){
-           $_terms = $this->prepareInParam($_terms);
+        if($_classificacoes = $this->getOption('event:classificacao_etaria')){
+            $_classificacoes = $this->prepareInParam($_classificacoes);
+            $this->addParam($params, 'classificacaoEtaria', $_classificacoes);
+        }
 
-            if(isset($params['term:linguagem'])){
-                $params['term:linguagem'] = 'AND(' . $_terms . ',' . $params['term:linguagem'] . ')';
-            }
+        if($this->getOption('event:verified')){
+            $params['@verified'] = 1;
         }
 
         return $params;
@@ -708,13 +721,18 @@ class ApiWrapper{
             $params['@permissions'] = '@control';
         }
 
-        $_terms = $this->getOption('agent:areas');
-        if($_terms){
-           $_terms = $this->prepareInParam($_terms);
+        if($_terms = $this->getOption('agent:area')){
+            $_terms = $this->prepareInParam($_terms);
+            $this->addParam($params, 'term:area', $_terms);
+        }
 
-            if(isset($params['term:area'])){
-                $params['term:area'] = 'AND(' . $_terms . ',' . $params['term:area'] . ')';
-            }
+        if($_types = $this->getOption('agent:types')){
+            $_types = $this->prepareInParam($_types);
+            $this->addParam($params, 'type', $_types);
+        }
+
+        if($this->getOption('agent:verified')){
+            $params['@verified'] = 1;
         }
 
         return $params;
@@ -739,13 +757,18 @@ class ApiWrapper{
             $params['owner'] = 'IN(' . implode(',', $agents) . ')';
         }
 
-        $_terms = $this->getOption('space:areas');
-        if($_terms){
-           $_terms = $this->prepareInParam($_terms);
+        if($_terms = $this->getOption('space:areas')){
+            $_terms = $this->prepareInParam($_terms);
+            $this->addParam($params, 'term:area', $_terms);
+        }
 
-            if(isset($params['term:area'])){
-                $params['term:area'] = 'AND(' . $_terms . ',' . $params['term:area'] . ')';
-            }
+        if($_types = $this->getOption('space:types')){
+            $_types = $this->prepareInParam($_types);
+            $this->addParam($params, 'type', $_types);
+        }
+
+        if($this->getOption('space:verified')){
+            $params['@verified'] = 1;
         }
 
         return $params;
@@ -758,16 +781,28 @@ class ApiWrapper{
      * @return array
      */
     function prepareEventOccurrenceParams(array $params){
-        // @TODO: implementar os filtros no admin
-        $_import = $this->getOption('space:import');
-        
-        if($_import == 'mine'){
-            $params['user'] = 'EQ(@me)';
-        } else if($_import == 'control'){
-            $params['@permissions'] = '@control';
+        $event_params = [];
+        $space_params = [];
+
+        foreach($params as $key => $param){
+            if(strpos($key, 'space:') === 0){
+                $key = substr($key, 6);
+                $space_params[$key] = $param;
+            } else {
+                $event_params[$key] = $param;
+            }
         }
 
-        return $params;
+        $event_params = $this->prepareEventParams($event_params);
+        $space_params = $this->prepareSpaceParams($space_params);
+        
+        $result = $event_params;
+
+        foreach($space_params as $key => $param){
+            $result['space:' . $key] = $param;
+        }
+
+        return $result;
     }
 
     function findOne($class, $entity_id){
@@ -788,6 +823,7 @@ class ApiWrapper{
      * @return array
      */
     function find($class, array $params, array $fields = []){
+        
         switch($class){
             case 'event':
                 $params = $this->prepareEventParams($params);
@@ -801,7 +837,7 @@ class ApiWrapper{
                 $params = $this->prepareSpaceParams($params);
                 return $this->findEntities($class, $params, $fields);
                 break;
-            case 'eventOccurrences':
+            case 'eventOccurrence':
                 $params = $this->prepareEventOccurrenceParams($params);
                 return $this->findEventOccurrences($params);
                 break;
@@ -836,10 +872,10 @@ class ApiWrapper{
      * @param array $params exemplo: ['from' => '2019-01-01', 'to]
      * @return void
      */
-    function findEventOccurrences($params){
+    protected function findEventOccurrences($params){
         
-        $from = isset($params['from']) ? $params['from'] : date('Y-m-d');
-        $to = isset($params['to']) ? $params['to'] : date('Y-m-d', strtotime('+1 month', strtotime($from)));
+        $from = isset($params['from']) && $params['from'] ? $params['from'] : date('Y-m-d');
+        $to = isset($params['to']) && $params['to'] ? $params['to'] : date('Y-m-d', strtotime('+1 month', strtotime($from)));
 
         unset($params['to'], $params['from']);
 

@@ -1,3 +1,19 @@
+<?php
+namespace WPMapasCulturais;
+
+$plugin = Plugin::instance();
+
+$linguagem_terms = $plugin->api->getTaxonomyTerms('linguagem');
+$area_terms = $plugin->api->getTaxonomyTerms('area');
+
+$space_types = $plugin->api->mapasApi->getEntityTypes('space');
+$agent_types = $plugin->api->mapasApi->getEntityTypes('agent');
+
+$event_metadata = $plugin->getEntityMetadataDescription('event');
+
+$event_classificacoes_etarias = (array) $event_metadata['classificacaoEtaria']->options;
+sort($event_classificacoes_etarias);
+?>
 <div class="wrap">
 <h1><?php _e('Configuração do Mapas Culturais', 'wp-mapas') ?></h1>
 <form method="post" action="options.php"> 
@@ -8,17 +24,17 @@
     <table class="form-table">
         <tr valign="top">
             <th scope="row"><?php _e('URL da instação do Mapas Culturais', 'wp-mapas') ?></th>
-            <td><input type="text" name="MAPAS:url" value="<?php echo esc_attr( get_option('MAPAS:url') ); ?>"/></td>
+            <td><input type="text" name="MAPAS:url" value="<?php echo esc_attr( $plugin->getOption('url') ); ?>"/></td>
         </tr>
         
         <tr valign="top">
             <th scope="row"><?php _e('Chave Pública', 'wp-mapas') ?></th>
-            <td><input type="text" name="MAPAS:public_key" value="<?php echo esc_attr( get_option('MAPAS:public_key') ); ?>"/></td>
+            <td><input type="text" name="MAPAS:public_key" value="<?php echo esc_attr( $plugin->getOption('public_key') ); ?>"/></td>
         </tr>
          
         <tr valign="top">
             <th scope="row"><?php _e('Chave Privada ', 'wp-mapas') ?></th>
-            <td><input type="password" name="MAPAS:private_key" value="<?php echo esc_attr( get_option('MAPAS:private_key') ); ?>"/></td>
+            <td><input type="password" name="MAPAS:private_key" value="<?php echo esc_attr( $plugin->getOption('private_key') ); ?>"/></td>
         </tr>
     </table>
 
@@ -27,7 +43,7 @@
     <table class="form-table">
         <tr valign="top">
             <td colspan='2'>
-                <?php $sync = get_option('MAPAS:agent:import') ?: 'mine'; ?>
+                <?php $sync = $plugin->getOption('agent:import') ?: 'mine'; ?>
                 <strong><?php _e('Importar', 'wp-mapas') ?></strong><br>
                 <label><input type="radio" name="MAPAS:agent:import" value="mine" <?php if($sync == 'mine') echo 'checked="checked"' ?>/> <?php _e('Somente os meus agentes', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:agent:import" value="control" <?php if($sync == 'control') echo 'checked="checked"' ?>/> <?php _e('Somente os agentes que tenho permissão para editar', 'wp-mapas') ?></label><br>
@@ -36,19 +52,22 @@
         </tr>
     </table>
 
-
+    <?php /* @todo enquanto não implementar a atribuição de selos às entidades não é possível utilizar o filtro abaixo
+    <?php $verified = $plugin->getOption('agent:verified') ?>
+    <label><input type="checkbox" name="MAPAS:agent:verified" <?php if($verified) echo 'checked' ?> /> <strong><?php _e("Somente agentes com selos verificadores") ?></strong> </label>
+    */ ?>
     <div class="taxonomy-selector">
-        <?php $types = get_option('MAPAS:agent:types') ?: []; ?>
+        <?php $types = $plugin->getOption('agent:types') ?: []; ?>
         <strong><?php _e('Selecione os tipos de agente que deseja utilizar em seu site. Para utilizar todos, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
-        <?php foreach(WPMapasCulturais\Plugin::instance()->api->mapasApi->getEntityTypes('agent') as $type): ?>
+        <?php foreach($plugin->api->mapasApi->getEntityTypes('agent') as $type): ?>
             <label class="checkbox-selector"><input type="checkbox" name="MAPAS:agent:types[]" value="<?php echo $type->id ?>" <?php if(in_array($type->id, $types)) echo 'checked' ?> ><?php echo $type->name ?></label>
         <?php endforeach; ?>
     </div>
 
     <div class="taxonomy-selector">
-        <?php $areas = get_option('MAPAS:agent:areas') ?: []; ?>
+        <?php $areas = $plugin->getOption('agent:areas') ?: []; ?>
         <strong><?php _e('Selecione as áreas de atuação que deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
-        <?php foreach(WPMapasCulturais\Plugin::instance()->api->getTaxonomyTerms('area') as $area): ?>
+        <?php foreach($area_terms as $area): ?>
             <label class="checkbox-selector"><input type="checkbox" name="MAPAS:agent:areas[]" value="<?php echo $area ?>" <?php if(in_array($area, $areas)) echo 'checked' ?> ><?php echo $area ?></label>
         <?php endforeach; ?>
     </div>
@@ -58,7 +77,7 @@
     <table class="form-table">
         <tr valign="top">
             <td colspan='2'>
-                <?php $sync = get_option('MAPAS:space:import') ?: 'mine'; ?>
+                <?php $sync = $plugin->getOption('space:import') ?: 'mine'; ?>
                 <strong><?php _e('Importar', 'wp-mapas') ?></strong><br>
                 <label><input type="radio" name="MAPAS:space:import" value="mine" <?php if($sync == 'mine') echo 'checked="checked"' ?>/> <?php _e('Somente os meus espaços', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:space:import" value="control" <?php if($sync == 'control') echo 'checked="checked"' ?>/> <?php _e('Somente os espaços que tenho permissão para editar', 'wp-mapas') ?></label><br>
@@ -68,19 +87,23 @@
         </tr>
     </table>
 
+    <?php /* @todo enquanto não implementar a atribuição de selos às entidades não é possível utilizar o filtro abaixo
+    <?php $verified = $plugin->getOption('space:verified') ?>
+    <label><input type="checkbox" name="MAPAS:space:verified" <?php if($verified) echo 'checked' ?> /> <strong><?php _e("Somente espaços com selos verificadores") ?></strong> </label>
+    */ ?>
 
     <div class="taxonomy-selector">
-        <?php $types = get_option('MAPAS:space:types') ?: []; ?>
+        <?php $types = $plugin->getOption('space:types') ?: []; ?>
         <strong><?php _e('Selecione os tipos de espaço que deseja utilizar em seu site. Para utilizar todos, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
-        <?php foreach(WPMapasCulturais\Plugin::instance()->api->mapasApi->getEntityTypes('space') as $type): ?>
+        <?php foreach($space_types as $type): ?>
             <label class="checkbox-selector"><input type="checkbox" name="MAPAS:space:types[]" value="<?php echo $type->id ?>" <?php if(in_array($type->id, $types)) echo 'checked' ?> ><?php echo $type->name ?></label>
         <?php endforeach; ?>
     </div>
 
     <div class="taxonomy-selector">
-        <?php $areas = get_option('MAPAS:space:areas') ?: []; ?>
+        <?php $areas = $plugin->getOption('space:areas') ?: []; ?>
         <strong><?php _e('Selecione as áreas de atuação que deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
-        <?php foreach(WPMapasCulturais\Plugin::instance()->api->getTaxonomyTerms('area') as $area): ?>
+        <?php foreach($area_terms as $area): ?>
             <label class="checkbox-selector"><input type="checkbox" name="MAPAS:space:areas[]" value="<?php echo $area ?>" <?php if(in_array($area, $areas)) echo 'checked' ?> ><?php echo $area ?></label>
         <?php endforeach; ?>
     </div>
@@ -90,27 +113,35 @@
     <table class="form-table">
         <tr valign="top">
             <td colspan='2'>
-                <?php $sync = get_option('MAPAS:event:import') ?: 'mine' ; ?>
+                <?php $sync = $plugin->getOption('event:import') ?: 'mine' ; ?>
                 <strong><?php _e('Importar', 'wp-mapas') ?></strong><br>
                 <label><input type="radio" name="MAPAS:event:import" value="mine" <?php if($sync == 'mine') echo 'checked="checked"' ?>/> <?php _e('Somente os meus eventos', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:event:import" value="control" <?php if($sync == 'control') echo 'checked="checked"' ?>/> <?php _e('Somente os eventos que tenho permissão para editar', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:event:import" value="agents" <?php if($sync == 'agents') echo 'checked="checked"' ?>/> <?php _e('Somente os eventos publicados pelos agentes importados', 'wp-mapas') ?></label><br>
-                <label><input type="radio" name="MAPAS:event:import" value="spaces" <?php if($sync == 'spaces') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os eventos publicados pelos agentes importados e que acontecem nos espaços importados', 'wp-mapas') ?></label><br>
-                <label><input type="radio" name="MAPAS:event:import" value="agents-spaces" <?php if($sync == 'agents-spaces') echo 'checked="checked"' ?> disabled/> <?php _e('Somente os eventos que acontecem nos espaços importados', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:event:import" value="all" <?php if($sync == 'all') echo 'checked="checked"' ?>/> <?php _e('Todos os eventos', 'wp-mapas') ?> (<?php _e('não recomentado se não combinado com outros filtros', 'wp-mapas') ?>)</label>
             </td>
         </tr>
     </table>
 
+    <?php /* @todo enquanto não implementar a atribuição de selos às entidades não é possível utilizar o filtro abaixo
+    <?php $verified = $plugin->getOption('event:verified') ?>
+    <label><input type="checkbox" name="MAPAS:event:verified" <?php if($verified) echo 'checked' ?> /> <strong><?php _e("Somente eventos com selos verificadores") ?></strong> </label>
+    */ ?>
     <div class="taxonomy-selector">
-        <?php $linguagens = get_option('MAPAS:event:linguagens') ?: []; ?>
-        <strong><?php _e('Selecione as linguagens deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
-        <?php foreach(WPMapasCulturais\Plugin::instance()->api->getTaxonomyTerms('linguagem') as $area): ?>
-            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:event:linguagens[]" value="<?php echo $area ?>" <?php if(in_array($area, $linguagens)) echo 'checked' ?> ><?php echo $area ?></label>
+        <?php $classificacoes_etarias = $plugin->getOption('event:classificacao_etaria') ?: []; ?>
+        <strong><?php _e('Selecione as classificações etárias que deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
+        <?php foreach($event_classificacoes_etarias as $classificacao): ?>
+            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:event:classificacao_etaria[]" value="<?php echo $classificacao ?>" <?php if(in_array($classificacao, $classificacoes_etarias)) echo 'checked' ?> ><?php echo $classificacao ?></label>
         <?php endforeach; ?>
     </div>
 
-
+    <div class="taxonomy-selector">
+        <?php $linguagens = $plugin->getOption('event:linguagens') ?: []; ?>
+        <strong><?php _e('Selecione as linguagens deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
+        <?php foreach($linguagem_terms as $area): ?>
+            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:event:linguagens[]" value="<?php echo $area ?>" <?php if(in_array($area, $linguagens)) echo 'checked' ?> ><?php echo $area ?></label>
+        <?php endforeach; ?>
+    </div>
 
     <?php submit_button(); ?>
     <button type="button" class="js-mapas--import-new-entities"><?php _e("Importar novas entidades", 'wp-mapas') ?></button>

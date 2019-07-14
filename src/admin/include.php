@@ -45,7 +45,12 @@ function register_settings(){
 
     register_setting( 'mapasculturais', 'MAPAS:agent:types' );
     register_setting( 'mapasculturais', 'MAPAS:space:types' );
-    
+
+    register_setting( 'mapasculturais', 'MAPAS:event:classificacao_etaria' );
+
+    register_setting( 'mapasculturais', 'MAPAS:agent:verified' );
+    register_setting( 'mapasculturais', 'MAPAS:space:verified' );
+    register_setting( 'mapasculturais', 'MAPAS:event:verified' );
 }
 
 add_action('admin_enqueue_scripts', 'WPMapasCulturais\\admin_scripts');
