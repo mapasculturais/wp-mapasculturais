@@ -63,6 +63,9 @@ class ApiWrapper{
         return self::$_instance;
     }
 
+    /**
+     * Inicializa o wrapper da API do Mapas Culturais
+     */
     protected function __construct() {
         $url = $this->getOption('url');
         $private_key = $this->getOption('private_key');
@@ -687,14 +690,14 @@ class ApiWrapper{
             $params['owner'] = 'IN(' . implode(',', $agents) . ')';
         }
         
-        if($_terms = $this->getOption('event:linguagens')){
+        if($_terms = $this->getOption('event:languages')){
             $_terms = $this->prepareInParam($_terms);
             $this->addParam($params, 'term:linguagem', $_terms);
         }
 
-        if($_classificacoes = $this->getOption('event:classificacao_etaria')){
-            $_classificacoes = $this->prepareInParam($_classificacoes);
-            $this->addParam($params, 'classificacaoEtaria', $_classificacoes);
+        if($_age_ratings = $this->getOption('event:age_ratings')){
+            $_age_ratings = $this->prepareInParam($_age_ratings);
+            $this->addParam($params, 'classificacaoEtaria', $_age_ratings);
         }
 
         if($this->getOption('event:verified')){

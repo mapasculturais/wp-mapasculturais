@@ -3,7 +3,7 @@ namespace WPMapasCulturais;
 
 $plugin = Plugin::instance();
 
-$linguagem_terms = $plugin->api->getTaxonomyTerms('linguagem');
+$languages_terms = $plugin->api->getTaxonomyTerms('linguagem');
 $area_terms = $plugin->api->getTaxonomyTerms('area');
 
 $space_types = $plugin->api->mapasApi->getEntityTypes('space');
@@ -11,8 +11,8 @@ $agent_types = $plugin->api->mapasApi->getEntityTypes('agent');
 
 $event_metadata = $plugin->getEntityMetadataDescription('event');
 
-$event_classificacoes_etarias = (array) $event_metadata['classificacaoEtaria']->options;
-sort($event_classificacoes_etarias);
+$event_age_ratings = (array) $event_metadata['classificacaoEtaria']->options;
+sort($event_age_ratings);
 ?>
 <div class="wrap">
 <h1><?php _e('Configuração do Mapas Culturais', 'wp-mapas') ?></h1>
@@ -128,18 +128,18 @@ sort($event_classificacoes_etarias);
     <label><input type="checkbox" name="MAPAS:event:verified" <?php if($verified) echo 'checked' ?> /> <strong><?php _e("Somente eventos com selos verificadores") ?></strong> </label>
     */ ?>
     <div class="taxonomy-selector">
-        <?php $classificacoes_etarias = $plugin->getOption('event:classificacao_etaria') ?: []; ?>
+        <?php $age_ratings = $plugin->getOption('event:age_ratings') ?: []; ?>
         <strong><?php _e('Selecione as classificações etárias que deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
-        <?php foreach($event_classificacoes_etarias as $classificacao): ?>
-            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:event:classificacao_etaria[]" value="<?php echo $classificacao ?>" <?php if(in_array($classificacao, $classificacoes_etarias)) echo 'checked' ?> ><?php echo $classificacao ?></label>
+        <?php foreach($event_age_ratings as $rating): ?>
+            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:event:age_ratings[]" value="<?php echo $rating ?>" <?php if(in_array($rating, $age_ratings)) echo 'checked' ?> ><?php echo $rating ?></label>
         <?php endforeach; ?>
     </div>
 
     <div class="taxonomy-selector">
-        <?php $linguagens = $plugin->getOption('event:linguagens') ?: []; ?>
+        <?php $languages = $plugin->getOption('event:languages') ?: []; ?>
         <strong><?php _e('Selecione as linguagens deseja utilizar em seu site. Para utilizar todas, não selecione nenhuma.', 'wp-mapas') ?></strong><br>
-        <?php foreach($linguagem_terms as $area): ?>
-            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:event:linguagens[]" value="<?php echo $area ?>" <?php if(in_array($area, $linguagens)) echo 'checked' ?> ><?php echo $area ?></label>
+        <?php foreach($languages_terms as $area): ?>
+            <label class="checkbox-selector"><input type="checkbox" name="MAPAS:event:languages[]" value="<?php echo $area ?>" <?php if(in_array($area, $languages)) echo 'checked' ?> ><?php echo $area ?></label>
         <?php endforeach; ?>
     </div>
 

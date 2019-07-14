@@ -16,8 +16,8 @@ $agent_type->set( 'priority', 'core' );
 $areas = new \Advanced_Taxonomy_Metabox( 'area', array( 'agent', 'space' ), 'checkbox' );
 $areas->set( 'priority', 'core' );
 
-$linguagens = new \Advanced_Taxonomy_Metabox( 'linguagem', array( 'event' ), 'checkbox' );
-$linguagens->set( 'priority', 'core' );
+$languages = new \Advanced_Taxonomy_Metabox( 'linguagem', array( 'event' ), 'checkbox' );
+$languages->set( 'priority', 'core' );
 
 add_action('admin_menu', function(){
     add_submenu_page('wp-mapasculturais', 'Configurações', 'Configurações', 'manage_options', 'wp-mapasculturais', 'WPMapasCulturais\\config_page');
@@ -41,12 +41,12 @@ function register_settings(){
 
     register_setting( 'mapasculturais', 'MAPAS:agent:areas' );
     register_setting( 'mapasculturais', 'MAPAS:space:areas' );
-    register_setting( 'mapasculturais', 'MAPAS:event:linguagens' );
+    register_setting( 'mapasculturais', 'MAPAS:event:languages' );
 
     register_setting( 'mapasculturais', 'MAPAS:agent:types' );
     register_setting( 'mapasculturais', 'MAPAS:space:types' );
 
-    register_setting( 'mapasculturais', 'MAPAS:event:classificacao_etaria' );
+    register_setting( 'mapasculturais', 'MAPAS:event:age_ratings' );
 
     register_setting( 'mapasculturais', 'MAPAS:agent:verified' );
     register_setting( 'mapasculturais', 'MAPAS:space:verified' );

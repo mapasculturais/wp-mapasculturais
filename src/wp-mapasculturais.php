@@ -8,6 +8,8 @@ Description: Plugin de integração escrita e leitura com o Mapas Culturais
 
  */
 
+namespace WPMapasCulturais;
+
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 define('WP_MAPAS__BASE_PATH', __DIR__ . '/');
@@ -50,17 +52,34 @@ function events_shortcodes( $atts ) {
         return ob_get_clean();
     }
 }
-add_shortcode( 'events', 'events_shortcodes' );
+add_shortcode( 'events', 'WPMapasCulturais\\events_shortcodes' );
 
 function mc_enqueue_scripts () {
     wp_enqueue_style('wp-mapasculturais-css', '/wp-content/plugins/wp-mapasculturais/dist/index.css');
     wp_enqueue_style('fontawesome5', '/wp-content/plugins/wp-mapasculturais/vendor/fontawesome-free/css/all.min.css');
 
     wp_enqueue_script('wp-mapasculturais', '/wp-content/plugins/wp-mapasculturais/dist/index.js', [], false, true);
+    $plugin = Plugin::instance();
 
-    $languages = WPMapasCulturais\Plugin::instance()->api->getTaxonomyTerms('linguagem');
-    wp_localize_script('wp-mapasculturais', 'mcTaxonomies', ['languages' => $languages]);
+    if(!($age_ratings = $plugin->getOption('event:age_ratings'))){
+        $age_ratings = $plugin->getEntityMetadataOptions('event', 'classificacaoEtaria');
+    }
+    
+    sort($age_ratings);
+    
+    if(!($languages = $plugin->getOption('event:languages'))){
+        $languages = $plugin->api->getTaxonomyTerms('linguagem');
+    }
+    if(!($areas = $plugin->getOption('space:areas'))){
+        $areas = $plugin->api->getTaxonomyTerms('area');
+    }
+
+    wp_localize_script('wp-mapasculturais', 'mcTaxonomies', [
+        'languages' => $languages,
+        'areas' => $areas,
+        'ageRatings' => $age_ratings
+    ]);
 }
-add_action('wp_enqueue_scripts', 'mc_enqueue_scripts');
+add_action('wp_enqueue_scripts', 'WPMapasCulturais\\mc_enqueue_scripts');
 
 session_start();
