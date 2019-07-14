@@ -87,9 +87,7 @@ class ApiWrapper{
      * @return mixed
      */
     public function getOption($name, $default = null){
-        $option_name = 'MAPAS:' . $name;
-
-        return get_option($option_name, $default);
+        return Plugin::instance()->getOption($name, $default);
     }
 
     /**

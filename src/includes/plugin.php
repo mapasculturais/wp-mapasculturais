@@ -61,6 +61,21 @@ class Plugin{
         add_filter('single_template', [$this, 'filter__single_template']);
     }
 
+
+
+    /**
+     * Alias para o get_option do wordpress acrescentando o prefixo MAPAS: ao nome da opção
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getOption($name, $default = null){
+        $option_name = 'MAPAS:' . $name;
+
+        return get_option($option_name, $default);
+    }
+
     function getEntityMetadataDescription($class){
         if(!isset($this->api->entityDescriptions[$class])){
             return [];
