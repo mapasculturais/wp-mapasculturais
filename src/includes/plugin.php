@@ -70,7 +70,7 @@ class Plugin{
      * @param mixed $default
      * @return mixed
      */
-    public function getOption($name, $default = null){
+    public static function getOption($name, $default = null){
         $option_name = 'MAPAS:' . $name;
 
         return get_option($option_name, $default);

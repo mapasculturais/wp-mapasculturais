@@ -87,7 +87,7 @@ class ApiWrapper{
      * @return mixed
      */
     public function getOption($name, $default = null){
-        return Plugin::instance()->getOption($name, $default);
+        return Plugin::getOption($name, $default);
     }
 
     /**
