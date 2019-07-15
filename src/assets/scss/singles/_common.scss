@@ -1,0 +1,62 @@
+.mc-s {
+    @extend %mc-s;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 7fr 3fr;
+
+    &__header, &__title .avatar {
+        background-position: center;
+        background-size: cover;
+    }
+
+    &__header {
+        border-radius: 5px;
+        padding-top: 200px;
+    }
+
+    &__title {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: 128px 1fr;
+        padding: 10px;
+
+        margin-top: -40px;
+
+        .avatar {
+            border-radius: 50%;
+            height: 128px;
+            width: 128px;
+        }
+
+        .type {
+            color: white;
+            font-style: italic;
+            line-height: 40px;
+            text-shadow: 0 0 5px black;
+        }
+
+        .title {
+            font-weight: bold;
+            font-size: 30px;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-weight: bold;
+        }
+    }
+
+    &__slot {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+
+        .icon {
+            text-align: center;
+
+            span {
+                font-weight: bold;
+                font-size: 0.9em;
+            }
+        }
+    }
+}
