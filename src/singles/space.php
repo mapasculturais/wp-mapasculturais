@@ -3,7 +3,6 @@ get_header('space');
 the_post();
 $meta = get_post_meta(get_the_ID());
 ?>
-<h1>Espaço: <?php the_title() ?></h1>
 <article><?php the_content() ?></article>
 <p><?php var_dump($meta) ?></p>
 
@@ -16,7 +15,7 @@ $meta = get_post_meta(get_the_ID());
             </div>
             <div>
                 <div class="type">Tipo do espaço</div>
-                <div class="title">Nome do espaço</div>
+                <div class="title"><?php the_title(); ?></div>
                 <div class="subtitle">Subtítulo do espaço</div>
             </div>
         </div>
@@ -31,10 +30,12 @@ $meta = get_post_meta(get_the_ID());
                 <div class="icon"></div>
                 <div class="text"></div>
             </div>
+            <?php if (!empty($meta['horario'])): ?>
             <div class="mc-s__slot">
-                <div class="icon"></div>
-                <div class="text"></div>
+                <div class="icon" aria-label="Horário de funcionamento"><i class="far fa-clock" aria-hidden="true"></i></div>
+                <div class="text"><?= $meta['horario'][0] ?></div>
             </div>
+            <?php endif; ?>
             <?php if (!empty($meta['acessibilidade'])): ?>
                 <div class="mc-s__slot">
                     <div class="icon" aria-label="Acessibilidade"><i class="fab fa-accessible-icon" aria-hidden="true"></i></div>
