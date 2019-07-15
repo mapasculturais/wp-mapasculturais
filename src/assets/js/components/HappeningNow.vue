@@ -31,26 +31,17 @@
         ],
         data () {
            return {
-               eventsToday: [],
-               fetchEvents$: null,
-               today: null
+                eventsNow: [],
+                eventsToday: [],
+                fetchEvents$: null,
+                today: null
            }
-        },
-        computed: {
-            eventsNow () {
-                const now = new Date()
-                return this.eventsToday.filter(event => {
-                    const beginning = new Date(event.occurrence.starts)
-                    const end = new Date(event.occurrence.ends)
-                    return beginning < now && end > now
-                })
-            }
         },
         watch: {
             filters: 'fetchEvents'
         },
         created () {
-            this.fetchEvents()
+            this.fetchEvents().then(() => this.getEventsNow())
         },
         mounted () {
             const fetchEventsOnInterval = function () {
@@ -58,6 +49,7 @@
                 if (this.today !== today) {
                     this.fetchEvents()
                 }
+                this.getEventsNow()
             }
             this.fetchEvents$ = window.setInterval(fetchEventsOnInterval,  5 * 60 * 1000)
         },
@@ -67,13 +59,22 @@
         methods: {
             fetchEvents () {
                 const today = new Date().toISOString().slice(0, 10)
-                this.$mc.EventOccurrences.find({
+                return this.$mc.EventOccurrences.find({
                     ...this.filters,
                     from: today,
                     to: today
                 }).then(response => {
                     this.eventsToday = response.data
                     this.today = today
+                    this.getEventsNow()
+                })
+            },
+            getEventsNow () {
+                const now = new Date()
+                this.eventsNow = this.eventsToday.filter(event => {
+                    const beginning = new Date(event.occurrence.starts)
+                    const end = new Date(event.occurrence.ends)
+                    return beginning < now && end > now
                 })
             }
         }
