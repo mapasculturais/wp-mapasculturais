@@ -2,15 +2,20 @@
 get_header('space');
 the_post();
 $meta = get_post_meta(get_the_ID());
+$headerMeta = mc_array_at($meta, 'space_header-image_thumbnail_id');
+$avatarMeta = mc_array_at($meta, 'MAPAS:entity_avatar_attachment_id');
 ?>
-<p><?php var_dump($meta); ?></p>
 
 <div class="mc-s mc-s-space">
     <main class="mc-s__main">
-        <div class="mc-s__header" style="background-image: url(<?= wp_get_attachment_image_src($meta['space_header-image_thumbnail_id'][0], 'large')[0] ?>)"></div>
+        <div class="mc-s__header"<?= is_array($headerMeta)
+            ? 'style="background-image: url('.wp_get_attachment_image_src($headerMeta[0], 'large')[0].')"'
+            : '' ?>></div>
         <div class="mc-s__title">
             <div>
-                <div class="avatar" style="background-image: url(<?= wp_get_attachment_image_src($meta['MAPAS:entity_avatar_attachment_id'][0], 'thumbnail')[0] ?>)"></div>
+                <div class="avatar"<?= is_array($avatarMeta)
+                    ? 'style="background-image: url('.wp_get_attachment_image_src($avatarMeta[0], 'thumbnail')[0].')"'
+                    : '' ?>></div>
             </div>
             <div>
                 <div class="type"><?= wp_get_post_terms(get_the_ID(), 'space_type')[0]->name ?></div>
