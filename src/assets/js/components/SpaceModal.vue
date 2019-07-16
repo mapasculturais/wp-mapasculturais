@@ -45,7 +45,7 @@
             address () {
                 const space = this.space
                 return [
-                    [space.En_Nome_Logradouro, space.En_Numero, space.En_Complemento, space.En_Bairro, space.En_CEP].filter(Boolean).join(', '),
+                    [space.En_Nome_Logradouro, space.En_Num, space.En_Complemento, space.En_Bairro, space.En_CEP].filter(Boolean).join(', '),
                     [space.En_Municipio, space.En_Estado].filter(Boolean).join(', ')
                 ].filter(Boolean).join(' - ')
             },
