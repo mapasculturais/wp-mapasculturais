@@ -92,6 +92,14 @@ class Plugin{
         }
     }
 
+    /**
+     * Retorna a descrição dos metadados da entidade da classe informada. 
+     * Caso informado o metadata_key será retornado somente a descrição do metadado da chave informada.
+     *
+     * @param string $class (agent|space|event)
+     * @param string $metadata_key
+     * @return mixed
+     */
     function getEntityMetadataDescription($class, $metadata_key = null){
         if(!isset($this->api->entityDescriptions[$class])){
             return [];
@@ -165,15 +173,35 @@ class Plugin{
         return array_diff($result, $exclude_fields);
     }
 
+    /**
+     * Imprime um json de resposta de erro
+     *
+     * @param mixed $data informações sobre o erro
+     * @param integer $http_status_code status da resposta http. default: 400
+     * @return void
+     */
     function output_error($data, $http_status_code = 400){
         $this->output($data, $http_status_code);
     }
 
-
+    /**
+     * Imprime um json de resposta de sucesso
+     *
+     * @param mixed $data informações a serem retornadas no json
+     * @param integer $http_status_code status da resposta http. default: 200
+     * @return void
+     */
     function output_success($data, $http_status_code = 200){
         $this->output($data, $http_status_code);
     }
 
+    /**
+     * Imprime um json de resposta com o status http infomado.
+     *
+     * @param mixed $data informações a serem retornadas no json
+     * @param integer $http_status_code
+     * @return void
+     */
     function output($data, $http_status_code){
         http_response_code($http_status_code);
 
@@ -182,6 +210,11 @@ class Plugin{
         die;
     }
 
+    /**
+     * Importa os termos das taxonomias (area, linguagem e tipos de agente e espaço) do mapas para o wordpress
+     *
+     * @return void
+     */
     function _import_terms(){
         
         if(!get_option('MAPAS:terms_imported')){
@@ -211,6 +244,12 @@ class Plugin{
         }
     }
 
+    /**
+     * Define o arquivo de template das singles dos post types registrados pelo plugin
+     *
+     * @param string $single arquivo de template padrão
+     * @return string arquivo de template
+     */
     public function filter__single_template($single){
 
         global $post;
@@ -220,7 +259,7 @@ class Plugin{
                 $single_template_filename =  WP_MAPAS__SINGLES_PATH . "{$post_type}.php";
                 
                 if ( file_exists( $single_template_filename ) ) {
-                    return $single_template_filename;
+                    $single = $single_template_filename;
                 }
             }
         }
@@ -228,13 +267,24 @@ class Plugin{
         return $single;
     }
 
-    public function filter__query_vars( $qvars ) {
+    /**
+     * Adiciona à query do wordpress variáveis que serão utilizadas pela api
+     *
+     * @param array $qvars
+     * @return array
+     */
+    public function filter__query_vars( array $qvars ) {
         $qvars[] = 'mcaction';
         $qvars[] = 'mcarg1';
         $qvars[] = 'mcarg2';
         return $qvars;
     }
 
+    /**
+     * Adiciona as rotas da API
+     *
+     * @return void
+     */
     public function action__rewrite_rules() {
         add_rewrite_rule('mcapi/([^/]+)/?$', 'index.php?action=wp_mapasculturais_actions&mcaction=$matches[1]', 'top');
         add_rewrite_rule('mcapi/([^/]+)/([^/]+)/?$', 'index.php?action=wp_mapasculturais_actions&mcaction=$matches[1]&mcarg1=$matches[2]', 'top');
@@ -245,6 +295,11 @@ class Plugin{
         }
     }
 
+    /**
+     * Recebe as rotas da API
+     *
+     * @return void
+     */
     public function action__template_redirects(){
         $action = get_query_var('mcaction');
         if(!$action){
@@ -298,6 +353,12 @@ class Plugin{
         }
     }
 
+    /**
+     * Envia as entidades para o Mapas Culturais
+     *
+     * @param integer $post_id
+     * @return void
+     */
     public function action__save_post($post_id){
         if ( wp_is_post_revision( $post_id ) ) {
             return;
@@ -330,6 +391,14 @@ class Plugin{
         }
     }
 
+    /**
+     * Prepara um novo post para ser enviado ao mapas culturais
+     *
+     * @param int $post_id
+     * @param object $post
+     * @param bool $update
+     * @return void
+     */
     function action__wp_insert_post($post_id, $post, $update){
         if($update){
             return;
@@ -350,10 +419,20 @@ class Plugin{
         
     }
 
+    /**
+     * Executado na ativação do plugin
+     *
+     * @return void
+     */
     function action__activate(){
         
     }
 
+    /**
+     * Executado na desativação do plugin
+     *
+     * @return void
+     */
     function action__deactivate(){
         delete_option('MAPAS:permalinks_flushed');
     }
