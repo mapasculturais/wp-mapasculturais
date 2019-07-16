@@ -47,12 +47,14 @@
     }
 
     &__slot {
-        display: grid;
-        grid-template-columns: 100px 1fr;
+        display: flex;
         margin-bottom: 10px;
+        width: 100%;
 
         .icon {
             line-height: 1.3;
+            min-width: 100px;
+            max-width: 100px;
             text-align: center;
 
             span {
@@ -72,14 +74,18 @@
                 margin-top: 1em;
             }
 
+            .mc-s__slot {
+                margin: 0;
+
+                .icon {
+                    min-width: 40px;
+                    max-width: 40px;
+                }
+            }
+
             &.address {
                 .name {
                     font-weight: bold;
-                }
-
-                .mc-s__slot {
-                    grid-template-columns: 50px 1fr;
-                    margin: 0;
                 }
             }
 
@@ -95,6 +101,19 @@
                     list-style: none;
                     margin: 2.5px;
                     padding: 0 5px;
+                }
+            }
+        }
+
+        &.contact {
+            padding: 10px 5px;
+            border-bottom: 1px solid $primary-color;
+            border-top: 1px solid $primary-color;
+
+            @media screen and (min-width: 600px) {
+                .mc-s__slot {
+                    display: inline-flex;
+                    width: calc(50% - 5px);
                 }
             }
         }

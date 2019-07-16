@@ -31,7 +31,7 @@ $meta = get_post_meta(get_the_ID());
                 <div class="icon" aria-label="Endereço"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
                 <div class="text address">
                     <?php if (!empty(mc_array_at($meta, 'endereco'))): ?>
-                        <div class="name"><?= $meta['endereco'][0] ?></div>
+                    <div class="name"><?= $meta['endereco'][0] ?></div>
                     <?php endif; ?>
                     <div class="location"><?= $address ?></div>
                     <div class="mc-s__slot">
@@ -85,6 +85,47 @@ $meta = get_post_meta(get_the_ID());
                 </div>
             </div>
             <?php endif; ?>
+            <div class="mc-s__slot contact">
+                <div class="icon"><span>Contato</span></div>
+                <div class="text">
+                    <?php if (!empty(mc_array_at($meta, 'site'))): ?>
+                    <div class="mc-s__slot">
+                        <div class="icon" aria-label="Link"><i class="fas fa-link" aria-hidden="true"></i></div>
+                        <div class="text"><a href="<?= $meta['site'][0] ?>"><?= $meta['site'][0] ?></a></div>
+                    </div>
+                    <?php endif;
+                    if (!empty(mc_array_at($meta, 'telefonePublico'))): ?>
+                    <div class="mc-s__slot">
+                        <div class="icon" aria-label="Telefone"><i class="fas fa-phone" aria-hidden="true"></i></div>
+                        <div class="text"><a href="tel:<?= $meta['telefonePublico'][0] ?>"><?= $meta['telefonePublico'][0] ?></a></div>
+                    </div>
+                    <?php endif;
+                    if (!empty(mc_array_at($meta, 'emailPublico'))): ?>
+                    <div class="mc-s__slot">
+                        <div class="icon" aria-label="E-mail"><i class="far fa-envelope" aria-hidden="true"></i></div>
+                        <div class="text"><a href="mailto:<?= $meta['emailPublico'][0] ?>"><?= $meta['emailPublico'][0] ?></a></div>
+                    </div>
+                    <?php endif;
+                    if (!empty(mc_array_at($meta, 'facebook'))): ?>
+                    <div class="mc-s__slot">
+                        <div class="icon" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></div>
+                        <div class="text"><a href="<?= $meta['facebook'][0] ?>"><?= $meta['facebook'][0] ?></a></div>
+                    </div>
+                    <?php endif;
+                    if (!empty(mc_array_at($meta, 'twitter'))): ?>
+                    <div class="mc-s__slot">
+                        <div class="icon" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></div>
+                        <div class="text"><a href="<?= $meta['twitter'][0] ?>"><?= $meta['twitter'][0] ?></a></div>
+                    </div>
+                    <?php endif;
+                    if (!empty(mc_array_at($meta, 'instagram'))): ?>
+                    <div class="mc-s__slot">
+                        <div class="icon" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></div>
+                        <div class="text"><?= $meta['instagram'][0] ?></div>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
     </main>
 
