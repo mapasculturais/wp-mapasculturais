@@ -28,6 +28,8 @@ require __DIR__ . '/includes/api-wrapper.php';
 
 require __DIR__ . '/includes/plugin.php';
 
+require __DIR__ . '/includes/helper.php';
+
 if(is_admin()){
     require __DIR__ . '/admin/admin.php';
 }
@@ -64,9 +66,9 @@ function mc_enqueue_scripts () {
     if(!($age_ratings = $plugin->getOption('event:age_ratings'))){
         $age_ratings = $plugin->getEntityMetadataOptions('event', 'classificacaoEtaria');
     }
-    
+
     sort($age_ratings);
-    
+
     if(!($languages = $plugin->getOption('event:languages'))){
         $languages = $plugin->api->getTaxonomyTerms('linguagem');
     }

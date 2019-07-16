@@ -48,14 +48,39 @@
 
     &__slot {
         display: grid;
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 100px 1fr;
+        margin-bottom: 5px;
 
         .icon {
+            line-height: 1.3;
             text-align: center;
 
             span {
                 font-weight: bold;
                 font-size: 0.9em;
+            }
+        }
+
+
+        .text {
+
+            p:first-of-type {
+                margin-top: 0;
+            }
+
+            ul.tags {
+                margin: 0;
+                padding: 0;
+
+                li.tag {
+                    @include secondary-inverse;
+                    border-radius: 5px;
+                    display: inline-block;
+                    font-size: 0.9em;
+                    list-style: none;
+                    margin: 2.5px;
+                    padding: 0 5px;
+                }
             }
         }
     }

@@ -3,8 +3,8 @@ get_header('space');
 the_post();
 $meta = get_post_meta(get_the_ID());
 ?>
-<article><?php the_content() ?></article>
-<p><?php var_dump($meta) ?></p>
+<p><?php var_dump($meta); ?></p>
+<p><?php var_dump(get_object_taxonomies(get_post())); ?></p>
 
 <div class="mc-s mc-s-space">
     <main class="mc-s__main">
@@ -20,10 +20,10 @@ $meta = get_post_meta(get_the_ID());
             </div>
         </div>
         <div class="mc-s__content">
-            <?php if (!empty($meta['shortDescription'])): ?>
+            <?php if (!empty(get_the_content())): ?>
                 <div class="mc-s__slot">
                     <div class="icon"><span>Descrição</span></div>
-                    <div class="text"><?= $meta['shortDescription'][0] ?></div>
+                    <div class="text"><?php the_content() ?></div>
                 </div>
             <?php endif; ?>
             <div class="mc-s__slot">
@@ -35,21 +35,39 @@ $meta = get_post_meta(get_the_ID());
                 <div class="icon" aria-label="Horário de funcionamento"><i class="far fa-clock" aria-hidden="true"></i></div>
                 <div class="text"><?= $meta['horario'][0] ?></div>
             </div>
-            <?php endif; ?>
-            <?php if (!empty($meta['acessibilidade'])): ?>
+            <?php endif;
+            if (!empty($meta['acessibilidade'])): ?>
                 <div class="mc-s__slot">
                     <div class="icon" aria-label="Acessibilidade"><i class="fab fa-accessible-icon" aria-hidden="true"></i></div>
                     <div class="text"><?= $meta['acessibilidade'][0] == 'Sim' ? 'Acessível' : 'Não acessível' ?></div>
                 </div>
+            <?php endif;
+            $tags = wp_get_post_terms(get_the_ID(), 'post_tag');
+            if (!empty($tags)): ?>
+            <div class="mc-s__slot">
+                <div class="icon" aria-label="Tags"><i class="fas fa-tags" aria-hidden="true"></i></div>
+                <div class="text">
+                    <ul class="tags">
+                    <?php foreach ($tags as $tag): ?>
+                        <li class="tag"><?= $tag->name ?></li>
+                    <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+            <?php endif;
+            $areas = wp_get_post_terms(get_the_ID(), 'area');
+            if (!empty($areas)): ?>
+            <div class="mc-s__slot">
+                <div class="icon"><span>Área de atuação</span></div>
+                <div class="text">
+                    <ul class="tags">
+                    <?php foreach ($areas as $area): ?>
+                        <li class="tag"><?= $area->name ?></li>
+                    <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
             <?php endif; ?>
-            <div class="mc-s__slot">
-                <div class="icon"></div>
-                <div class="text"></div>
-            </div>
-            <div class="mc-s__slot">
-                <div class="icon"></div>
-                <div class="text"></div>
-            </div>
         </div>
     </main>
 
