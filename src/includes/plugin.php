@@ -182,16 +182,6 @@ class Plugin{
         die;
     }
 
-    function admin_message($message, $type = 'success'){
-        add_action( 'admin_notices',  function () use($message, $type) {
-            ?>
-            <div class="notice notice-<?php echo $type ?> is-dismissible">
-                <p><?php echo $message; ?></p>
-            </div>
-            <?php
-        } );
-    }
-
     function _import_terms(){
         
         if(!get_option('MAPAS:terms_imported')){
@@ -336,24 +326,7 @@ class Plugin{
                 delete_post_meta($post_id, 'MAPAS:__push_failed');
             }
         } catch (\Exception $e){
-            $this->admin_message(__('Erro ao sincronizar com o Mapas Culturais', 'wp-mapas'), 'error');
             add_post_meta($post_id, 'MAPAS:__push_failed', 1, true);
-        }
-    }
-
-    public function action__edit_post(){
-        add_action('posts_selection', [$this, 'action__edit_post__post_selection']);
-    }
-
-    public function action__edit_post__post_selection(){
-        $post_type = get_post_type();
-        if(in_array($post_type, self::POST_TYPES)){
-            
-            $post_id = get_the_ID();
-            $entity_id = get_post_meta($post_id, 'MAPAS:entity_id', true);
-            if($entity_id){
-                // $this->api->
-            }
         }
     }
 
