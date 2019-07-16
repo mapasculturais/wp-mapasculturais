@@ -13,3 +13,6 @@
 [submodule "src/vendor/CMB2-field-Leaflet-Geocoder"]
 	path = src/vendor/CMB2-field-Leaflet-Geocoder
 	url = https://github.com/villeristi/CMB2-field-Leaflet-Geocoder.git
+[submodule "src/vendor/wp-mapasculturais-theme"]
+	path = src/vendor/wp-mapasculturais-theme
+	url = git@git.hacklab.com.br:open-source/wp-mapasculturais-theme.git
