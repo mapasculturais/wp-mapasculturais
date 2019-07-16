@@ -11,7 +11,7 @@ class Plugin{
      * @var \WPMapasCulturais\Plugin
      */
     protected static $_instance = null;
-    
+
     /**
      * @var \WPMapasCulturais\ApiWrapper
      */
@@ -45,17 +45,15 @@ class Plugin{
         }
 
         add_action('wp', [$this, '_import_terms']);
-        
+
         add_action('init', [$this, 'action__rewrite_rules']);
-        
+
         add_action('template_redirect', [$this, 'action__template_redirects']);
-        
+
         add_action('save_post', [$this, 'action__save_post'], 1000);
-        
-        add_action('load-post.php', [$this, 'action__edit_post']);
-        
+
         add_action('wp_insert_post', [$this, 'action__wp_insert_post'], 10, 3);
-        
+
         add_filter('query_vars', [$this, 'filter__query_vars'] );
 
         add_filter('single_template', [$this, 'filter__single_template']);
@@ -93,7 +91,7 @@ class Plugin{
     }
 
     /**
-     * Retorna a descrição dos metadados da entidade da classe informada. 
+     * Retorna a descrição dos metadados da entidade da classe informada.
      * Caso informado o metadata_key será retornado somente a descrição do metadado da chave informada.
      *
      * @param string $class (agent|space|event)
@@ -123,10 +121,10 @@ class Plugin{
 
         foreach($class_description as $key => $description){
             // if(!isset($description->isEntityRelation)) die(var_dump($description));
-            if( strpos($key, 'geo') === 0 || 
-                strpos($key, '__') === 0 || 
+            if( strpos($key, 'geo') === 0 ||
+                strpos($key, '__') === 0 ||
                 in_array($key, $to_remove) ||
-                (isset($description->private) && is_bool($description->private) && $description->private)|| 
+                (isset($description->private) && is_bool($description->private) && $description->private)||
                 ($description->isEntityRelation && !$description->isOwningSide)
                 ){
                 continue;
@@ -216,7 +214,7 @@ class Plugin{
      * @return void
      */
     function _import_terms(){
-        
+
         if(!get_option('MAPAS:terms_imported')){
             try{
                 foreach(['linguagem', 'area'] as $taxonomy_slug){
@@ -234,7 +232,7 @@ class Plugin{
                 foreach(['agent', 'space'] as $class){
                     $taxonomy_slug = $class . '_type';
                     $terms = $this->api->getEntityTypes($class);
-                    
+
                     foreach($terms as $term){
                         wp_insert_term($term, $taxonomy_slug);
                     }
@@ -257,7 +255,7 @@ class Plugin{
         foreach(self::POST_TYPES as $post_type){
             if ( $post->post_type == $post_type ) {
                 $single_template_filename =  WP_MAPAS__SINGLES_PATH . "{$post_type}.php";
-                
+
                 if ( file_exists( $single_template_filename ) ) {
                     $single = $single_template_filename;
                 }
@@ -329,7 +327,7 @@ class Plugin{
                     $this->output_error(__('Entidade não encontrada', 'wp-mapas'), 404);
                 }
                 break;
-            
+
             case 'agent':
             case 'space':
             case 'event':
@@ -381,7 +379,7 @@ class Plugin{
                     case 'event':
                         $this->api->pushEvent($post_id);
                         break;
-                        
+
                 }
 
                 delete_post_meta($post_id, 'MAPAS:__push_failed');
@@ -416,7 +414,7 @@ class Plugin{
 
         add_post_meta($post_id, 'MAPAS:__new_post', 1);
         add_post_meta($post_id, 'MAPAS:permission_to_modify', 1);
-        
+
     }
 
     /**
@@ -425,7 +423,7 @@ class Plugin{
      * @return void
      */
     function action__activate(){
-        
+
     }
 
     /**
