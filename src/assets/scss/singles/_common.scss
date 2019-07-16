@@ -64,8 +64,12 @@
 
         .text {
 
-            p:first-of-type {
-                margin-top: 0;
+            p {
+                margin: 0;
+            }
+
+            p + p {
+                margin-top: 1em;
             }
 
             ul.tags {

@@ -14,29 +14,32 @@ $meta = get_post_meta(get_the_ID());
                 <div class="avatar" style="background-image: url(<?= wp_get_attachment_image_src($meta['MAPAS:entity_avatar_attachment_id'][0], 'thumbnail')[0] ?>)"></div>
             </div>
             <div>
-                <div class="type">Tipo do espaço</div>
+                <div class="type"><?= wp_get_post_terms(get_the_ID(), 'space_type')[0]->name ?></div>
                 <div class="title"><?php the_title(); ?></div>
-                <div class="subtitle">Subtítulo do espaço</div>
+                <div class="subtitle"><?= str_replace(['<p>', '</p>'], ['', ''], get_the_excerpt()) ?></div>
             </div>
         </div>
         <div class="mc-s__content">
             <?php if (!empty(get_the_content())): ?>
                 <div class="mc-s__slot">
                     <div class="icon"><span>Descrição</span></div>
-                    <div class="text"><?php the_content() ?></div>
+                    <div class="text"><?php the_content(); ?></div>
                 </div>
-            <?php endif; ?>
+            <?php endif;
+            $address = mc_format_address($meta);
+            if (!empty(mc_array_at($meta, 'endereco'))): ?>
             <div class="mc-s__slot">
-                <div class="icon"></div>
-                <div class="text"></div>
+                <div class="icon" aria-label="Endereço"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
+                <div class="text adress"><?= $address ?></div>
             </div>
-            <?php if (!empty($meta['horario'])): ?>
+            <?php endif;
+            if (!empty(mc_array_at($meta, 'horario'))): ?>
             <div class="mc-s__slot">
                 <div class="icon" aria-label="Horário de funcionamento"><i class="far fa-clock" aria-hidden="true"></i></div>
                 <div class="text"><?= $meta['horario'][0] ?></div>
             </div>
             <?php endif;
-            if (!empty($meta['acessibilidade'])): ?>
+            if (!empty(mc_array_at($meta, 'acessibilidade'))): ?>
                 <div class="mc-s__slot">
                     <div class="icon" aria-label="Acessibilidade"><i class="fab fa-accessible-icon" aria-hidden="true"></i></div>
                     <div class="text"><?= $meta['acessibilidade'][0] == 'Sim' ? 'Acessível' : 'Não acessível' ?></div>
