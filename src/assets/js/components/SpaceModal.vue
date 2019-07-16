@@ -10,7 +10,7 @@
                     <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                 </div>
                 <div class="text address">
-                    <div class="name">{{ space.En_Municipio }} - {{ space.En_Estado }}</div>
+                    <div class="name">{{ space.endereco || `${space.En_Municipio} - ${space.En_Estado}` }}</div>
                     <div class="location">{{ address }}</div>
                 </div>
             </div>
