@@ -17,5 +17,10 @@ Vue.component('mc-w-list', WidgetList)
 Vue.component('mc-w-now', WidgetNow)
 
 new Vue({
-    el: '#content'
+    el: '#content',
+    data () {
+        return {
+            tab: 0
+        }
+    }
 })

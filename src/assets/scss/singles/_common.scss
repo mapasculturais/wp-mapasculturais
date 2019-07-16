@@ -46,6 +46,28 @@
         }
     }
 
+    &__tabs-control {
+        display: flex;
+        margin: 10px 0;
+
+        .tab {
+            border-bottom: 1px solid $primary-color;
+            color: $primary-color;
+            display: flex;
+            flex: 1;
+            justify-content: center;
+
+            &.selected {
+                font-weight: bold;
+                border-bottom-width: 3px;
+            }
+        }
+    }
+
+    &__tab {
+        padding: 10px;
+    }
+
     &__slot {
         display: flex;
         margin-bottom: 10px;
