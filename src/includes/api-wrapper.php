@@ -361,6 +361,9 @@ class ApiWrapper{
             '0' => 'draft',
             '1' => 'publish'
         ];
+
+        $created = 0;
+        $updated = 0;
         
         foreach($entities as $entity){
             $args = [
@@ -372,9 +375,12 @@ class ApiWrapper{
             ];
 
             if(isset($entity_ids[$entity->id])){
+                $updated++;
                 $args['ID'] = $entity_ids[$entity->id];
                 
                 $this->_updating[$args['ID']] = true;
+            } else {
+                $created++;
             }
 
             $post_id = wp_insert_post($args);
@@ -407,7 +413,8 @@ class ApiWrapper{
         }
 
         update_option("MAPAS:{$class}:import_timestamp", date('Y-m-d H:i:s'), false);
-        $this->importing = false;
+        
+        return (object) ['created' => $created, 'updated' => $updated];
     }
 
     /**
@@ -641,7 +648,7 @@ class ApiWrapper{
      */
     function importEvents(){
         $fields = Plugin::instance()->getEntityFields('event');
-        $this->importEntities('event', $fields);
+        return $this->importEntities('event', $fields);
     }
 
     /**
