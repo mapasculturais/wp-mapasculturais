@@ -1,16 +1,6 @@
 footer.main-footer {
     background-color: #F5F5F5;
     padding: 40px 0;    
-    
-    .footer-title{
-        text-transform: uppercase;
-        color: #000000;
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 18px;
-        text-align: center;
-        border-bottom: 2px solid black;
-    }
 
     .footer-menu{
         display: flex;
@@ -30,7 +20,11 @@ footer.main-footer {
             }
         }
 
-        a{ color: black; font-size: 14px;  }
+        a{ 
+            color: black; 
+            font-size: 18px;  
+            font-weight: bold;
+        }
 
         > li{
             flex: 1;
@@ -42,7 +36,6 @@ footer.main-footer {
         }
 
         .menu-item-has-children > a{
-            @extend .footer-title;
             display: block;
             text-align: left;
             margin-right: 20px;

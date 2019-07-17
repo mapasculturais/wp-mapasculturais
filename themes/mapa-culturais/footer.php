@@ -13,19 +13,17 @@
 
 <footer class="main-footer">
     <div class="row justify-content-between">
-        <div class="column large-7">
-            <a href="/"><img src="<?= get_theme_logo()  ?>" alt="<?= get_bloginfo('name') ?>"></a>
+        <div class="column large-4">
+            <a href="/"><img src="<?= get_theme_logo()  ?>" alt="<?= get_bloginfo('name') ?>" width="215"></a>
         </div>
 
-        <div class="column large-3">
-            <div class="footer-title">Siga-nos nas redes sociais</div>
-            <div class="d-flex justify-content-between mt-20 social-networks--wrapper">
-                <?php the_social_networks_menu(true) ?>
-            </div>
-        </div>
-
-        <div class="column large-12 mt-40">
+        <div class="column large-5">
 			<?=wp_nav_menu(['theme_location' => 'footer-menu', 'container' => 'nav', 'menu_id' => 'footer-menu', 'menu_class' => 'footer-menu'])?>
+        </div>
+
+        <div class="column large-3 social-networks">
+            <i class="fz-12">redes sociais</i>
+            <?php the_social_networks_menu() ?>
         </div>
     </div>
 </footer>
