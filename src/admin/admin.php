@@ -28,6 +28,14 @@ function config_page(){
     include __DIR__ . '/pages/mapasculturais-config.php';
 }
 
+add_action('add_meta_boxes', function() {
+    add_meta_box('occurrences', __('Quando e onde', 'wp-mapas'), 'WPMapasCulturais\\event_occurrences_metabox','event','normal');
+});
+
+function event_occurrences_metabox() {
+    echo '<mc-occurrence-cmb :event="'.get_the_ID().'"></mc-occurrence-cmb>';
+}
+
 add_action( 'admin_init', 'WPMapasCulturais\\register_settings' );
 function register_settings(){
     register_setting( 'mapasculturais', 'MAPAS:url' );
@@ -35,7 +43,7 @@ function register_settings(){
     register_setting( 'mapasculturais', 'MAPAS:public_key' );
 
     register_setting( 'mapasculturais', 'MAPAS:import-entities-interval' );
-    
+
     register_setting( 'mapasculturais', 'MAPAS:agent:import' );
     register_setting( 'mapasculturais', 'MAPAS:space:import' );
     register_setting( 'mapasculturais', 'MAPAS:event:import' );
@@ -57,18 +65,22 @@ function register_settings(){
 
 add_action('admin_enqueue_scripts', 'WPMapasCulturais\\admin_scripts');
 function admin_scripts(){
-    wp_enqueue_script('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.js');
+    wp_enqueue_script('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.js', ['jquery'], false, true);
     wp_enqueue_style('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.css');
-    
+
     if(isset($_GET['post']) && isset($_SESSION['MAPAS:error:' . $_GET['post']])){
         $e = $_SESSION['MAPAS:error:' . $_GET['post']];
         $response = $e->curl->response;
-        
+
         wp_localize_script('wp-mapasculturais-admin', 'mc_errors', (array) $response->data);
-        
+
         unset($_SESSION['MAPAS:error:' . $_GET['post']]);
-        
+
     }
+
+    /* Assets processed by Laravel-Mix */
+    wp_enqueue_script('wp-mapasculturais-laravel-admin', plugin_dir_url(__FILE__) . '/../../dist/admin.js', [], false, true);
+    wp_enqueue_style('wp-mapasculturais-laravel-admin', plugin_dir_url(__FILE__) . '/../../dist/admin.css');
 }
 
 add_action( 'cmb2_admin_init', 'WPMapasCulturais\\register_metaboxes' );
@@ -85,23 +97,23 @@ function register_metaboxes(){
                 'data' => (object) [
                         'name' => __( 'Dados', 'wp-mapas' ),
                         'fn'=> function ($meta_key) { return (!in_array($meta_key, ['location', 'publicLocation', 'endereco'])) && strpos($meta_key, 'En_') === false; }
-                    ], 
+                    ],
                 'location' => (object) [
                         'name' => __( 'Localização', 'wp-mapas' ),
                         'fn' => function ($meta_key) { return in_array($meta_key, ['location', 'publicLocation', 'endereco']) || strpos($meta_key, 'En_') !== false; }
                     ]
             ];
         } else {
-            $metaboxes = [ 
+            $metaboxes = [
                 'data' => (object) [
                         'name' => __( 'Dados', 'wp-mapas' ),
                         'fn' => function ($meta_key) { return true; }
-                    ] 
+                    ]
             ];
         }
 
         foreach($metaboxes as $metabox_id => $cfg){
-            
+
             /**
              * Initiate the metabox
              */
@@ -140,7 +152,7 @@ function register_metaboxes(){
                     case 'select':
                         $options = [];
                         foreach($description->optionsOrder as $value){
-                            $options[$value] = $description->options->{$value}; 
+                            $options[$value] = $description->options->{$value};
                         }
                         $cmb->add_field( array(
                             'name'       => $description->label,
@@ -180,17 +192,17 @@ function register_metaboxes(){
                                 'search'              => __( 'Buscar...', 'wp-mapas' ),
                                 'not_found'           => __( 'Não encontrado', 'wp-mapas' ),
                                 'initial_coordinates' => [
-                                    'lat' => -23, 
-                                    'lng' => -46 
+                                    'lat' => -23,
+                                    'lng' => -46
                                 ],
                                 'initial_zoom' => 4, // Zoomlevel when there's no coordinates set,
                                 'default_zoom' => 13 // Zoomlevel after the coordinates have been set & page saved
                             ]
                         ) );
-                    
+
                         break;
                 }
-            }   
+            }
         }
     }
 }

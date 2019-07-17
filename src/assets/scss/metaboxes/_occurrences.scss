@@ -1,0 +1,12 @@
+.mc-cmb-occurrences {
+
+    .fields-row {
+        display: flex;
+
+        & > button, & > label {
+            display: flex;
+            flex-direction: column;
+            margin: 5px 10px;
+        }
+    }
+}
