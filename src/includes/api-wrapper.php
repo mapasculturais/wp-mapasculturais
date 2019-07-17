@@ -107,6 +107,16 @@ class ApiWrapper{
     }
 
     /**
+     * Prepara uma string de data para o Mapas Culturais
+     *
+     * @param string $date_string string de datetime no formato "Y-m-d H:i:s"
+     * @return string
+     */
+    function parseDateToMapas($date_string){
+        return $date_string;
+    }
+
+    /**
      * Popula o objeto entityDescriptions com as descrições obtidas pelo endpoint /api/{$class}/describe
      *
      * @return void
@@ -157,12 +167,17 @@ class ApiWrapper{
         } else {
             $result = $this->wpdb->get_results("
                 SELECT 
-                    post_id, meta_value AS entity_id
+                    m.post_id, 
+                    m.meta_value AS entity_id,
+                    p.post_modified as update_timestamp
                 FROM 
-                    {$this->wpdb->postmeta} 
+                    {$this->wpdb->postmeta} m, 
+                    {$this->wpdb->posts} p
+
                 WHERE 
-                    meta_key = 'MAPAS:entity_id' AND 
-                    post_id IN (
+                    p.ID = m.post_id AND
+                    m.meta_key = 'MAPAS:entity_id' AND 
+                    m.post_id IN (
                         SELECT 
                             ID 
                         FROM 
@@ -287,33 +302,55 @@ class ApiWrapper{
         return ['terms', 'permissionTo.modify'];
     }
 
+    protected $_updating = [];
+
+    function updating($post_id){
+        return isset($this->_updating[$post_id]);
+    }
+
     /**
-     * Importa novas entidades da classe informada trazendo os campos informados
+     * Importa entidades da classe informada trazendo os campos informados
      *
      * @param string $class (event|agent|space)
      * @param array $entity_fields
      * @return void
      */
-    protected function importNewEntities($class, array $entity_fields){
-        $params = [];
-        $import_datetime = $this->getOption("{$class}:import_timestamp");
-
-        if($import_datetime){
-            $params['createTimestamp'] = "GTE({$import_datetime})";
-        }
-
-        if($entities_ids = $this->getLinkedEntitiesIds($class)){
-            $ids = implode(',', array_map(function($obj) { return $obj->entity_id; }, $entities_ids));
-            $params['id'] = "!IN($ids)";
+    protected function importEntities($class, array $entity_fields){
+        if(get_transient( "MAPAS:cron-interval:$class" )){
+            return;
         }
         
-        $params['@files'] = '(avatar,header,gallery):name,description,url';
+        set_transient( "MAPAS:cron-interval:$class", true, $this->getOption('import-interval', 30) );
 
+        $params = [];
+        $import_datetime = $this->parseDateToMapas($this->getOption("{$class}:import_timestamp"));
+
+        if($import_datetime){
+            $params['updateTimestamp'] = "GT({$import_datetime})";
+        }
+
+        $entity_ids = [];
+        $exclude_ids = [];
+        foreach($this->getLinkedEntitiesIds($class) as $link){
+            $entity_ids[$link->entity_id] = $link->post_id;
+
+            if($link->update_timestamp >= $import_datetime){
+                $exclude_ids[] = $link->entity_id;
+            }
+        }
+
+        if($exclude_ids){
+            $exclude_ids = implode(',', $exclude_ids);
+            $params['id'] = "!IN({$exclude_ids})";
+        }
+
+        $params['@files'] = '(avatar,header,gallery):name,description,url';
+        
         $_fields = array_merge(
             $this->getBaseEntityFields(),
             $this->getExtraEntityFields()
         );
-
+        
         $fields = $entity_fields;
         foreach($_fields as $f){
             if(!in_array($f, $fields)){
@@ -321,27 +358,34 @@ class ApiWrapper{
             }
         }
         
-        $entities = $this->find($class, $params, $fields);
+        $entities = $this->find($class, $params, $fields, false);
         
         $status = [
             '-10' => 'trash',
             '0' => 'draft',
             '1' => 'publish'
         ];
-
+        
         foreach($entities as $entity){
-
-            $post_id = wp_insert_post([
+            $args = [
                 'post_type' => $class,
                 'post_title' => $entity->name,
                 'post_excerpt' => $entity->shortDescription ?: '',
                 'post_content' => $entity->longDescription ?: '',
                 'post_status' => $status[$entity->status]
-            ]);
+            ];
+
+            if(isset($entity_ids[$entity->id])){
+                $args['ID'] = $entity_ids[$entity->id];
+                
+                $this->_updating[$args['ID']] = true;
+            }
+
+            $post_id = wp_insert_post($args);
 
             if(is_int($post_id) && $post_id > 0){
-                add_post_meta($post_id, 'MAPAS:entity_id', $entity->id);
-                add_post_meta($post_id, 'MAPAS:permission_to_modify', $entity->permissionTo->modify);
+                update_post_meta($post_id, 'MAPAS:entity_id', $entity->id);
+                update_post_meta($post_id, 'MAPAS:permission_to_modify', $entity->permissionTo->modify);
                 delete_post_meta($post_id, 'MAPAS:__new_post');
 
                 if(in_array($class, ['agent', 'space'])){
@@ -357,14 +401,14 @@ class ApiWrapper{
                 }
 
                 foreach($entity_fields as $field){
-                    add_post_meta($post_id, $field, $entity->$field);
+                    update_post_meta($post_id, $field, $entity->$field);
                 }
             }
 
             $this->importEntityImages($entity, $post_id);
         }
 
-        add_option("MAPAS:{$class}:import_timestamp", date('Y-m-d H:i:s'),'', false);
+        update_option("MAPAS:{$class}:import_timestamp", date('Y-m-d H:i:s'), false);
         $this->importing = false;
     }
 
@@ -551,11 +595,11 @@ class ApiWrapper{
     /**
      * Importa novos agentes da instalação do mapas culturais como posts 
      *
-     * @return void
+     * @return int número de agentes importados
      */
-    function importNewAgents(){
+    function importAgents(){
         $fields = Plugin::instance()->getEntityFields('agent');
-        $this->importNewEntities('agent', $fields);
+        return $this->importEntities('agent', $fields);
     }
 
     /**
@@ -572,11 +616,11 @@ class ApiWrapper{
     /**
      * Importa novos espaços da instalação do mapas culturais como posts 
      *
-     * @return void
+     * @return int número de espaços importados
      */
-    function importNewSpaces(){
+    function importSpaces(){
         $fields = Plugin::instance()->getEntityFields('space');
-        $this->importNewEntities('space', $fields);
+        return $this->importEntities('space', $fields);
     }
 
     /**
@@ -593,11 +637,11 @@ class ApiWrapper{
     /**
      * Importa novos eventos da instalação do mapas culturais como posts 
      *
-     * @return void
+     * @return int número de eventos importados
      */
-    function importNewEvents(){
+    function importEvents(){
         $fields = Plugin::instance()->getEntityFields('event');
-        $this->importNewEntities('event', $fields);
+        $this->importEntities('event', $fields);
     }
 
     /**
@@ -825,24 +869,24 @@ class ApiWrapper{
      * @param array $params 
      * @return array
      */
-    function find($class, array $params, array $fields = []){
+    function find($class, array $params, array $fields = [], $use_post_values = true){
         
         switch($class){
             case 'event':
                 $params = $this->prepareEventParams($params);
-                return $this->findEntities($class, $params, $fields);
+                return $this->findEntities($class, $params, $fields, $use_post_values);
                 break;
             case 'agent':
                 $params = $this->prepareAgentParams($params);
-                return $this->findEntities($class, $params, $fields);
+                return $this->findEntities($class, $params, $fields, $use_post_values);
                 break;
             case 'space':
                 $params = $this->prepareSpaceParams($params);
-                return $this->findEntities($class, $params, $fields);
+                return $this->findEntities($class, $params, $fields, $use_post_values);
                 break;
             case 'eventOccurrence':
                 $params = $this->prepareEventOccurrenceParams($params);
-                return $this->findEventOccurrences($params);
+                return $this->findEventOccurrences($params, $use_post_values);
                 break;
             default: 
                 throw new \Exception(__('Classe inválida: ') . $class);
@@ -858,13 +902,13 @@ class ApiWrapper{
      * @param array $fields
      * @return void
      */
-    protected function findEntities($class, array $params, array $fields = []){
+    protected function findEntities($class, array $params, array $fields = [], $use_post_values = true){
         if(empty($fields)){
             $fields = Plugin::instance()->getEntityFields($class, true, true, ['permissionTo.modify', 'longDescription']);
         }
         $entities = $this->mapasApi->findEntities($class, $fields, $params);
         foreach($entities as &$entity){
-            $this->parseEntity($class, $entity);
+            $this->parseEntity($class, $entity, $use_post_values);
         }
         return $entities;
     }
@@ -875,7 +919,7 @@ class ApiWrapper{
      * @param array $params exemplo: ['from' => '2019-01-01', 'to]
      * @return void
      */
-    protected function findEventOccurrences($params){
+    protected function findEventOccurrences($params, $use_post_values = true){
         
         $from = isset($params['from']) && $params['from'] ? $params['from'] : date('Y-m-d');
         $to = isset($params['to']) && $params['to'] ? $params['to'] : date('Y-m-d', strtotime('+1 month', strtotime($from)));
@@ -890,8 +934,8 @@ class ApiWrapper{
 
         $result = $this->mapasApi->findEventOccurrences($from, $to, $params);
         foreach($result as &$event){
-            $this->parseEntity('eventOccurrence', $event);
-            $this->parseEntity('space', $event->space);
+            $this->parseEntity('eventOccurrence', $event, $use_post_values);
+            $this->parseEntity('space', $event->space, $use_post_values);
         }
 
         return $result; 
@@ -918,7 +962,7 @@ class ApiWrapper{
      * @param object &$entity
      * @return void
      */
-    function parseEntity($class, &$entity){
+    function parseEntity($class, &$entity, $use_post_values = true){
         $is_event_occurrence = false;
 
         $entity->entityClass = $class;
@@ -930,9 +974,11 @@ class ApiWrapper{
         $entity_post_id = $this->getPostIdByEntityId($class, $entity->id);
         $entity->post_id = $entity_post_id;
         if($entity_post_id){
-            $entity->name = get_the_title($entity_post_id);
-            $entity->shortDescription = get_the_excerpt($entity_post_id);
-            $entity->longDescription = $this->get_the_content($entity_post_id);
+            if($use_post_values){
+                $entity->name = get_the_title($entity_post_id);
+                $entity->shortDescription = get_the_excerpt($entity_post_id);
+                $entity->longDescription = $this->get_the_content($entity_post_id);
+            }
             
             $cache_id = __METHOD__ . ':' . $class . ':' . $entity_post_id;
 
