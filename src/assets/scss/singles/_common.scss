@@ -7,6 +7,10 @@
     max-width: 1280px;
     width: 100%;
 
+    @media screen and (max-width: 799px) {
+        grid-template-columns: 1fr;
+    }
+
     &__header, &__title .avatar {
         background-color: gray;
         background-position: center;
@@ -144,7 +148,7 @@
             border-top-color: $primary-color;
             border-top: 1px solid var(--primary-color, $primary-color);
 
-            @media screen and (min-width: 600px) {
+            @media screen and (min-width: 800px) {
                 .mc-s__slot {
                     display: inline-flex;
                     width: calc(50% - 5px);
