@@ -366,6 +366,10 @@ class ApiWrapper{
         $updated = 0;
         
         foreach($entities as $entity){
+            if(is_null($entity->updateTimestamp) && $entity->createTimestamp < $import_datetime){
+                continue;
+            }
+
             $args = [
                 'post_type' => $class,
                 'post_title' => $entity->name,
