@@ -10,16 +10,18 @@ header.main-header{
     z-index: 100;
     transition: all .6s;
     background: white;  
+}
 
-    .social-networks{
-        font-weight: bold;
 
-        i{ 
-            color: black; 
-            margin-right: 15px;
-        }
+.social-networks{
+    font-weight: bold;
+
+    i{ 
+        color: black; 
+        margin-right: 15px;
     }
 }
+
 
 .main-menu{
     &, ul{

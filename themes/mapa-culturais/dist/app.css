@@ -953,11 +953,11 @@ header.main-header {
   background: white;
 }
 
-header.main-header .social-networks {
+.social-networks {
   font-weight: bold;
 }
 
-header.main-header .social-networks i {
+.social-networks i {
   color: black;
   margin-right: 15px;
 }
@@ -1150,17 +1150,6 @@ footer.main-footer {
   padding: 40px 0;
 }
 
-footer.main-footer .footer-title,
-footer.main-footer .footer-menu .menu-item-has-children > a {
-  text-transform: uppercase;
-  color: #000000;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 18px;
-  text-align: center;
-  border-bottom: 2px solid black;
-}
-
 footer.main-footer .footer-menu {
   display: flex;
   justify-content: space-between;
@@ -1186,7 +1175,8 @@ footer.main-footer .footer-menu ul {
 
 footer.main-footer .footer-menu a {
   color: black;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 footer.main-footer .footer-menu > li {
