@@ -6,9 +6,6 @@ $headerMeta = mc_array_at($meta, 'agent_header-image_thumbnail_id');
 $avatarMeta = mc_array_at($meta, '_thumbnail_id');
 ?>
 
-<?php var_dump($meta); ?>
-<?php var_dump(get_object_taxonomies(get_post())); ?>
-
 <div id="content" class="mc-s mc-s-space">
     <main class="mc-s__main">
         <div class="mc-s__header"<?= is_array($headerMeta)
