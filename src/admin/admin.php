@@ -33,6 +33,8 @@ function register_settings(){
     register_setting( 'mapasculturais', 'MAPAS:url' );
     register_setting( 'mapasculturais', 'MAPAS:private_key' );
     register_setting( 'mapasculturais', 'MAPAS:public_key' );
+
+    register_setting( 'mapasculturais', 'MAPAS:import-entities-interval' );
     
     register_setting( 'mapasculturais', 'MAPAS:agent:import' );
     register_setting( 'mapasculturais', 'MAPAS:space:import' );
