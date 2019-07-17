@@ -151,7 +151,7 @@ $avatarMeta = mc_array_at($meta, 'MAPAS:entity_avatar_attachment_id');
                 include 'includes/_gallery.php'; ?>
             </div>
             <div class="mc-s__tab" v-show="tab === 2">
-                Agenda
+                <mc-w-list :show-filters="false" spaces="<?= $meta['MAPAS:entity_id'][0] ?>"></mc-w-list>
             </div>
         </div>
     </main>

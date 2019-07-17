@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-now">
-        <FiltersBar v-if="showFilters" :agents="agents" :showDates="false" :spaces="spaces" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" :showDates="false" @change="updateFilters"/>
         <WidgetHeader :showArrows="false">Agora</WidgetHeader>
         <div class="mc-w-now__content">
             <div class="mc-w-now__events" v-if="eventsNow.length > 0">
@@ -61,6 +61,7 @@
                 const today = new Date().toISOString().slice(0, 10)
                 return this.$mc.EventOccurrences.find({
                     ...this.filters,
+                    ...this.propsParams,
                     from: today,
                     to: today
                 }).then(response => {

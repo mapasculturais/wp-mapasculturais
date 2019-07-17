@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-list">
-        <FiltersBar v-if="showFilters" :agents="agents" :spaces="spaces" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" @change="updateFilters"/>
         <WidgetHeader @previous="previousMonth" @next="nextMonth">
             {{ monthString }} de {{ currentYear }}
         </WidgetHeader>
@@ -72,7 +72,8 @@
                 this.$mc.EventOccurrences.find({
                     from: firstDay.toISOString().slice(0, 10),
                     to: lastDay.toISOString().slice(0, 10),
-                    ...this.filters
+                    ...this.filters,
+                    ...this.propsParams
                 }).then(response => {
                     this.events = response.data
                 })

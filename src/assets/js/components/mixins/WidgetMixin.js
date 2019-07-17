@@ -16,6 +16,14 @@ export default {
             filters: {}
         }
     },
+    computed: {
+        propsParams () {
+            return {
+                'owner': this.$props.agents && `IN(${this.$props.agents})`,
+                'space:id': this.$props.spaces && `IN(${this.$props.spaces})`,
+            }
+        }
+    },
     methods: {
         updateFilters (filters) {
             this.filters = filters

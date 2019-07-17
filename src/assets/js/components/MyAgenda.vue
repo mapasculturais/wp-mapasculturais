@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-agenda">
-        <FiltersBar v-if="showFilters" :agents="agents" :spaces="spaces" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" @change="updateFilters"/>
         <WidgetHeader :showArrows="false">Minha agenda</WidgetHeader>
         <AgendaMonth v-for="month in months" :key="month" :events="eventsByMonth[month] || []" :filters="filters" :month="month"/>
     </section>
@@ -53,7 +53,8 @@
                 this.$mc.EventOccurrences.find({
                     from: new Date().toISOString().slice(0, 10),
                     to: `${new Date().getFullYear()}-12-31`,
-                    ...this.filters
+                    ...this.filters,
+                    ...this.propsParams
                 }).then(response => {
                     this.events = response.data
                 })

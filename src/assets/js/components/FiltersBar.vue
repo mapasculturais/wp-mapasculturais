@@ -44,8 +44,6 @@
         computed: {
             params () {
                 return {
-                    'owner': this.$props.agents && `IN(${this.$props.agents})`,
-                    'space:id': this.$props.spaces && `IN(${this.$props.spaces})`,
                     'from': this.from,
                     'to': this.to,
                     '@keyword': this.keyword || undefined,

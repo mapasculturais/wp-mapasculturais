@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-day">
-        <FiltersBar v-if="showFilters" :agents="agents" :showDates="false" :spaces="spaces" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" :showDates="false" @change="updateFilters"/>
         <WidgetHeader @previous="previousDay" @next="nextDay">
             {{ currentDay }} de {{ monthString }} de {{ currentYear }}
         </WidgetHeader>
@@ -80,6 +80,7 @@
             fetchEvents () {
                 this.$mc.EventOccurrences.find({
                     ...this.filters,
+                    ...this.propsParams,
                     from: this.isoDate,
                     to: this.isoDate
                 }).then(response => {
