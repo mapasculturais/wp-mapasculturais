@@ -231,7 +231,9 @@ class ApiWrapper{
             $result[$r->entity_id] = $r->post_id;
         }
         
-        $this->cache->add($cache_id,$result,Cache::DAY);
+        if(count($entity_ids) && $result){
+            $this->cache->add($cache_id,$result,Cache::DAY);
+        }
 
         return $result;
     }
@@ -316,17 +318,11 @@ class ApiWrapper{
      * @return void
      */
     protected function importEntities($class, array $entity_fields){
-        if(get_transient( "MAPAS:cron-interval:$class" )){
-            return;
-        }
-        
-        set_transient( "MAPAS:cron-interval:$class", true, $this->getOption('import-interval', 30) );
-
         $params = [];
         $import_datetime = $this->parseDateToMapas($this->getOption("{$class}:import_timestamp"));
 
         if($import_datetime){
-            $params['updateTimestamp'] = "GT({$import_datetime})";
+            $params['updateTimestamp'] = "OR(NULL(),GT({$import_datetime}))";
         }
 
         $entity_ids = [];
@@ -406,6 +402,8 @@ class ApiWrapper{
             }
 
             $this->importEntityImages($entity, $post_id);
+
+            $this->cache->delete($class . ':parse:' . $post_id);
         }
 
         update_option("MAPAS:{$class}:import_timestamp", date('Y-m-d H:i:s'), false);
@@ -469,6 +467,8 @@ class ApiWrapper{
         $file = wp_remote_get($url, array('timeout' => 120));
         $response = wp_remote_retrieve_response_code($file);
         $body = wp_remote_retrieve_body($file);
+
+
         if ($response != 200) {
             return false;
         }
@@ -980,7 +980,7 @@ class ApiWrapper{
                 $entity->longDescription = $this->get_the_content($entity_post_id);
             }
             
-            $cache_id = __METHOD__ . ':' . $class . ':' . $entity_post_id;
+            $cache_id = $class . ':parse:' . $entity_post_id;
 
             if($this->cache->exists($cache_id, false)){
                 $entity_data = $this->cache->get($cache_id, false);

@@ -63,6 +63,9 @@ class Plugin{
     }
 
     function cron($name, $interval, $function){
+        if(isset($_GET['skip-cron'])){
+            return;
+        }
         $name = 'cron:' . $name;
         $last_executed_time = $this->getOption($name);
         $current_time = time();
@@ -73,7 +76,7 @@ class Plugin{
     }
 
     function cron_importEntities(){
-        $this->async_http_request(get_bloginfo('url') . '/mcapi/import-entities/');
+        $this->async_http_request(get_bloginfo('url') . '/mcapi/import-entities/?skip-cron');
     }
 
     function async_http_request($url, $params = [], $method = 'GET') {
