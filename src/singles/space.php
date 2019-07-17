@@ -20,7 +20,8 @@ $avatarMeta = mc_array_at($meta, 'MAPAS:entity_avatar_attachment_id');
                 </div>
             </div>
             <div>
-                <div class="type"><?= wp_get_post_terms(get_the_ID(), 'space_type')[0]->name ?></div>
+                <?php $type = wp_get_post_terms(get_the_ID(), 'space_type'); ?>
+                <div class="type"><?= empty($type) ? '' : $type[0]->name ?></div>
                 <div class="title"><?php the_title(); ?></div>
                 <div class="subtitle"><?= str_replace(['<p>', '</p>'], ['', ''], get_the_excerpt()) ?></div>
             </div>

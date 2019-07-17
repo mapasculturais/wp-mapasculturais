@@ -20,7 +20,8 @@ $avatarMeta = mc_array_at($meta, 'MAPAS:entity_avatar_attachment_id');
                 </div>
             </div>
             <div>
-                <div class="type"><?= wp_get_post_terms(get_the_ID(), 'linguagem')[0]->name ?></div>
+                <?php $linguagem = wp_get_post_terms(get_the_ID(), 'linguagem'); ?>
+                <div class="type"><?= empty($linguagem) ? '' : $linguagem[0]->name ?></div>
                 <div class="title"><?php the_title(); ?></div>
                 <div class="subtitle"><?= str_replace(['<p>', '</p>'], ['', ''], get_the_excerpt()) ?></div>
             </div>

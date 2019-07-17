@@ -20,7 +20,8 @@ $avatarMeta = mc_array_at($meta, '_thumbnail_id');
                 </div>
             </div>
             <div>
-                <div class="type">Agente <?= wp_get_post_terms(get_the_ID(), 'agent_type')[0]->name ?></div>
+                <?php $type = wp_get_post_terms(get_the_ID(), 'agent_type'); ?>
+                <div class="type">Agente <?= empty($type) ? '' : $type[0]->name ?></div>
                 <div class="title"><?php the_title(); ?></div>
                 <div class="subtitle"><?= str_replace(['<p>', '</p>'], ['', ''], get_the_excerpt()) ?></div>
             </div>
@@ -56,7 +57,7 @@ $avatarMeta = mc_array_at($meta, '_thumbnail_id');
                         <div class="location"><?= $address ?></div>
                         <div class="mc-s__slot">
                             <div class="icon" aria-label="Tipo"><i class="fas fa-university" aria-hidden="true"></i></div>
-                            <div class="text"><b><i>Agente <?= wp_get_post_terms(get_the_ID(), 'agent_type')[0]->name ?></i></b></div>
+                            <div class="text"><b><i>Agente <?= empty($type) ? '' : $type[0]->name ?></i></b></div>
                         </div>
                         <?php if (!empty(mc_array_at($meta, 'horario'))): ?>
                             <div class="mc-s__slot">
