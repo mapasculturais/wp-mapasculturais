@@ -49,6 +49,8 @@ function array_flatten($array)
 function the_social_networks_menu($color = false){
 
     $menu_items = get_menu_by_position('social-networks');
+
+    if(!$menu_items) return ;
     $icons_color_dir = get_template_directory_uri(). '/assets/images/social-networks/';
 
     $icons = [

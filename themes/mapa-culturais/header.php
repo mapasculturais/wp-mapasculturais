@@ -14,11 +14,11 @@
 	<header class="main-header">
 		<div class="row">
 			
-			<div class="column large-3">
-				<i>redes sociais </i><?php the_social_networks_menu(true) ?>
+			<div class="column large-3 social-networks">
+				<i class="fz-12">redes sociais </i><?php the_social_networks_menu() ?>
 			</div>
 
-			<div class="column large-3 text-center">
+			<div class="column large-6 text-center">
 				<div class="logo">
 					<a href="/"><img src="<?= get_theme_logo()  ?>" alt="<?= get_bloginfo('name') ?>"></a>
 				</div>
@@ -26,7 +26,7 @@
 
 			<div class="column large-3 search-form">
 				<form action="/">
-					<input type="text" name="s" id="s">
+					<input type="text" placeholder="busque aqui" name="s" id="s">
 				</form>
 				<a href="javascript:void(0);" onclick="jQuery('.search-form').toggleClass('active')"><i class="fa fa-search fz-18"></i></a>
 			</div>

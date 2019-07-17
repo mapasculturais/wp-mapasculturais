@@ -1,3 +1,3 @@
 const mix = require('laravel-mix')
 
-mix.sass('themes/mapas-culturais/assets/scss/app.scss', 'themes/mapas-culturais/dist')
+mix.sass('themes/mapa-culturais/assets/scss/app.scss', 'themes/mapa-culturais/dist')

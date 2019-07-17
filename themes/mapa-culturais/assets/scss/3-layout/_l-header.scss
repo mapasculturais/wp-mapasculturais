@@ -1,27 +1,41 @@
+.logo img{
+    max-width: 230px;
+    margin: 20px auto;
+}
+
 header.main-header{
     padding: 10px;
-    // position: fixed;
     width: 100%;
     top: 0;
     z-index: 100;
     transition: all .6s;
     background: white;  
+
+    .social-networks{
+        font-weight: bold;
+
+        i{ 
+            color: black; 
+            margin-right: 15px;
+        }
+    }
 }
 
 .main-menu{
     &, ul{
-        float: right;
         display: flex;
         list-style-type: none;
         margin: 5px 0 0 0;
+        background-color: $c_secondary;
+        justify-content: center;
 
         li a{
             padding: 15px 7.5px 15px 15px;
             display: block;
-            text-transform: uppercase;
             transition: all .6s;
-            color: white;
             font-weight: bold;
+            color: black;
+            font-size: 18px;
         }
 
         > li{ 
@@ -112,39 +126,35 @@ header.main-header{
             }
         }
     }
+}
 
-    .search-form{
-        position: relative;
+.search-form{
+    position: relative;
 
-        input{
-            border-radius: 17px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 17px;
-            position: absolute;
-            top: 1px;
-            height: 34px;
-            width: 320px;
-            transition: transform .6s;
-            transform: translateY(-100px) translateX(-310px);
-            
-            @include mobile{
-                transform: translateX(100px);
-            }
+    input{
+        position: absolute;
+        left: 0;
+        top: 1px;
+        height: 28px;
+        width: 100%;
+        font-size: 12px;
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        border-bottom: 1px solid black;
+
+        &::placeholder{
+            color: black;
+            font-weight: bold;
+            font-style: italic;
         }
+    }
 
-        &.active{
-            input{
-                left: 100%;
-                transform: translateY(0) translateX(-310px);
-
-                @include mobile{
-                    transform: translateX(-310px);
-                }
-            }
-
-            i{ color: black;  z-index: 10; position: relative;}
-        }
+    a {
+        position: absolute;
+        right: 0;
+        top: 3px;
+        font-size: 14px;
+        color: black;
     }
 }
