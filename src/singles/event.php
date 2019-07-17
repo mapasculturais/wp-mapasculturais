@@ -108,6 +108,10 @@ $avatarMeta = mc_array_at($meta, 'MAPAS:entity_avatar_attachment_id');
             </div>
         </div>
     </main>
+
+    <aside class="mc-s__sidebar">
+        Sidebar
+    </aside>
 </div>
 
 <?php get_footer('event'); ?>
