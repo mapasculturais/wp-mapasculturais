@@ -11,7 +11,7 @@ class Plugin{
      * @var \WPMapasCulturais\Plugin
      */
     protected static $_instance = null;
-    
+
     /**
      * @var \WPMapasCulturais\ApiWrapper
      */
@@ -44,24 +44,59 @@ class Plugin{
             return;
         }
 
-        add_action('wp', [$this, '_import_terms']);
-        
+        add_action('wp', [$this, 'import_terms']);
+
         add_action('init', [$this, 'action__rewrite_rules']);
-        
+
         add_action('template_redirect', [$this, 'action__template_redirects']);
-        
+
         add_action('save_post', [$this, 'action__save_post'], 1000);
-        
-        add_action('load-post.php', [$this, 'action__edit_post']);
-        
+
         add_action('wp_insert_post', [$this, 'action__wp_insert_post'], 10, 3);
-        
+
         add_filter('query_vars', [$this, 'filter__query_vars'] );
 
         add_filter('single_template', [$this, 'filter__single_template']);
+        
+        $interval = $this->getOption('import-entities-interval', 60);
+        $this->cron('import-entities', $interval, [$this, 'cron_importEntities']);
     }
 
+    function cron($name, $interval, $function){
+        if(isset($_GET['skip-cron'])){
+            return;
+        }
+        $name = 'cron:' . $name;
+        $last_executed_time = $this->getOption($name);
+        $current_time = time();
+        if(!$last_executed_time || $current_time - $last_executed_time > $interval){
+            $this->setOption($name, $current_time);
+            $function();
+        }
+    }
 
+    function cron_importEntities(){
+        $this->async_http_request(get_bloginfo('url') . '/mcapi/import-entities/?skip-cron');
+    }
+
+    function async_http_request($url, $params = [], $method = 'GET') {
+        $params = http_build_query($params);
+
+        $url_parts = parse_url($url);
+        $fp = fsockopen($url_parts['host'], isset($url_parts['port']) ? $url_parts['port']: 80, $errno, $errstr, 30);
+        
+        strtoupper($method);
+
+        $out = "$method ".$url_parts['path']." HTTP/1.1\r\n";
+        $out .= "Host: ".$url_parts['host']."\r\n";
+        $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
+        $out .= "Content-Length: ".strlen($params)."\r\n";
+        $out .= "Connection: Close\r\n\r\n";
+        $out.= $params;
+
+        fwrite($fp, $out);
+        fclose($fp);
+    }
 
     /**
      * Alias para o get_option do wordpress acrescentando o prefixo MAPAS: ao nome da opção
@@ -70,10 +105,16 @@ class Plugin{
      * @param mixed $default
      * @return mixed
      */
-    public static function getOption($name, $default = null){
+    static function getOption($name, $default = null){
         $option_name = 'MAPAS:' . $name;
 
         return get_option($option_name, $default);
+    }
+
+    static function setOption($name, $value){
+        $option_name = 'MAPAS:' . $name;
+
+        update_option($option_name, $value);
     }
 
     /**
@@ -93,7 +134,7 @@ class Plugin{
     }
 
     /**
-     * Retorna a descrição dos metadados da entidade da classe informada. 
+     * Retorna a descrição dos metadados da entidade da classe informada.
      * Caso informado o metadata_key será retornado somente a descrição do metadado da chave informada.
      *
      * @param string $class (agent|space|event)
@@ -123,10 +164,10 @@ class Plugin{
 
         foreach($class_description as $key => $description){
             // if(!isset($description->isEntityRelation)) die(var_dump($description));
-            if( strpos($key, 'geo') === 0 || 
-                strpos($key, '__') === 0 || 
+            if( strpos($key, 'geo') === 0 ||
+                strpos($key, '__') === 0 ||
                 in_array($key, $to_remove) ||
-                (isset($description->private) && is_bool($description->private) && $description->private)|| 
+                (isset($description->private) && is_bool($description->private) && $description->private)||
                 ($description->isEntityRelation && !$description->isOwningSide)
                 ){
                 continue;
@@ -215,8 +256,8 @@ class Plugin{
      *
      * @return void
      */
-    function _import_terms(){
-        
+    function import_terms(){
+
         if(!get_option('MAPAS:terms_imported')){
             try{
                 foreach(['linguagem', 'area'] as $taxonomy_slug){
@@ -234,7 +275,7 @@ class Plugin{
                 foreach(['agent', 'space'] as $class){
                     $taxonomy_slug = $class . '_type';
                     $terms = $this->api->getEntityTypes($class);
-                    
+
                     foreach($terms as $term){
                         wp_insert_term($term, $taxonomy_slug);
                     }
@@ -244,20 +285,33 @@ class Plugin{
         }
     }
 
+    function importEntities(){
+        $api = $this->api;
+
+        $agents = $api->importAgents();
+        $spaces = $api->importSpaces();
+        $events = $api->importEvents();
+        $result['agents'] = $agents;
+        $result['spaces'] = $spaces;
+        $result['events'] = $events;
+
+        return $result;
+    }
+
     /**
      * Define o arquivo de template das singles dos post types registrados pelo plugin
      *
      * @param string $single arquivo de template padrão
      * @return string arquivo de template
      */
-    public function filter__single_template($single){
+    function filter__single_template($single){
 
         global $post;
 
         foreach(self::POST_TYPES as $post_type){
             if ( $post->post_type == $post_type ) {
                 $single_template_filename =  WP_MAPAS__SINGLES_PATH . "{$post_type}.php";
-                
+
                 if ( file_exists( $single_template_filename ) ) {
                     $single = $single_template_filename;
                 }
@@ -273,7 +327,7 @@ class Plugin{
      * @param array $qvars
      * @return array
      */
-    public function filter__query_vars( array $qvars ) {
+    function filter__query_vars( array $qvars ) {
         $qvars[] = 'mcaction';
         $qvars[] = 'mcarg1';
         $qvars[] = 'mcarg2';
@@ -285,7 +339,7 @@ class Plugin{
      *
      * @return void
      */
-    public function action__rewrite_rules() {
+    function action__rewrite_rules() {
         add_rewrite_rule('mcapi/([^/]+)/?$', 'index.php?action=wp_mapasculturais_actions&mcaction=$matches[1]', 'top');
         add_rewrite_rule('mcapi/([^/]+)/([^/]+)/?$', 'index.php?action=wp_mapasculturais_actions&mcaction=$matches[1]&mcarg1=$matches[2]', 'top');
         add_rewrite_rule('mcapi/([^/]+)/([^/]+)/([^/]+)/?$', 'index.php?action=wp_mapasculturais_actions&mcaction=$matches[1]&mcarg1=$matches[2]&mcarg2=$matches[3]', 'top');
@@ -300,7 +354,7 @@ class Plugin{
      *
      * @return void
      */
-    public function action__template_redirects(){
+    function action__template_redirects(){
         $action = get_query_var('mcaction');
         if(!$action){
             return;
@@ -310,13 +364,8 @@ class Plugin{
 
         $api = $this->api;
         switch($action){
-            case 'import-new-entities':
-                $agents = $api->importNewAgents();
-                $spaces = $api->importNewSpaces();
-                $events = $api->importNewEvents();
-                $result['agents'] = $agents;
-                $result['spaces'] = $spaces;
-                $result['events'] = $events;
+            case 'import-entities':
+                $result = $this->importEntities();
                 $this->output_success($result);
                 break;
             case 'entity':
@@ -329,7 +378,7 @@ class Plugin{
                     $this->output_error(__('Entidade não encontrada', 'wp-mapas'), 404);
                 }
                 break;
-            
+
             case 'agent':
             case 'space':
             case 'event':
@@ -359,7 +408,7 @@ class Plugin{
      * @param integer $post_id
      * @return void
      */
-    public function action__save_post($post_id){
+    function action__save_post($post_id){
         if ( wp_is_post_revision( $post_id ) ) {
             return;
         }
@@ -370,7 +419,7 @@ class Plugin{
             return;
         }
         try{
-            if(get_post_meta($post_id, 'MAPAS:permission_to_modify', true)){
+            if(!$this->api->updating($post_id) && get_post_meta($post_id, 'MAPAS:permission_to_modify', true)){
                 switch($post_type){
                     case 'agent':
                         $this->api->pushAgent($post_id);
@@ -381,7 +430,7 @@ class Plugin{
                     case 'event':
                         $this->api->pushEvent($post_id);
                         break;
-                        
+
                 }
 
                 delete_post_meta($post_id, 'MAPAS:__push_failed');
@@ -416,7 +465,7 @@ class Plugin{
 
         add_post_meta($post_id, 'MAPAS:__new_post', 1);
         add_post_meta($post_id, 'MAPAS:permission_to_modify', 1);
-        
+
     }
 
     /**
@@ -425,7 +474,7 @@ class Plugin{
      * @return void
      */
     function action__activate(){
-        
+
     }
 
     /**

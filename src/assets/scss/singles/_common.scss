@@ -5,12 +5,14 @@
     grid-template-columns: 7fr 3fr;
 
     &__header, &__title .avatar {
+        background-color: gray;
         background-position: center;
         background-size: cover;
     }
 
     &__header {
-        border-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
         padding-top: 200px;
     }
 
@@ -36,23 +38,52 @@
         }
 
         .title {
+            color: $primary-color;
+            color: var(--primary-color, $primary-color);
             font-weight: bold;
             font-size: 30px;
             line-height: 1.3;
         }
 
         .subtitle {
+            color: $primary-color;
+            color: var(--primary-color, $primary-color);
             font-weight: bold;
         }
     }
 
+    &__tabs-control {
+        display: flex;
+        margin: 10px 0;
+
+        .tab {
+            @include primary-color;
+            border-bottom-color: $primary-color;
+            border-bottom: 1px solid var(--primary-color, $primary-color);
+            display: flex;
+            flex: 1;
+            justify-content: center;
+
+            &.selected {
+                font-weight: bold;
+                border-bottom-width: 3px;
+            }
+        }
+    }
+
+    &__tab {
+        padding: 10px;
+    }
+
     &__slot {
-        display: grid;
-        grid-template-columns: 100px 1fr;
-        margin-bottom: 5px;
+        display: flex;
+        margin-bottom: 10px;
+        width: 100%;
 
         .icon {
             line-height: 1.3;
+            min-width: 100px;
+            max-width: 100px;
             text-align: center;
 
             span {
@@ -64,8 +95,27 @@
 
         .text {
 
-            p:first-of-type {
-                margin-top: 0;
+            p {
+                margin: 0;
+            }
+
+            p + p {
+                margin-top: 1em;
+            }
+
+            .mc-s__slot {
+                margin: 0;
+
+                .icon {
+                    min-width: 40px;
+                    max-width: 40px;
+                }
+            }
+
+            &.address {
+                .name {
+                    font-weight: bold;
+                }
             }
 
             ul.tags {
@@ -83,5 +133,35 @@
                 }
             }
         }
+
+        &.contact {
+            padding: 10px 5px;
+            border-bottom-color: $primary-color;
+            border-bottom: 1px solid var(--primary-color, $primary-color, --primary-color);
+            border-top-color: $primary-color;
+            border-top: 1px solid var(--primary-color, $primary-color);
+
+            @media screen and (min-width: 600px) {
+                .mc-s__slot {
+                    display: inline-flex;
+                    width: calc(50% - 5px);
+                }
+            }
+        }
+    }
+
+    &__gallery {
+        display: grid;
+        grid-gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        margin: auto;
+        width: 1080px;
+    }
+
+    &__attached-image {
+        background-position: center;
+        background-size: cover;
+        display: block;
+        padding-top: 100%;
     }
 }
