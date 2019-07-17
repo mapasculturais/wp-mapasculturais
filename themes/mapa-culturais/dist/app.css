@@ -939,6 +939,10 @@ i {
 
 /* ----- 3: LAYOUT ------- */
 
+a {
+  color: black;
+}
+
 .logo img {
   max-width: 230px;
   margin: 20px auto;
@@ -955,6 +959,14 @@ header.main-header {
 
 .social-networks {
   font-weight: bold;
+}
+
+@media (max-width: 767px) {
+  .social-networks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .social-networks i {
@@ -1052,14 +1064,14 @@ header.main-header {
     position: fixed;
     width: 80vw;
     height: 100vh;
-    background: linear-gradient(175deg, #F5F5F5, #efefef);
+    background: #E5E5E5;
     top: 0px;
     left: 0;
     padding: 70px 0 17.5px 0;
   }
 
   .main-menu .menu-menu-principal-container.active {
-    box-shadow: 30px 0px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 30px 0px 30px rgba(197, 145, 145, 0.08);
   }
 
   .main-menu .responsive-logo {
@@ -1092,6 +1104,12 @@ header.main-header {
 
 .search-form {
   position: relative;
+}
+
+@media (max-width: 767px) {
+  .search-form {
+    margin-bottom: 20px;
+  }
 }
 
 .search-form input {
