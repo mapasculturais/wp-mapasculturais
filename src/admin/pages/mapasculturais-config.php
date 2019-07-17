@@ -36,6 +36,11 @@ sort($event_age_ratings);
             <th scope="row"><?php _e('Chave Privada ', 'wp-mapas') ?></th>
             <td><input type="password" name="MAPAS:private_key" value="<?php echo esc_attr( $plugin->getOption('private_key') ); ?>"/></td>
         </tr>
+
+        <tr valign="top" style="display:none">
+            <th scope="row"><?php _e('Intervalo mínimo entre cada importação das entidades ', 'wp-mapas') ?></th>
+            <td><input type="numeric" step="1" name="MAPAS:import-entities-interval" value="<?php echo esc_attr( $plugin->getOption('import-entities-interval', 60) ); ?>"/> <?php _e("segundos", 'wp-mapas') ?></td>
+        </tr>
     </table>
 
     

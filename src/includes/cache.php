@@ -46,10 +46,10 @@ class Cache{
      * @return bool
      */
     function existsPersistent(string $key, $set_runtime_cache_if_found = true){
-        $found = false;
-        $data = wp_cache_get($key, $this->namespace, $force = false, $found);
+        $cache = get_transient($this->_key($key));
+        $found = is_object($cache);
         if($found && $set_runtime_cache_if_found){
-            $this->addRuntime($key, $data);
+            $this->addRuntime($key, $cache->data);
         }
         return $found;
     }
@@ -90,7 +90,8 @@ class Cache{
      * @return void
      */
     function addPersistent(string $key, $data, int $ttl){
-        wp_cache_add($key, $data, $this->namespace, $ttl);
+        $data = (object)['timestamp' => time(), 'data' => $data];
+        set_transient($this->_key($key), $data, $ttl);
     }
 
     /**
@@ -116,7 +117,10 @@ class Cache{
      */
     function delete(string $key){
         unset($this->runtime[$key]);
-        wp_cache_delete($key, $this->namespace);
+        delete_transient($this->_key($key), $this->namespace);
     }
 
+    protected function _key($key){
+        return "MAPAS:cache:{$this->namespace}:$key";
+    }
 }
