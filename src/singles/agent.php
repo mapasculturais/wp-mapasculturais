@@ -20,7 +20,8 @@ $avatarMeta = mc_array_at($meta, '_thumbnail_id');
                 </div>
             </div>
             <div>
-                <div class="type">Agente <?= wp_get_post_terms(get_the_ID(), 'agent_type')[0]->name ?></div>
+                <?php $type = wp_get_post_terms(get_the_ID(), 'agent_type'); ?>
+                <div class="type">Agente <?= empty($type) ? '' : $type[0]->name ?></div>
                 <div class="title"><?php the_title(); ?></div>
                 <div class="subtitle"><?= str_replace(['<p>', '</p>'], ['', ''], get_the_excerpt()) ?></div>
             </div>
@@ -56,7 +57,7 @@ $avatarMeta = mc_array_at($meta, '_thumbnail_id');
                         <div class="location"><?= $address ?></div>
                         <div class="mc-s__slot">
                             <div class="icon" aria-label="Tipo"><i class="fas fa-university" aria-hidden="true"></i></div>
-                            <div class="text"><b><i>Agente <?= wp_get_post_terms(get_the_ID(), 'agent_type')[0]->name ?></i></b></div>
+                            <div class="text"><b><i>Agente <?= empty($type) ? '' : $type[0]->name ?></i></b></div>
                         </div>
                         <?php if (!empty(mc_array_at($meta, 'horario'))): ?>
                             <div class="mc-s__slot">
@@ -117,13 +118,13 @@ $avatarMeta = mc_array_at($meta, '_thumbnail_id');
                     <?php if (!empty(mc_array_at($meta, 'facebook'))): ?>
                         <div class="mc-s__slot">
                             <div class="icon" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></div>
-                            <div class="text"><a href="<?= $meta['facebook'][0] ?>"><?= $meta['facebook'][0] ?></a></div>
+                            <div class="text"><a href="<?= $meta['facebook'][0] ?>"><?= preg_replace('/(https?:\/\/)?(www\.)?facebook\.com/', '', $meta['facebook'][0]) ?></a></div>
                         </div>
                     <?php endif; ?>
                     <?php if (!empty(mc_array_at($meta, 'twitter'))): ?>
                         <div class="mc-s__slot">
                             <div class="icon" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></div>
-                            <div class="text"><a href="<?= $meta['twitter'][0] ?>"><?= $meta['twitter'][0] ?></a></div>
+                            <div class="text"><a href="<?= $meta['twitter'][0] ?>"><?= preg_replace('/(https?:\/\/)?(www\.)?twitter\.com\//', '@', $meta['twitter'][0]) ?></a></div>
                         </div>
                     <?php endif; ?>
                     <?php if (!empty(mc_array_at($meta, 'instagram'))): ?>
@@ -140,7 +141,7 @@ $avatarMeta = mc_array_at($meta, '_thumbnail_id');
             include 'includes/_gallery.php'; ?>
         </div>
         <div class="mc-s__tab" v-show="tab === 2">
-            Agenda
+            <mc-w-list agents="<?= $meta['MAPAS:entity_id'][0] ?>" :show-filters="false"></mc-w-list>
         </div>
     </main>
 

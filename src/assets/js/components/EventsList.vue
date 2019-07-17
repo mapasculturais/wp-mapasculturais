@@ -72,7 +72,8 @@
                 this.$mc.EventOccurrences.find({
                     from: firstDay.toISOString().slice(0, 10),
                     to: lastDay.toISOString().slice(0, 10),
-                    ...this.filters
+                    ...this.filters,
+                    ...this.propsParams
                 }).then(response => {
                     this.events = response.data
                 })

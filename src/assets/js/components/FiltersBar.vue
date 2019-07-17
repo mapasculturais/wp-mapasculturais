@@ -28,7 +28,9 @@
             Multiselect
         },
         props: {
-            showDates: { type: Boolean, default: true }
+            agents: { type: String, default: undefined },
+            showDates: { type: Boolean, default: true },
+            spaces: { type: String, default: undefined }
         },
         data () {
             return {

@@ -61,6 +61,7 @@
                 const today = new Date().toISOString().slice(0, 10)
                 return this.$mc.EventOccurrences.find({
                     ...this.filters,
+                    ...this.propsParams,
                     from: today,
                     to: today
                 }).then(response => {
