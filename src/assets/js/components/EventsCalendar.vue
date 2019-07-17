@@ -1,6 +1,6 @@
 <template>
     <div class="mc-w mc-w-calendar">
-        <FiltersBar v-if="showFilters" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" :agents="agents" :spaces="spaces" @change="updateFilters"/>
         <WidgetHeader @previous="previousMonth" @next="nextMonth">{{ monthString }} de {{ currentYear }}</WidgetHeader>
         <Calendar defaultView="month" :events="calendarEvents" hideTitleBar hideViewSelector locale="pt-br" :selectedDate="selectedDate" :startWeekOnSunday="true" :style="{ 'min-height': '50vh' }" todayButton>
             <template class="mc-w-calendar__date" #cell-content="{ cell, view, events, goNarrower }">

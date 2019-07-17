@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-agenda">
-        <FiltersBar v-if="showFilters" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" :agents="agents" :spaces="spaces" @change="updateFilters"/>
         <WidgetHeader :showArrows="false">Minha agenda</WidgetHeader>
         <AgendaMonth v-for="month in months" :key="month" :events="eventsByMonth[month] || []" :filters="filters" :month="month"/>
     </section>

@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-now">
-        <FiltersBar v-if="showFilters" :showDates="false" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" :agents="agents" :showDates="false" :spaces="spaces" @change="updateFilters"/>
         <WidgetHeader :showArrows="false">Agora</WidgetHeader>
         <div class="mc-w-now__content">
             <div class="mc-w-now__events" v-if="eventsNow.length > 0">

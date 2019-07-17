@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-list">
-        <FiltersBar v-if="showFilters" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" :agents="agents" :spaces="spaces" @change="updateFilters"/>
         <WidgetHeader @previous="previousMonth" @next="nextMonth">
             {{ monthString }} de {{ currentYear }}
         </WidgetHeader>

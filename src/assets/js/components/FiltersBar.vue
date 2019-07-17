@@ -28,7 +28,9 @@
             Multiselect
         },
         props: {
-            showDates: { type: Boolean, default: true }
+            agents: { type: String, default: undefined },
+            showDates: { type: Boolean, default: true },
+            spaces: { type: String, default: undefined }
         },
         data () {
             return {
@@ -42,6 +44,8 @@
         computed: {
             params () {
                 return {
+                    'owner': this.$props.agents && `IN(${this.$props.agents})`,
+                    'space:id': this.$props.spaces && `IN(${this.$props.spaces})`,
                     'from': this.from,
                     'to': this.to,
                     '@keyword': this.keyword || undefined,

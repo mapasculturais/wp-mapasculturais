@@ -1,6 +1,6 @@
 <template>
     <section class="mc-w mc-w-day">
-        <FiltersBar v-if="showFilters" :showDates="false" @change="updateFilters"/>
+        <FiltersBar v-if="showFilters" :agents="agents" :showDates="false" :spaces="spaces" @change="updateFilters"/>
         <WidgetHeader @previous="previousDay" @next="nextDay">
             {{ currentDay }} de {{ monthString }} de {{ currentYear }}
         </WidgetHeader>
