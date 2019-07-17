@@ -140,4 +140,19 @@
             }
         }
     }
+
+    &__gallery {
+        display: grid;
+        grid-gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        margin: auto;
+        width: 1080px;
+    }
+
+    &__attached-image {
+        background-position: center;
+        background-size: cover;
+        display: block;
+        padding-top: 100%;
+    }
 }

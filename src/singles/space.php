@@ -145,7 +145,8 @@ $avatarMeta = mc_array_at($meta, 'MAPAS:entity_avatar_attachment_id');
                 </div>
             </div>
             <div class="mc-s__tab" v-show="tab === 1">
-                Multimídia
+                <?php $images = get_attached_media('image', get_the_ID());
+                include 'includes/_gallery.php'; ?>
             </div>
             <div class="mc-s__tab" v-show="tab === 2">
                 Agenda
