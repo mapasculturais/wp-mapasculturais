@@ -46,25 +46,25 @@ $avatarMeta = mc_array_at($meta, 'MAPAS:entity_avatar_attachment_id');
                 <?php endif; ?>
                 <?php $address = mc_format_address($meta); ?>
                 <?php if (!empty($address)): ?>
-                <div class="mc-s__slot">
-                    <div class="icon" aria-label="Endereço"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
-                    <div class="text address">
-                        <?php if (!empty(mc_array_at($meta, 'endereco'))): ?>
-                            <div class="name"><?= $meta['endereco'][0] ?></div>
-                        <?php endif; ?>
-                        <div class="location"><?= $address ?></div>
-                        <div class="mc-s__slot">
-                            <div class="icon" aria-label="Tipo"><i class="fas fa-university" aria-hidden="true"></i></div>
-                            <div class="text"><b><i><?= wp_get_post_terms(get_the_ID(), 'space_type')[0]->name ?></i></b></div>
-                        </div>
-                        <?php if (!empty(mc_array_at($meta, 'horario'))): ?>
+                    <div class="mc-s__slot">
+                        <div class="icon" aria-label="Endereço"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
+                        <div class="text address">
+                            <?php if (!empty(mc_array_at($meta, 'endereco'))): ?>
+                                <div class="name"><?= $meta['endereco'][0] ?></div>
+                            <?php endif; ?>
+                            <div class="location"><?= $address ?></div>
                             <div class="mc-s__slot">
-                                <div class="icon" aria-label="Horário de funcionamento"><i class="far fa-clock" aria-hidden="true"></i></div>
-                                <div class="text"><?= $meta['horario'][0] ?></div>
+                                <div class="icon" aria-label="Tipo"><i class="fas fa-university" aria-hidden="true"></i></div>
+                                <div class="text"><b><i><?= wp_get_post_terms(get_the_ID(), 'space_type')[0]->name ?></i></b></div>
                             </div>
-                        <?php endif; ?>
+                            <?php if (!empty(mc_array_at($meta, 'horario'))): ?>
+                                <div class="mc-s__slot">
+                                    <div class="icon" aria-label="Horário de funcionamento"><i class="far fa-clock" aria-hidden="true"></i></div>
+                                    <div class="text"><?= $meta['horario'][0] ?></div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                </div>
                 <?php endif; ?>
                 <?php if (!empty(mc_array_at($meta, 'horario'))): ?>
                     <div class="mc-s__slot">
