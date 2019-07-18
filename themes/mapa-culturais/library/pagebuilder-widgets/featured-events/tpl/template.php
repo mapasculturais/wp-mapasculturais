@@ -11,8 +11,8 @@ $i = 0;
             <div class="featured-events--slide slide <?= $i == 0 ? 'active' : '' ?>">
                 <div class="featured-events--image" style="background-image: url('<?= images\url('full') ?>')"></div>
                 <div class="featured-events--block">
-                    <h2 class="featured-events--title"><?php the_title() ?></h2>
-                    <div class="featured-events--linguagens">
+                    <h2 class="card--title"><?php the_title() ?></h2>
+                    <div class="card--taxonomy">
                     <?php 
                     $featured_linguagens = [];
                     foreach( get_the_terms(get_the_ID(), 'linguagem') as $linguagem ){
@@ -23,7 +23,7 @@ $i = 0;
                     ?>
                     </div>
                     <?php if(has_excerpt()): ?>
-                        <div class="featured-events--description"><?php the_excerpt(); ?></div>
+                        <div class="card--excerpt"><?php the_excerpt(); ?></div>
                     <?php endif; ?>
 
                     <a href="javascript:void(0);" class="featured-events--arrows left" data-set-index="<?= $i == 0 ? (count($query->posts) - 1) : ($i - 1) ?>"> 

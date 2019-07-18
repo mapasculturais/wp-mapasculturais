@@ -1375,156 +1375,77 @@ footer.main-footer .social-networks--wrapper {
 }
 
 .card {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
+  border-radius: 0 0 10px 10px;
   overflow: hidden;
-  padding: 15px 0;
 }
 
-@media (max-width: 767px) {
-  .card {
-    padding: 0 15px;
-  }
-}
-
-.card.horizontal {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.card.horizontal .card--image {
-  max-width: 140px;
+.card--icon {
   float: left;
   margin-right: 15px;
-}
-
-@media (max-width: 767px) {
-  .card.horizontal .card--image {
-    max-width: 100%;
-  }
-}
-
-.card.horizontal .card--image-wrapper {
-  flex: 0 0 155px;
-  max-width: 155px;
-}
-
-@media (max-width: 767px) {
-  .card.horizontal .card--image-wrapper {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-}
-
-.card a {
-  color: black;
-}
-
-.card--info-wrapper {
-  flex: 1;
+  margin-top: 5px;
 }
 
 .card--image {
-  margin-bottom: 15px;
+  background-size: cover;
+  background-position: center;
+  padding: 35px 25px;
+  position: relative;
+}
+
+.card--image * {
+  color: white;
+  position: relative;
+}
+
+.card--image:before {
+  content: "";
+  position: absolute;
   width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  top: 0;
+  left: 0;
 }
 
 .card--title {
-  font-size: 22px;
-  font-weight: 900;
-  display: block;
-  line-height: 1.2;
-  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 25px;
+}
+
+.card--taxonomy {
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 15px;
 }
 
 .card--excerpt {
   font-size: 14px;
-  margin-top: 5px;
-  line-height: 1.2;
+  line-height: 18px;
+  margin-top: 20px;
 }
 
-.card i,
-.card--date,
-.card--category {
-  color: #888888;
-  font-size: 13px;
-  line-height: 16px;
+.card--footer {
+  background-color: white;
+  padding: 10px 25px;
 }
 
-.card--category {
-  font-weight: bold;
+.card--info {
+  display: flex;
+  align-items: center;
 }
 
-.card--category::after {
-  content: ", ";
+.card--info i {
+  margin-right: 15px;
 }
 
-.card--category:last-of-type:after {
-  display: none;
-}
-
-.card i {
-  margin: 0 5px;
-}
-
-.categories {
-  background-color: rgba(255, 225, 0, 0.8);
-  padding: 5px 8px;
-  color: #222222;
-  font-size: 10px;
-  font-weight: bold;
-  display: inline-block;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-}
-
-.posts-list {
-  margin-top: -15px !important;
-}
-
-.posts-list > .column .card {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  padding-bottom: 15px;
-}
-
-@media (max-width: 767px) {
-  .posts-list > .column .card {
-    padding: 15px;
-  }
-}
-
-.posts-list > .column.last-post .card {
-  border: none;
-}
-
-.card-multimidia .card--no-image {
-  width: 100%;
-  padding-top: 56%;
-  position: relative;
-  background-image: url("/wp-content/themes/mapas-culturais/assets/images/card-multimidia--bg.png");
-  background-size: cover;
-  border-radius: 12px;
-}
-
-.card-multimidia .card--no-image > * {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 160px;
-  font-weight: 600;
-  font-size: 13px;
-  text-align: center;
-}
-
-.card-multimidia .card--title {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.card-multimidia .button.video {
-  display: block;
-  margin-top: -7px;
-  border-radius: 0 0 5px 5px;
-  text-align: center;
+.card--info,
+.card--info p {
+  margin-bottom: 0;
+  font-size: 14px;
 }
 
 .title-button {
@@ -1693,25 +1614,6 @@ footer.main-footer .social-networks--wrapper {
 .featured-events--info i {
   font-size: 16px;
   margin-right: 20px;
-}
-
-.featured-events--title {
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 25px;
-}
-
-.featured-events--linguagens {
-  font-size: 12px;
-  font-style: italic;
-  font-weight: 300;
-  line-height: 15px;
-}
-
-.featured-events--description {
-  font-size: 14px;
-  line-height: 18px;
-  margin-top: 20px;
 }
 
 .featured-events--arrows {
