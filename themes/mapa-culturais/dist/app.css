@@ -1367,6 +1367,13 @@ footer.main-footer .social-networks--wrapper {
   color: white;
 }
 
+.small-link {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 15px;
+  text-decoration: underline;
+}
+
 .card {
   overflow: hidden;
   padding: 15px 0;
@@ -1617,6 +1624,112 @@ footer.main-footer .social-networks--wrapper {
 
 .page--share .telegram {
   background-color: #5682a3;
+}
+
+.featured-events {
+  margin-bottom: 100px;
+  position: relative;
+}
+
+.featured-events--slide {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: all 0.6s;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.featured-events--slide.active {
+  opacity: 1;
+  pointer-events: all;
+  position: relative;
+}
+
+.featured-events--image {
+  max-width: 100%;
+  flex: 0 0 100%;
+  padding-top: 22.37%;
+  background-size: cover;
+  background-position: center;
+}
+
+.featured-events--block {
+  background-color: black;
+  border-radius: 10px 0 0 0;
+  max-width: 340px;
+  flex: 0 0 340px;
+  padding: 30px 20px 40px 20px;
+  margin: -40px 60px 0 60px;
+  position: relative;
+}
+
+.featured-events--block * {
+  color: white;
+}
+
+.featured-events--infos {
+  flex: 1;
+  margin-right: calc(50% - 340px);
+  margin-top: 30px;
+}
+
+.featured-events--info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.featured-events--info * {
+  font-size: 12px;
+  margin: 0;
+}
+
+.featured-events--info i {
+  font-size: 16px;
+  margin-right: 20px;
+}
+
+.featured-events--title {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 25px;
+}
+
+.featured-events--linguagens {
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 15px;
+}
+
+.featured-events--description {
+  font-size: 14px;
+  line-height: 18px;
+  margin-top: 20px;
+}
+
+.featured-events--arrows {
+  position: absolute;
+  bottom: 0px;
+}
+
+.featured-events--arrows i {
+  opacity: 0.3;
+  color: #000000;
+}
+
+.featured-events--arrows.left {
+  left: -30px;
+}
+
+.featured-events--arrows.right {
+  right: -30px;
 }
 
 /* ----- 5: PAGES ------- */

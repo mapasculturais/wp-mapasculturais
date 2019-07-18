@@ -93,7 +93,7 @@ function mapas_culturais_load_assets() {
     wp_enqueue_style( 'foundation', get_template_directory_uri() . '/dist/foundation.min.css' );
     wp_enqueue_style( 'app', get_template_directory_uri() . '/dist/app.css', [], filemtime(__DIR__.'/dist/app.css') );
     wp_enqueue_script('no-js', get_stylesheet_directory_uri() . '/no-js.js', array('jquery'), false, true);
-    // wp_enqueue_script( 'main-app', get_template_directory_uri() . '/dist/app.js', array('jquery', 'no-js'), false, true);
+    wp_enqueue_script( 'main-app', get_template_directory_uri() . '/dist/app.js', array('jquery', 'no-js'), false, true);
     wp_enqueue_script( 'cookie', get_template_directory_uri() . '/assets/javascript/js.cookie.js', array('jquery'), false, true);
 }
 add_action( 'wp_enqueue_scripts', 'mapas_culturais_load_assets' );
@@ -269,4 +269,13 @@ if($depth === 0 ){
     }
 }
     return $output;
+}
+
+function dd($v){
+    echo '<xmp>
+    ';
+    var_dump($v);
+    echo '
+    </xmp>';
+    die;
 }
