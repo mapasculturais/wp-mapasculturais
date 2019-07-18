@@ -9,5 +9,5 @@ Vue.use(MCApiPlugin)
 Vue.component('mc-occurrence-cmb', OccurrenceMetabox)
 
 new Vue({
-    el: '#wpbody'
+    el: '#quando-onde'
 })
