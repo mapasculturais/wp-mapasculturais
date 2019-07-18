@@ -1,12 +1,31 @@
 .mc-cmb-occurrences {
 
-    .fields-row {
-        display: flex;
+    &__list {
+        li {
+            border-bottom: 1px solid #e9e9e9;
+            padding-bottom: 5px;
 
-        & > button, & > label {
+            span {
+                line-height: 28px;
+            }
+        }
+    }
+
+    &__form {
+
+        &-wrapper {
+            background-color: #f7f7f7;
+            padding: 10px;
+        }
+
+        .fields-row {
             display: flex;
-            flex-direction: column;
-            margin: 5px 10px;
+
+            & > button, & > label {
+                display: flex;
+                flex-direction: column;
+                margin: 5px 10px;
+            }
         }
     }
 }

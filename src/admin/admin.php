@@ -33,7 +33,7 @@ add_action('add_meta_boxes', function() {
 });
 
 function event_occurrences_metabox() {
-    echo '<mc-occurrence-cmb :event="'.get_the_ID().'"></mc-occurrence-cmb>';
+    echo '<mc-occurrence-cmb :event="'.get_post_meta(get_the_ID(), 'MAPAS:entity_id', true).'" :post="'.get_the_ID().'"></mc-occurrence-cmb>';
 }
 
 add_action( 'admin_init', 'WPMapasCulturais\\register_settings' );

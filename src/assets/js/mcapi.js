@@ -1,11 +1,23 @@
 import axios from 'axios'
 
 export const EventOccurrences = {
-    create (params) {
-        return axios.post('/mcapi/eventOccurrence/create', { params })
-    },
     find (params) {
         return axios.get('/mcapi/eventOccurrence/', { params })
+    }
+}
+
+export const EventRules = {
+    create (params) {
+        return axios.post('/mcapi/createEventRule/', { params })
+    },
+    delete (id, params) {
+        return axios.post(`/mcapi/deleteEventRule/${id}/`, { params })
+    },
+    get (id, params) {
+        return axios.get(`/mcapi/eventRules/${id}/`, { params })
+    },
+    update (id, params) {
+        return axios.post(`/mcapi/updateEventRules/${id}/`, params)
     }
 }
 
@@ -19,6 +31,7 @@ export const Taxonomies = window.mcTaxonomies
 
 const mcapi = {
     EventOccurrences,
+    EventRules,
     Spaces,
     Taxonomies
 }
