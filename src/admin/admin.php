@@ -48,8 +48,11 @@ add_action('add_meta_boxes', function() {
 });
 
 function event_occurrences_metabox() {
-    $entityId = get_post_meta(get_the_ID(), 'MAPAS:entity_id', true);
-    echo '<mc-occurrence-cmb :event="'.(empty($entityId) ? -1 : $entityId).'" :post="'.get_the_ID().'"></mc-occurrence-cmb>';
+    $entityId = get_post_meta(get_the_ID(), 'MAPAS:entity_id', true); ?>
+    <div id="quando-onde">
+        <mc-occurrence-cmb :event="<?= (empty($entityId) ? -1 : $entityId) ?>" :post="<?= get_the_ID() ?>"></mc-occurrence-cmb>
+    </div>
+    <?php
 }
 
 add_action( 'admin_init', 'WPMapasCulturais\\register_settings' );
