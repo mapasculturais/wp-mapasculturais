@@ -7,11 +7,21 @@ export default {
         WidgetHeader
     },
     props: {
-        showFilters: { type: Boolean, default: true }
+        agents: { type: String, default: undefined },
+        showFilters: { type: Boolean, default: true },
+        spaces: { type: String, default: undefined },
     },
     data () {
         return {
             filters: {}
+        }
+    },
+    computed: {
+        propsParams () {
+            return {
+                'owner': this.$props.agents && `IN(${this.$props.agents})`,
+                'space:id': this.$props.spaces && `IN(${this.$props.spaces})`,
+            }
         }
     },
     methods: {

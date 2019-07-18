@@ -80,6 +80,7 @@
             fetchEvents () {
                 this.$mc.EventOccurrences.find({
                     ...this.filters,
+                    ...this.propsParams,
                     from: this.isoDate,
                     to: this.isoDate
                 }).then(response => {

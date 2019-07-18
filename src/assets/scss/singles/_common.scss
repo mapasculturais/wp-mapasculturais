@@ -3,6 +3,13 @@
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 7fr 3fr;
+    margin: auto;
+    max-width: 1280px;
+    width: 100%;
+
+    @media screen and (max-width: 799px) {
+        grid-template-columns: 1fr;
+    }
 
     &__header, &__title .avatar {
         background-color: gray;
@@ -141,7 +148,7 @@
             border-top-color: $primary-color;
             border-top: 1px solid var(--primary-color, $primary-color);
 
-            @media screen and (min-width: 600px) {
+            @media screen and (min-width: 800px) {
                 .mc-s__slot {
                     display: inline-flex;
                     width: calc(50% - 5px);
@@ -155,7 +162,7 @@
         grid-gap: 20px;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         margin: auto;
-        width: 1080px;
+        max-width: 860px;
     }
 
     &__attached-image {

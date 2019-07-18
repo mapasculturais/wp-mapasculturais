@@ -57,7 +57,7 @@ class Plugin{
         add_filter('query_vars', [$this, 'filter__query_vars'] );
 
         add_filter('single_template', [$this, 'filter__single_template']);
-        
+
         $interval = $this->getOption('import-entities-interval', 60);
         $this->cron('import-entities', $interval, [$this, 'cron_importEntities']);
     }
@@ -84,7 +84,7 @@ class Plugin{
 
         $url_parts = parse_url($url);
         $fp = fsockopen($url_parts['host'], isset($url_parts['port']) ? $url_parts['port']: 80, $errno, $errstr, 30);
-        
+
         strtoupper($method);
 
         $out = "$method ".$url_parts['path']." HTTP/1.1\r\n";
@@ -405,7 +405,11 @@ class Plugin{
                 $this->output_success($result);
 
             case 'eventOccurrence':
-                $result = $this->api->find($action, $_GET);
+                if ($_POST) {
+                    $result = (object)[];
+                } else {
+                    $result = $this->api->find($action, $_GET);
+                }
                 $this->output_success($result);
                 break;
 

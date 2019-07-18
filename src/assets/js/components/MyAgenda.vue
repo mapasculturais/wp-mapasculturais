@@ -53,7 +53,8 @@
                 this.$mc.EventOccurrences.find({
                     from: new Date().toISOString().slice(0, 10),
                     to: `${new Date().getFullYear()}-12-31`,
-                    ...this.filters
+                    ...this.filters,
+                    ...this.propsParams
                 }).then(response => {
                     this.events = response.data
                 })

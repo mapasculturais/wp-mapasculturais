@@ -41,7 +41,9 @@ register_deactivation_hook( __FILE__, [$wp_mapasculturais, 'action__deactivate']
 // [events view="calendar"]
 function events_shortcodes( $atts ) {
 	$a = shortcode_atts( array(
+        'agents' => NULL,
         'filters' => true,
+        'spaces' => NULL,
 		'view' => 'calendar'
     ), $atts );
 

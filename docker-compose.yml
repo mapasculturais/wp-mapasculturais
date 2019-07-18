@@ -18,6 +18,7 @@ services:
     volumes:
       - ./src:/var/www/html/wp-content/plugins/wp-mapasculturais
       - wp-uploads:/var/www/html/wp-content/uploads
+      - ./themes:/var/www/html/wp-content/themes
 
   db:
     image: mysql:5.7
@@ -28,6 +29,8 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - db-data:/var/lib/mysql
+      - ./wordpress-dump.sql:/docker-entrypoint-initdb.d/wordpress-dump.sql
+
 
   mapas-nginx:
     image: hacklab/mapasculturais-nginx:latest
@@ -75,7 +78,8 @@ services:
       - "5432:5432"
     volumes:
       - mapas-db-data:/var/lib/postgresql/data
-      - ./compose/local/mapas.sql:/docker-entrypoint-initdb.d/mapas.sql
+      - ./mapas-dump.sql:/docker-entrypoint-initdb.d/mapas.sql
+
 
 volumes:
   db-data:
