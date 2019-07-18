@@ -72,12 +72,11 @@ class ApiWrapper{
         $public_key = $this->getOption('public_key');
 
         $this->cache = new Cache(__CLASS__);
-
         $this->mapasApi = new MapasSDK($url, $public_key, $private_key);
-
+        
         global $wpdb;
         $this->wpdb = $wpdb;
-
+        
         $this->_populateDescriptions();
 
     }
@@ -934,8 +933,9 @@ class ApiWrapper{
         
         $from = isset($params['from']) && $params['from'] ? $params['from'] : date('Y-m-d');
         $to = isset($params['to']) && $params['to'] ? $params['to'] : date('Y-m-d', strtotime('+1 month', strtotime($from)));
+        $groupBy = isset($params['groupBy']);
 
-        unset($params['to'], $params['from']);
+        unset($params['to'], $params['from'], $params['groupBy']);
 
         $space_fields = Plugin::instance()->getEntityFields('space', true, true, ['permissionTo.modify', 'longDescription']);
         $event_fields = Plugin::instance()->getEntityFields('event', true, true, ['permissionTo.modify', 'longDescription']);
@@ -949,7 +949,25 @@ class ApiWrapper{
             $this->parseEntity('space', $event->space, $use_post_values);
         }
 
-        return $result; 
+        if($groupBy == 'event'){
+            $_result = [];
+            foreach($result as $event){
+
+                if(!isset($_result[$event->id])){
+                    $_event = clone $event;
+                    $_event->occurrences = [];
+                    unset($_event->occurrence, $_event->space);
+                    $_result[$event->id] = $_event;
+                }
+                $event->occurrence->space = $event->space;
+                $_result[$event->id]->occurrences[] = $event->occurrence;
+            }
+
+            return $_result;
+        } else {
+            return $result; 
+        }
+
     }
 
     /**
@@ -1028,9 +1046,12 @@ class ApiWrapper{
                 'ends' => $ends_on . ' ' . $entity->ends_at,
                 'ends_on' => $ends_on,
                 'ends_at' => $entity->ends_at,
+
+                'attendance' => $entity->event_attendance
             ];
 
-            unset($entity->occurrence_id, $entity->event_id, $entity->starts_at, $entity->starts_on, $entity->ends_at, $entity->ends_on);
+            unset($entity->occurrence_id, $entity->event_id, $entity->starts_at, 
+                  $entity->starts_on, $entity->ends_at, $entity->ends_on, $entity->event_attendance);
         }
 
         if(isset($entity->createTimestamp)){
