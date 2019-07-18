@@ -379,6 +379,16 @@ class Plugin{
                 }
                 break;
 
+            case 'eventRules': 
+                $event_id = get_query_var('mcarg1');
+                if(empty($event_id)){
+                    $this->output_error('fué');
+                }
+
+                $result = $this->api->mapasApi->findEntities('eventOccurrence',['*'],['event' => "EQ({$event_id})"]);
+
+                $this->output_success($result);
+                break;
             case 'agent':
             case 'space':
             case 'event':
