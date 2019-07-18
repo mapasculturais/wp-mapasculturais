@@ -20,12 +20,27 @@ $languages = new \Advanced_Taxonomy_Metabox( 'linguagem', array( 'event' ), 'che
 $languages->set( 'priority', 'core' );
 
 add_action('admin_menu', function(){
-    add_submenu_page('wp-mapasculturais', 'Configurações', 'Configurações', 'manage_options', 'wp-mapasculturais', 'WPMapasCulturais\\config_page');
     add_menu_page('Mapas Culturais', 'Mapas Culturais', 'manage_options', 'wp-mapasculturais', 'WPMapasCulturais\\config_page', 'dashicons-location-alt');
+    add_submenu_page('wp-mapasculturais', 'Configurações', 'Configurações', 'manage_options', 'wp-mapasculturais', 'WPMapasCulturais\\config_page');
+    add_submenu_page('wp-mapasculturais', 'Agentes', 'Agentes', 'manage_options', 'wp-mapasculturais-agents', 'WPMapasCulturais\\config_agents');
+    add_submenu_page('wp-mapasculturais', 'Espaços', 'Espaços', 'manage_options', 'wp-mapasculturais-spaces', 'WPMapasCulturais\\config_spaces');
+    add_submenu_page('wp-mapasculturais', 'Agentes', 'Events', 'manage_options', 'wp-mapasculturais-events', 'WPMapasCulturais\\config_events');
 });
 
 function config_page(){
     include __DIR__ . '/pages/mapasculturais-config.php';
+}
+
+function config_agents(){
+    include __DIR__ . '/pages/mapasculturais-agents.php';
+}
+
+function config_spaces(){
+    include __DIR__ . '/pages/mapasculturais-spaces.php';
+}
+
+function config_events(){
+    include __DIR__ . '/pages/mapasculturais-events.php';
 }
 
 add_action('add_meta_boxes', function() {
@@ -42,26 +57,22 @@ function register_settings(){
     register_setting( 'mapasculturais', 'MAPAS:url' );
     register_setting( 'mapasculturais', 'MAPAS:private_key' );
     register_setting( 'mapasculturais', 'MAPAS:public_key' );
-
     register_setting( 'mapasculturais', 'MAPAS:import-entities-interval' );
 
-    register_setting( 'mapasculturais', 'MAPAS:agent:import' );
-    register_setting( 'mapasculturais', 'MAPAS:space:import' );
-    register_setting( 'mapasculturais', 'MAPAS:event:import' );
+    register_setting( 'mapasculturais_agents', 'MAPAS:agent:import' );
+    register_setting( 'mapasculturais_agents', 'MAPAS:agent:verified' );
+    register_setting( 'mapasculturais_agents', 'MAPAS:agent:types' );
+    register_setting( 'mapasculturais_agents', 'MAPAS:agent:areas' );
 
-
-    register_setting( 'mapasculturais', 'MAPAS:agent:areas' );
-    register_setting( 'mapasculturais', 'MAPAS:space:areas' );
-    register_setting( 'mapasculturais', 'MAPAS:event:languages' );
-
-    register_setting( 'mapasculturais', 'MAPAS:agent:types' );
-    register_setting( 'mapasculturais', 'MAPAS:space:types' );
-
-    register_setting( 'mapasculturais', 'MAPAS:event:age_ratings' );
-
-    register_setting( 'mapasculturais', 'MAPAS:agent:verified' );
-    register_setting( 'mapasculturais', 'MAPAS:space:verified' );
-    register_setting( 'mapasculturais', 'MAPAS:event:verified' );
+    register_setting( 'mapasculturais_spaces', 'MAPAS:space:import' );
+    register_setting( 'mapasculturais_spaces', 'MAPAS:space:verified' );
+    register_setting( 'mapasculturais_spaces', 'MAPAS:space:types' );
+    register_setting( 'mapasculturais_spaces', 'MAPAS:space:areas' );
+    
+    register_setting( 'mapasculturais_events', 'MAPAS:event:import' );
+    register_setting( 'mapasculturais_events', 'MAPAS:event:verified' );
+    register_setting( 'mapasculturais_events', 'MAPAS:event:age_ratings' );
+    register_setting( 'mapasculturais_events', 'MAPAS:event:languages' );
 }
 
 add_action('admin_enqueue_scripts', 'WPMapasCulturais\\admin_scripts');
