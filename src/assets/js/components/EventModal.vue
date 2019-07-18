@@ -1,5 +1,11 @@
 <template>
     <CardModal :name="event.name" :category="event.terms.linguagem[0]" :background="backgroundImage" :link="event.permalink" @close="$emit('close')">
+        <template #toolbars>
+            <div class="toolbar">
+                <a role="button" tabindex="0" @click="attendEvent"><i class="fas fa-check"></i></a>
+                <a role="button" tabindex="0" @click="favoriteEvent"><i class="fas fa-star"></i></a>
+            </div>
+        </template>
         <template #content>
             <div class="mc-w__card-slot">
                 <div class="icon"></div>
@@ -57,6 +63,14 @@
                 const endDate = new Date(this.event.occurrence.ends).toLocaleDateString('pt-BR')
                 return `${ startDate } ${ this.event.occurrence.starts_on.slice(5) } -
                 ${ endDate !== startDate ? endDate : '' } ${ this.event.occurrence.ends_on.slice(5) }`
+            }
+        },
+        methods: {
+            attendEvent () {
+                console.log('Marcar presença no evento.')
+            },
+            favoriteEvent () {
+                console.log('Favoritar evento')
             }
         }
     }

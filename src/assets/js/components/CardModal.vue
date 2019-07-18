@@ -2,6 +2,7 @@
     <div class="mc-w__card-wrapper" @click="$emit('close')">
         <article class="mc-w__card" @click.stop>
             <footer class="mc-w__card-actions">
+                <slot name="toolbars"/>
                 <div class="toolbar">
                     <a role="button" tabindex="0" @click="$emit('close')"><i class="fas fa-times"></i></a>
                 </div>
