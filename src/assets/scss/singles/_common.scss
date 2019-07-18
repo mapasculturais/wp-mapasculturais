@@ -2,10 +2,15 @@
     @extend %mc-s;
     display: grid;
     grid-gap: 10px;
-    grid-template-columns: 7fr 3fr;
+    //grid-template-columns: 7fr 3fr;
+    grid-template-columns: 1fr;
     margin: auto;
-    max-width: 1280px;
+    max-width: 1024px;
     width: 100%;
+
+    &__sidebar {
+        display: none;
+    }
 
     @media screen and (max-width: 799px) {
         grid-template-columns: 1fr;
