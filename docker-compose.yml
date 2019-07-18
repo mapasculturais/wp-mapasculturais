@@ -16,6 +16,7 @@ services:
       WORDPRESS_DEBUG: 1
 
     volumes:
+      - wp-plugins:/var/www/html/wp-content/plugins
       - ./src:/var/www/html/wp-content/plugins/wp-mapasculturais
       - wp-uploads:/var/www/html/wp-content/uploads
       - ./themes:/var/www/html/wp-content/themes
@@ -67,7 +68,7 @@ services:
 
     depends_on:
       - db-mapas
-      
+
   db-mapas:
     image: mdillon/postgis:10
     environment:
@@ -88,3 +89,4 @@ volumes:
   mapas-private-files:
   mapas-assets:
   wp-uploads:
+  wp-plugins:
