@@ -1,0 +1,1 @@
+<mc-w-schedule title="<?php echo  $instance['title'] ?>"></mc-w-schedule>

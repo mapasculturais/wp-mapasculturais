@@ -1,1 +1,0 @@
-<mc-w-schedule title="<?= $instance['title'] ?>"></mc-w-schedule>
