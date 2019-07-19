@@ -277,3 +277,19 @@ function dd($v){
     </xmp>';
     die;
 }
+
+function the_taxonomy($taxonomy, $separator = ', '){
+    echo get_the_taxonomy($taxonomy, $separator);
+}
+
+function get_the_taxonomy($taxonomy, $separator = ', '){
+    global $post;
+
+    $terms = [];
+
+    foreach( get_the_terms(get_the_ID(), $taxonomy) as $term ){
+        $terms[] = '<a href="'. get_term_link($term->term_id, $taxonomy) .'">'. $term->name .'</a>';
+    }
+
+    return implode($separator, $terms);
+}

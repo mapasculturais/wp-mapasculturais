@@ -13,13 +13,9 @@ $query = new WP_Query($query_args);
                       . get_post_meta(get_the_ID(), 'endereco', true) .
                 '</div>';
 
-                $featured_linguagens = [];
-                foreach( get_the_terms(get_the_ID(), 'linguagem') as $linguagem ){
-                    $featured_linguagens[] = '<a href="'. get_term_link($linguagem->term_id, 'linguagem') .'">'. $linguagem->name .'</a>';
-                }
                 ?>
                 <div class="column large-<?= 12 / $instance['columns'] ?>">
-                    <?php template_part('card', [ 'extra_info' => $extra_info, 'taxonomy' => implode(', ', $featured_linguagens) ]); ?>
+                    <?php template_part('card', [ 'extra_info' => $extra_info, 'taxonomy' => get_the_taxonomy('space_type') ]); ?>
                 </div>
             <?php endwhile; ?>
     <?php endif; ?>

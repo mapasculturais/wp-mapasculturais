@@ -7,14 +7,14 @@
             </a>
 
             <?php if(isset($taxonomy) && !empty($taxonomy)): ?>
-                <div class="card--taxonomy"><?php $taxonomy ?></div>
+                <div class="card--taxonomy"><?= $taxonomy ?></div>
             <?php endif; ?>
         </div>
     </div>
 
     <?php if(isset($extra_info) && !empty($extra_info)): ?>
         <div class="card--footer">
-            <div class="card--info"><?= $extra_info ?></div>
+            <div class="card--info fz-12"><?= $extra_info ?></div>
         </div>
     <?php endif; ?>
 </div>

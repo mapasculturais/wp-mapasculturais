@@ -14,14 +14,7 @@ if(strpos($instance['link_content'], 'post:') > -1 ){
             <div class="events--block">
                 <a href="<?= get_the_permalink() ?>"><h2 class="card--title"><?php the_title() ?></h2></a>
                 <div class="card--taxonomy">
-                <?php 
-                $slider_linguagens = [];
-                foreach( get_the_terms(get_the_ID(), 'linguagem') as $linguagem ){
-                    $slider_linguagens[] = '<a href="'. get_term_link($linguagem->term_id, 'linguagem') .'">'. $linguagem->name .'</a>';
-                }
-
-                echo implode(', ', $slider_linguagens);
-                ?>
+                <?php the_taxonomy('linguagem', ', '); ?>
                 </div>
                 <?php if(has_excerpt()): ?>
                     <div class="card--excerpt">
