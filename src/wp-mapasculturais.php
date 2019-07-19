@@ -59,10 +59,25 @@ function events_shortcodes( $atts ) {
 add_shortcode( 'events', 'WPMapasCulturais\\events_shortcodes' );
 
 function mc_enqueue_scripts () {
-    wp_enqueue_style('wp-mapasculturais-css', '/wp-content/plugins/wp-mapasculturais/dist/index.css');
-    wp_enqueue_style('fontawesome5', '/wp-content/plugins/wp-mapasculturais/vendor/fontawesome-free/css/all.min.css');
+    // @todo usar método mais elegante para a url
+    $plugin_url = get_bloginfo('url') . '/wp-content/plugins/wp-mapasculturais/';
+    
+    wp_enqueue_script('jquery');
 
-    wp_enqueue_script('wp-mapasculturais', '/wp-content/plugins/wp-mapasculturais/dist/index.js', [], false, true);
+    wp_enqueue_style('wp-mapasculturais-css', $plugin_url . 'dist/index.css');
+    wp_enqueue_style('fontawesome5', $plugin_url . 'vendor/fontawesome-free/css/all.min.css');
+    
+    wp_enqueue_script('wp-mapasculturais', $plugin_url . 'dist/index.js', [], false, true);
+    
+    wp_enqueue_script('js-cookies', $plugin_url . 'assets/js/js-cookies.js', [], false, true);
+    wp_enqueue_script('wp-procuration', $plugin_url . 'assets/js/procuration.js', ['js-cookies'], false, true);
+
+    wp_localize_script('wp-procuration', 'mapas', [
+        'url' => Plugin::getOption('url'),
+        'publicKey' => Plugin::getOption('public_key'),
+        'wpUrl' => get_bloginfo('url')
+    ]);
+
     $plugin = Plugin::instance();
 
     if(!($age_ratings = $plugin->getOption('event:age_ratings'))){
