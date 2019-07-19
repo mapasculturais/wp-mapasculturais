@@ -10,7 +10,7 @@ $i = 0;
             ?>
             <div class="slider-events--slide slide <?= $i == 0 ? 'active' : '' ?>">
                 <div class="slider-events--image" style="background-image: url('<?= images\url('full') ?>')"></div>
-                <div class="slider-events--block">
+                <div class="events--block">
                     <h2 class="card--title"><?php the_title() ?></h2>
                     <div class="card--taxonomy">
                     <?php 

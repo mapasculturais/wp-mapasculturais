@@ -1565,6 +1565,20 @@ footer.main-footer .social-networks--wrapper {
   background-color: #5682a3;
 }
 
+.events--block {
+  background-color: black;
+  border-radius: 10px 0 0 0;
+  max-width: 340px;
+  flex: 0 0 340px;
+  padding: 30px 20px 40px 20px;
+  margin: -40px 60px 0 60px;
+  position: relative;
+}
+
+.events--block * {
+  color: white;
+}
+
 .slider-events {
   margin-bottom: 100px;
   position: relative;
@@ -1596,20 +1610,6 @@ footer.main-footer .social-networks--wrapper {
   padding-top: 22.37%;
   background-size: cover;
   background-position: center;
-}
-
-.slider-events--block {
-  background-color: black;
-  border-radius: 10px 0 0 0;
-  max-width: 340px;
-  flex: 0 0 340px;
-  padding: 30px 20px 40px 20px;
-  margin: -40px 60px 0 60px;
-  position: relative;
-}
-
-.slider-events--block * {
-  color: white;
 }
 
 .slider-events--infos {
@@ -1650,6 +1650,23 @@ footer.main-footer .social-networks--wrapper {
 
 .slider-events--arrows.right {
   right: -30px;
+}
+
+.featured-event {
+  padding-top: 22.4%;
+  background-size: cover;
+  background-position: center;
+}
+
+.featured-event .events--block {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-top: 100px;
+}
+
+.featured-event .column {
+  position: relative;
 }
 
 /* ----- 5: PAGES ------- */

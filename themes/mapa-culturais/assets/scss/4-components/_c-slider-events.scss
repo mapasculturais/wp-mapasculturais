@@ -30,18 +30,6 @@
         background-position: center;
     }
 
-    &--block{
-        background-color: black;
-        border-radius: 10px 0 0 0;
-        max-width: 340px;
-        flex: 0 0 340px;
-        padding: 30px 20px 40px 20px;
-        margin: -40px 60px 0 60px;
-        position: relative;
-
-        * { color: white; }
-    }
-
     &--infos{
         flex: 1;
         margin-right: calc(50% - 340px);
