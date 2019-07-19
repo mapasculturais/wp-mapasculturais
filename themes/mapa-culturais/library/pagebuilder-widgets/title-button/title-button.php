@@ -17,6 +17,14 @@ class TitleButton extends \SiteOrigin_Widget {
                 'type' => 'text',
                 'label' => 'Título'
             ],
+            'align' => [
+                'type' => 'select',
+                'label' => 'Alinhar',
+                'options' => [
+                    'left' => 'à esquerda',
+                    'center' => 'ao centro'
+                ]
+            ],
             'button_text' => [
                 'type' => 'text',
                 'label' => 'Texto do Botão',

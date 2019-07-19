@@ -1451,9 +1451,16 @@ footer.main-footer .social-networks--wrapper {
 .title-button {
   display: flex;
   align-items: center;
+}
+
+.title-button.left {
   justify-content: space-between;
   border-bottom: 1px solid black;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
+}
+
+.title-button.center {
+  justify-content: center;
 }
 
 @media (max-width: 767px) {
@@ -1468,6 +1475,17 @@ footer.main-footer .social-networks--wrapper {
   font-weight: 300;
   line-height: 38px;
   margin-bottom: 0;
+  position: relative;
+}
+
+.title-button h3:after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  width: 100%;
+  background: #000;
+  bottom: -13px;
+  left: 0;
 }
 
 .title-button a {
