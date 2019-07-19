@@ -1,29 +1,20 @@
-<?php
-$show_image = isset($show_image) && $show_image;
-$show_excerpt = isset($show_excerpt) && $show_excerpt;
-$horizontal = isset($horizontal) && $horizontal;
+<div class="card card-spaces">
+    <div class="card--image" style="background-image: url( <?php echo images\url('card-small') ?> )">
+        <i class="card--icon fas fa-bookmark"></i>
+        <div class="card--block">
+            <a tabindex="-1" href="<?= get_the_permalink() ?>">
+                <div class="card--title"><?php the_title() ?></div>
+            </a>
 
-?>
-    <div class="card <?= $horizontal ? 'horizontal' : '' ?>">
-        <?php if( $show_image && images\tag('card-small', 'card--image') != ''): ?>
-        <a tabindex="-1" href="<?= get_the_permalink() ?>" class="card--image-wrapper">
-            <?php echo images\tag('card-small', 'card--image') ?>
-        </a>    
-        <?php endif ?>
-        
-        <div class="card--info-wrapper">
-            <div class="categories">
-                <span class="card--category-title"><?php the_category(', ') ?></span>
-            </div>
-            
-            <h4 class="card--title">
-                <a href="<?= get_the_permalink() ?>"><?php the_title() ?></a>
-            </h4>
-
-            <?php if($show_excerpt && has_excerpt()) : ?>
-            <div class="card--excerpt">
-                <a href="<?= get_the_permalink() ?>"><?php the_excerpt() ?></a>
-            </div>
+            <?php if(isset($taxonomy) && !empty($taxonomy)): ?>
+                <div class="card--taxonomy"><?php $taxonomy ?></div>
             <?php endif; ?>
         </div>
     </div>
+
+    <?php if(isset($extra_info) && !empty($extra_info)): ?>
+        <div class="card--footer">
+            <div class="card--info"><?= $extra_info ?></div>
+        </div>
+    <?php endif; ?>
+</div>
