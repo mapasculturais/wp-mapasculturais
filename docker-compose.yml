@@ -2,6 +2,7 @@ version: '3.1'
 
 services:
   wordpress:
+    network_mode: host
     build:
       context: ./
       dockerfile: compose/local/wordpress/Dockerfile
@@ -9,7 +10,7 @@ services:
     ports:
      - "80:80"
     environment:
-      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_HOST: 127.0.0.1
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
@@ -22,7 +23,12 @@ services:
       - ./themes:/var/www/html/wp-content/themes
 
   db:
+    network_mode: host
     image: mysql:5.7
+
+    ports:
+     - "3306:3306"
+
     environment:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
@@ -43,15 +49,11 @@ services:
      - "8080:80"
     depends_on:
       - mapasculturais
-    links:
-      - mapasculturais
 
   mapasculturais:
     image: mapasculturais/mapasculturais:develop
     ports:
       - "9000:9000"
-    links:
-      - db-mapas
     environment:
       - DB_HOST=db-mapas
       - DB_NAME=mapas
@@ -65,6 +67,9 @@ services:
       - mapas-assets:/var/www/html/assets
       - mapas-public-files:/var/www/html/files
       - mapas-private-files:/var/www/private-files
+      - ../mapasculturais/src/protected/application/lib:/var/www/html/protected/application/lib
+      - ../mapasculturais/src/protected/db-updates.php:/var/www/html/protected/db-updates.php
+      - ../mapasculturais/src/protected/application/themes/:/var/www/html/protected/application/themes/
 
     depends_on:
       - db-mapas
@@ -79,7 +84,7 @@ services:
       - "5432:5432"
     volumes:
       - mapas-db-data:/var/lib/postgresql/data
-      - ./mapas-dump.sql:/docker-entrypoint-initdb.d/mapas.sql
+      - ./compose/local/mapas.sql:/docker-entrypoint-initdb.d/mapas.sql
 
 
 volumes:
