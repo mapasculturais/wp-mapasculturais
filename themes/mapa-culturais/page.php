@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<div class="page-content" id="pageContent">
+<div class="page-content" id="content">
     <?php the_post(); ?>
 
     <div class="row row-small">
