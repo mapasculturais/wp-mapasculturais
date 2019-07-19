@@ -33152,7 +33152,11 @@ module.exports = g;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 module.exports = __webpack_require__(/*! /home/rafael/devel/wp-mapasculturais/src/assets/js/admin.js */"./assets/js/admin.js");
+=======
+module.exports = __webpack_require__(/*! /home/nreek/Development/wp-mc/src/assets/js/admin.js */"./assets/js/admin.js");
+>>>>>>> 7f6d5f5180803a4793beeb60f94c09e2605afc69
 
 
 /***/ })

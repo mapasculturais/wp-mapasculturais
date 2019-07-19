@@ -2,8 +2,8 @@
     <CardModal :name="event.name" :category="event.terms.linguagem[0]" :background="backgroundImage" :link="event.permalink" @close="$emit('close')">
         <template #toolbars>
             <div class="toolbar">
-                <a role="button" tabindex="0" @click="attendEvent"><i class="fas fa-check"></i></a>
-                <a role="button" tabindex="0" @click="favoriteEvent"><i class="fas fa-star"></i></a>
+                <a role="button" tabindex="0" @click="attendEvent"><i :class="checkAttendence('confirmation', 'active') + ' fas fa-check'"></i></a>
+                <a role="button" tabindex="0" @click="favoriteEvent"><i :class="checkAttendence('interested', 'active') + ' fas fa-star'"></i></a>
             </div>
         </template>
         <template #content>
@@ -68,25 +68,31 @@
         methods: {
             deleteEventAttendance () {
                 console.log
-                this.$mc.EventAttendance.delete(this.event.occurrence.attendence).then(() => {
-                    this.event.occurrence.attendence = null
+                this.$mc.EventAttendance.delete(this.event.occurrence.attendance).then(() => {
+                    this.event.occurrence.attendance = null
                 });
             }, 
             attendEvent () {
                 var event = this.event
-                if(!event.occurrence.attendence || event.occurrence.attendence.type != 'confirmation'){
+                if(!event.occurrence.attendance || event.occurrence.attendance.type != 'confirmation'){
                     this.$mc.EventAttendance.confirm(this.event.occurrence.reccurrence_string).then((event_attendance) => {
-                        event.occurrence.attendence = event_attendance.data
+                        event.occurrence.attendance = event_attendance.data
                     });
                 }else {
                     this.deleteEventAttendance()
                 }
             },
+            checkAttendence(type, return_value){
+                if(this.event.occurrence.attendance && this.event.occurrence.attendance.type == type){
+                    return return_value;
+                }
+                return '';
+            },
             favoriteEvent () {
                 var event = this.event
-                if(!event.occurrence.attendence || event.occurrence.attendence.type != 'interested'){
+                if(!event.occurrence.attendance || event.occurrence.attendance.type != 'interested'){
                     this.$mc.EventAttendance.interested(this.event.occurrence.reccurrence_string).then((event_attendance) => {
-                        event.occurrence.attendence = event_attendance.data
+                        event.occurrence.attendance = event_attendance.data
                     });
                 } else {
                     this.deleteEventAttendance()
