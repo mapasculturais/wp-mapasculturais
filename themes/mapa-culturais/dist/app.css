@@ -1379,6 +1379,7 @@ footer.main-footer .social-networks--wrapper {
   margin-bottom: 30px;
   border-radius: 0 0 10px 10px;
   overflow: hidden;
+  height: calc(100% - 30px);
 }
 
 .card--icon {
