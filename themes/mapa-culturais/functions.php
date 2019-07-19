@@ -110,8 +110,6 @@ function custom_excerpt_length() {
 }
 add_filter( 'excerpt_length', 'custom_excerpt_length' );
 
-add_filter( 'show_admin_bar', '__return_false' );
-
 /**
  * Pagination
  */
