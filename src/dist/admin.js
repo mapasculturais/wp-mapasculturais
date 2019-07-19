@@ -252,19 +252,12 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************!*\
   !*** ./assets/js/mcapi.js ***!
   \****************************/
-<<<<<<< HEAD
 /*! exports provided: EventAttendance, EventOccurrences, EventRules, Spaces, Taxonomies, default, MCApiPlugin */
-=======
-/*! exports provided: EventOccurrences, EventRules, Spaces, Taxonomies, default, MCApiPlugin */
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-<<<<<<< HEAD
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventAttendance", function() { return EventAttendance; });
-=======
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOccurrences", function() { return EventOccurrences; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventRules", function() { return EventRules; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Spaces", function() { return Spaces; });
@@ -272,7 +265,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MCApiPlugin", function() { return MCApiPlugin; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-<<<<<<< HEAD
 /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_1__);
 
@@ -297,17 +289,13 @@ var EventAttendance = {
     var params = qs__WEBPACK_IMPORTED_MODULE_1___default.a.stringify({
       event_attendance_id: event_attendance.id
     });
-    console.log(event_attendance, {
-      event_attendance_id: event_attendance.id
-    });
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/mcapi/eventAttendance/delete', params);
   }
 };
-=======
-
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 var EventOccurrences = {
   find: function find(params) {
+    var token = Cookies.get('mcProcurationToken');
+    params['token'] = token;
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/mcapi/eventOccurrence/', {
       params: params
     });
@@ -342,10 +330,7 @@ var Spaces = {
 };
 var Taxonomies = window.mcTaxonomies;
 var mcapi = {
-<<<<<<< HEAD
   EventAttendance: EventAttendance,
-=======
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
   EventOccurrences: EventOccurrences,
   EventRules: EventRules,
   Spaces: Spaces,
@@ -19503,7 +19488,6 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-<<<<<<< HEAD
 /***/ "./node_modules/qs/lib/formats.js":
 /*!****************************************!*\
   !*** ./node_modules/qs/lib/formats.js ***!
@@ -20334,8 +20318,6 @@ module.exports = {
 
 /***/ }),
 
-=======
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /***/ "./node_modules/setimmediate/setImmediate.js":
 /*!***************************************************!*\
   !*** ./node_modules/setimmediate/setImmediate.js ***!
@@ -33170,11 +33152,7 @@ module.exports = g;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-<<<<<<< HEAD
 module.exports = __webpack_require__(/*! /home/rafael/devel/wp-mapasculturais/src/assets/js/admin.js */"./assets/js/admin.js");
-=======
-module.exports = __webpack_require__(/*! /home/nreek/Development/wp-mc/src/assets/js/admin.js */"./assets/js/admin.js");
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 
 
 /***/ })

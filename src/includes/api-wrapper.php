@@ -935,13 +935,16 @@ class ApiWrapper{
         $to = isset($params['to']) && $params['to'] ? $params['to'] : date('Y-m-d', strtotime('+1 month', strtotime($from)));
         $groupBy = isset($params['groupBy']);
 
-        unset($params['to'], $params['from'], $params['groupBy']);
+        $params['@attendanceUser'] = isset($params['token']) ? $params['token'] : '-1';
+
+        unset($params['to'], $params['from'], $params['groupBy'], $params['token']);
 
         $space_fields = Plugin::instance()->getEntityFields('space', true, true, ['permissionTo.modify', 'longDescription']);
         $event_fields = Plugin::instance()->getEntityFields('event', true, true, ['permissionTo.modify', 'longDescription']);
 
         $params['space:@select'] = implode(',', $space_fields);
         $params['@select'] = implode(',', $event_fields);
+
 
         $result = $this->mapasApi->findEventOccurrences($from, $to, $params);
         foreach($result as &$event){

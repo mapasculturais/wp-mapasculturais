@@ -21,15 +21,14 @@ export const EventAttendance = {
         var params = qs.stringify({
             event_attendance_id: event_attendance.id
         });
-        console.log(event_attendance, {
-            event_attendance_id: event_attendance.id
-        });
         return axios.post('/mcapi/eventAttendance/delete', params)
     }
 }
 
 export const EventOccurrences = {
     find (params) {
+        var token = Cookies.get('mcProcurationToken');
+        params['token'] = token;
         return axios.get('/mcapi/eventOccurrence/', { params })
     }
 }
