@@ -66,11 +66,31 @@
             }
         },
         methods: {
+            deleteEventAttendance () {
+                console.log
+                this.$mc.EventAttendance.delete(this.event.occurrence.attendence).then(() => {
+                    this.event.occurrence.attendence = null
+                });
+            }, 
             attendEvent () {
-                console.log('Marcar presença no evento.')
+                var event = this.event
+                if(!event.occurrence.attendence || event.occurrence.attendence.type != 'confirmation'){
+                    this.$mc.EventAttendance.confirm(this.event.occurrence.reccurrence_string).then((event_attendance) => {
+                        event.occurrence.attendence = event_attendance.data
+                    });
+                }else {
+                    this.deleteEventAttendance()
+                }
             },
             favoriteEvent () {
-                console.log('Favoritar evento')
+                var event = this.event
+                if(!event.occurrence.attendence || event.occurrence.attendence.type != 'interested'){
+                    this.$mc.EventAttendance.interested(this.event.occurrence.reccurrence_string).then((event_attendance) => {
+                        event.occurrence.attendence = event_attendance.data
+                    });
+                } else {
+                    this.deleteEventAttendance()
+                }
             }
         }
     }

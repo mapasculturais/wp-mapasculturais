@@ -433,9 +433,18 @@ class Plugin{
                             'type' => $_POST['type'],
                             'reccurrenceString' => $_POST['reccurrenceString']
                         ];
-                        $this->output_success($this->api->mapasApi->createEntity('eventAttendance',$data));
+                        try{
+                            $result = $this->api->mapasApi->createEntity('eventAttendance',$data);
+                            $this->output_success($result);
+                        } catch(\Exception $e){
+                            $this->output_error($e->toString());
+                        }
                         break;
                     case 'delete':
+                        if(!isset($_POST['event_attendance_id'])){
+                            $this->output_error(__("O parâmetro 'event_attendance_id' é obrigatório"));
+                        }
+                        $result = $this->api->mapasApi->deleteEntity('eventAttendance',$_POST['event_attendance_id']);
                         break;
                 }
 
