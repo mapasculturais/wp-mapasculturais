@@ -81,7 +81,7 @@ class Plugin{
 
     function async_http_request($url, $params = [], $method = 'GET') {
         $params = http_build_query($params);
-
+// var_Dump($url); die;
         $url_parts = parse_url($url);
         $fp = fsockopen($url_parts['host'], isset($url_parts['port']) ? $url_parts['port']: 80, $errno, $errstr, 30);
 
@@ -411,6 +411,35 @@ class Plugin{
                     $result = $this->api->find($action, $_GET);
                 }
                 $this->output_success($result);
+                break;
+
+            case 'eventAttendance':
+                switch(get_query_var('mcarg1')){
+                    case 'create':
+                        if(!isset($_POST['token'])){
+                            $this->output_error(__("O parâmetro 'token' é obrigatório"));
+                        }
+                        if(!isset($_POST['reccurrenceString'])){
+                            $this->output_error(__("O parâmetro 'reccurrenceString' é obrigatório"));
+                        }
+                        if(!isset($_POST['type'])){
+                            $this->output_error(__("O parâmetro 'type' é obrigatório"));
+                        }
+                        if(!in_array($_POST['type'], ['confirmation', 'interested'])){
+                            $this->output_error(__("O valor do parâmetro 'type' deve ser 'confirmation' ou 'interested'"));
+                        }
+                        $data = [
+                            'user' => $_POST['token'],
+                            'type' => $_POST['type'],
+                            'reccurrenceString' => $_POST['reccurrenceString']
+                        ];
+                        $this->output_success($this->api->mapasApi->createEntity('eventAttendance',$data));
+                        break;
+                    case 'delete':
+                        break;
+                }
+
+                $this->output_success($_POST);
                 break;
 
         }
