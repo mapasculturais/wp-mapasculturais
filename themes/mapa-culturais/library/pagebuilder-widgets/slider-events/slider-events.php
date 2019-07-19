@@ -1,27 +1,27 @@
 <?php
 
 /*
-  Widget Name: Eventos em Destaque
-  Description: Lista de eventos em Destaque
+  Widget Name: Slider de Eventos
+  Description: Lista de Slider de Eventos
   Author: hacklab/
   Author URI: https://hacklab.com.br/
  */
 
 namespace widgets;
 
-class FeaturedEvents extends \SiteOrigin_Widget {
+class SliderEvents extends \SiteOrigin_Widget {
 
     function __construct() {
         $fields = [
             'conteudo' => [
                 'type' => 'posts',
-                'label' => __('Conteúdo', 'lula'),
+                'label' => __('Conteúdo', 'mapas-culturais'),
             ],
         ];
 
-        parent::__construct('featured-events', __('Eventos em Destaque', 'lula'), [
+        parent::__construct('slider-events', __('Slider de Eventos', 'mapas-culturais'), [
             'panels_groups' => [WIDGETGROUP_MAIN],
-            'description' => 'Lista de eventos em Destaque'
+            'description' => 'Lista de Slider de Eventos'
                 ], [], $fields, plugin_dir_path(__FILE__)
         );
     }
@@ -42,4 +42,4 @@ class FeaturedEvents extends \SiteOrigin_Widget {
 
 }
 
-Siteorigin_widget_register('featured-events', __FILE__, 'widgets\FeaturedEvents');
+Siteorigin_widget_register('slider-events', __FILE__, 'widgets\SliderEvents');
