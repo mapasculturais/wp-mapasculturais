@@ -177,3 +177,15 @@
         padding-top: 100%;
     }
 }
+
+.fa-check.active, .fa-star.active{
+    background: rgba(142, 142, 142, 0.3);
+    border-radius: 50%;
+    padding: 4px 3px;
+    color: #333;
+    font-size: 13px;
+}
+
+.fa-check.active{
+    padding: 4px;
+}

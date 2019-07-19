@@ -776,8 +776,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./assets/js/components/Schedule.vue":
 /*!*******************************************!*\
   !*** ./assets/js/components/Schedule.vue ***!
@@ -865,7 +863,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /***/ "./assets/js/components/SpaceModal.vue":
 /*!*********************************************!*\
   !*** ./assets/js/components/SpaceModal.vue ***!
@@ -1178,11 +1175,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_DailyEvents_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/DailyEvents.vue */ "./assets/js/components/DailyEvents.vue");
 /* harmony import */ var _components_EventsList_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/EventsList.vue */ "./assets/js/components/EventsList.vue");
 /* harmony import */ var _components_HappeningNow_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/HappeningNow.vue */ "./assets/js/components/HappeningNow.vue");
-<<<<<<< HEAD
-=======
 /* harmony import */ var _components_Schedule_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Schedule.vue */ "./assets/js/components/Schedule.vue");
 
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 
 
 
@@ -1196,10 +1190,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('mc-w-calendar', _component
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('mc-w-day', _components_DailyEvents_vue__WEBPACK_IMPORTED_MODULE_4__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('mc-w-list', _components_EventsList_vue__WEBPACK_IMPORTED_MODULE_5__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('mc-w-now', _components_HappeningNow_vue__WEBPACK_IMPORTED_MODULE_6__["default"]);
-<<<<<<< HEAD
-=======
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('mc-w-schedule', _components_Schedule_vue__WEBPACK_IMPORTED_MODULE_7__["default"]);
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#content',
   data: function data() {
@@ -1215,19 +1206,12 @@ new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 /*!****************************!*\
   !*** ./assets/js/mcapi.js ***!
   \****************************/
-<<<<<<< HEAD
 /*! exports provided: EventAttendance, EventOccurrences, EventRules, Spaces, Taxonomies, default, MCApiPlugin */
-=======
-/*! exports provided: EventOccurrences, EventRules, Spaces, Taxonomies, default, MCApiPlugin */
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-<<<<<<< HEAD
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventAttendance", function() { return EventAttendance; });
-=======
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOccurrences", function() { return EventOccurrences; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventRules", function() { return EventRules; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Spaces", function() { return Spaces; });
@@ -1235,7 +1219,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MCApiPlugin", function() { return MCApiPlugin; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-<<<<<<< HEAD
 /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_1__);
 
@@ -1266,9 +1249,6 @@ var EventAttendance = {
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/mcapi/eventAttendance/delete', params);
   }
 };
-=======
-
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 var EventOccurrences = {
   find: function find(params) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/mcapi/eventOccurrence/', {
@@ -1305,10 +1285,7 @@ var Spaces = {
 };
 var Taxonomies = window.mcTaxonomies;
 var mcapi = {
-<<<<<<< HEAD
   EventAttendance: EventAttendance,
-=======
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
   EventOccurrences: EventOccurrences,
   EventRules: EventRules,
   Spaces: Spaces,
@@ -3200,10 +3177,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-<<<<<<< HEAD
 //
-=======
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'CardModal',
   props: {
@@ -3418,15 +3392,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-<<<<<<< HEAD
 //
 //
 //
 //
 //
 //
-=======
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'EventModal',
@@ -3452,41 +3423,45 @@ __webpack_require__.r(__webpack_exports__);
       var endDate = new Date(this.event.occurrence.ends).toLocaleDateString('pt-BR');
       return "".concat(startDate, " ").concat(this.event.occurrence.starts_on.slice(5), " -\n            ").concat(endDate !== startDate ? endDate : '', " ").concat(this.event.occurrence.ends_on.slice(5));
     }
-<<<<<<< HEAD
   },
   methods: {
     deleteEventAttendance: function deleteEventAttendance() {
       var _this = this;
 
       console.log;
-      this.$mc.EventAttendance["delete"](this.event.occurrence.attendence).then(function () {
-        _this.event.occurrence.attendence = null;
+      this.$mc.EventAttendance["delete"](this.event.occurrence.attendance).then(function () {
+        _this.event.occurrence.attendance = null;
       });
     },
     attendEvent: function attendEvent() {
       var event = this.event;
 
-      if (!event.occurrence.attendence || event.occurrence.attendence.type != 'confirmation') {
+      if (!event.occurrence.attendance || event.occurrence.attendance.type != 'confirmation') {
         this.$mc.EventAttendance.confirm(this.event.occurrence.reccurrence_string).then(function (event_attendance) {
-          event.occurrence.attendence = event_attendance.data;
+          event.occurrence.attendance = event_attendance.data;
         });
       } else {
         this.deleteEventAttendance();
       }
     },
+    checkAttendence: function checkAttendence(type, return_value) {
+      if (this.event.occurrence.attendance && this.event.occurrence.attendance.type == type) {
+        return return_value;
+      }
+
+      return '';
+    },
     favoriteEvent: function favoriteEvent() {
       var event = this.event;
 
-      if (!event.occurrence.attendence || event.occurrence.attendence.type != 'interested') {
+      if (!event.occurrence.attendance || event.occurrence.attendance.type != 'interested') {
         this.$mc.EventAttendance.interested(this.event.occurrence.reccurrence_string).then(function (event_attendance) {
-          event.occurrence.attendence = event_attendance.data;
+          event.occurrence.attendance = event_attendance.data;
         });
       } else {
         this.deleteEventAttendance();
       }
     }
-=======
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
   }
 });
 
@@ -4001,8 +3976,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./assets/js/components/Schedule.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./assets/js/components/Schedule.vue?vue&type=script&lang=js& ***!
@@ -4099,7 +4072,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./assets/js/components/SpaceModal.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./assets/js/components/SpaceModal.vue?vue&type=script&lang=js& ***!
@@ -4208,8 +4180,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./assets/js/components/Schedule.vue?vue&type=style&index=0&lang=css&":
 /*!***********************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--7-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/vue-loader/lib??vue-loader-options!./assets/js/components/Schedule.vue?vue&type=style&index=0&lang=css& ***!
@@ -4316,7 +4286,6 @@ function toComment(sourceMap) {
 
 /***/ }),
 
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /***/ "./node_modules/is-buffer/index.js":
 /*!*****************************************!*\
   !*** ./node_modules/is-buffer/index.js ***!
@@ -4534,7 +4503,6 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-<<<<<<< HEAD
 /***/ "./node_modules/qs/lib/formats.js":
 /*!****************************************!*\
   !*** ./node_modules/qs/lib/formats.js ***!
@@ -5560,202 +5528,6 @@ module.exports = {
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../process/browser.js */ "./node_modules/process/browser.js")))
-=======
-/***/ "./node_modules/setimmediate/setImmediate.js":
-/*!***************************************************!*\
-  !*** ./node_modules/setimmediate/setImmediate.js ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
-    "use strict";
-
-    if (global.setImmediate) {
-        return;
-    }
-
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
-
-    function setImmediate(callback) {
-      // Callback can either be a function or a string
-      if (typeof callback !== "function") {
-        callback = new Function("" + callback);
-      }
-      // Copy function arguments
-      var args = new Array(arguments.length - 1);
-      for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i + 1];
-      }
-      // Store and register the task
-      var task = { callback: callback, args: args };
-      tasksByHandle[nextHandle] = task;
-      registerImmediate(nextHandle);
-      return nextHandle++;
-    }
-
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
-
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-        case 0:
-            callback();
-            break;
-        case 1:
-            callback(args[0]);
-            break;
-        case 2:
-            callback(args[0], args[1]);
-            break;
-        case 3:
-            callback(args[0], args[1], args[2]);
-            break;
-        default:
-            callback.apply(undefined, args);
-            break;
-        }
-    }
-
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
-                }
-            }
-        }
-    }
-
-    function installNextTickImplementation() {
-        registerImmediate = function(handle) {
-            process.nextTick(function () { runIfPresent(handle); });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function() {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function(event) {
-            if (event.source === global &&
-                typeof event.data === "string" &&
-                event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function(event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -6295,7 +6067,6 @@ module.exports = function (css) {
 	return fixedCss;
 };
 
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 
 /***/ }),
 
@@ -13377,7 +13148,6 @@ var render = function() {
           }
         },
         [
-<<<<<<< HEAD
           _c(
             "footer",
             { staticClass: "mc-w__card-actions" },
@@ -13401,24 +13171,6 @@ var render = function() {
             ],
             2
           ),
-=======
-          _c("footer", { staticClass: "mc-w__card-actions" }, [
-            _c("div", { staticClass: "toolbar" }, [
-              _c(
-                "a",
-                {
-                  attrs: { role: "button", tabindex: "0" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$emit("close")
-                    }
-                  }
-                },
-                [_c("i", { staticClass: "fas fa-times" })]
-              )
-            ])
-          ]),
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
           _vm._v(" "),
           _c(
             "header",
@@ -13607,7 +13359,6 @@ var render = function() {
     },
     scopedSlots: _vm._u([
       {
-<<<<<<< HEAD
         key: "toolbars",
         fn: function() {
           return [
@@ -13618,7 +13369,13 @@ var render = function() {
                   attrs: { role: "button", tabindex: "0" },
                   on: { click: _vm.attendEvent }
                 },
-                [_c("i", { staticClass: "fas fa-check" })]
+                [
+                  _c("i", {
+                    class:
+                      _vm.checkAttendence("confirmation", "active") +
+                      " fas fa-check"
+                  })
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -13627,7 +13384,13 @@ var render = function() {
                   attrs: { role: "button", tabindex: "0" },
                   on: { click: _vm.favoriteEvent }
                 },
-                [_c("i", { staticClass: "fas fa-star" })]
+                [
+                  _c("i", {
+                    class:
+                      _vm.checkAttendence("interested", "active") +
+                      " fas fa-star"
+                  })
+                ]
               )
             ])
           ]
@@ -13635,8 +13398,6 @@ var render = function() {
         proxy: true
       },
       {
-=======
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
         key: "content",
         fn: function() {
           return [
@@ -14324,8 +14085,6 @@ render._withStripped = true
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./assets/js/components/Schedule.vue?vue&type=template&id=e8b93390&":
 /*!********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./assets/js/components/Schedule.vue?vue&type=template&id=e8b93390& ***!
@@ -14444,7 +14203,6 @@ render._withStripped = true
 
 /***/ }),
 
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./assets/js/components/SpaceModal.vue?vue&type=template&id=1014caa8&":
 /*!**********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./assets/js/components/SpaceModal.vue?vue&type=template&id=1014caa8& ***!
@@ -26770,15 +26528,9 @@ module.exports = g;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-<<<<<<< HEAD
-__webpack_require__(/*! /home/rafael/devel/wp-mapasculturais/src/assets/js/index.js */"./assets/js/index.js");
-__webpack_require__(/*! /home/rafael/devel/wp-mapasculturais/src/assets/scss/index.scss */"./assets/scss/index.scss");
-module.exports = __webpack_require__(/*! /home/rafael/devel/wp-mapasculturais/src/assets/scss/admin.scss */"./assets/scss/admin.scss");
-=======
 __webpack_require__(/*! /home/nreek/Development/wp-mc/src/assets/js/index.js */"./assets/js/index.js");
 __webpack_require__(/*! /home/nreek/Development/wp-mc/src/assets/scss/index.scss */"./assets/scss/index.scss");
 module.exports = __webpack_require__(/*! /home/nreek/Development/wp-mc/src/assets/scss/admin.scss */"./assets/scss/admin.scss");
->>>>>>> d402be784d043309cdc7c36c66063b526811713e
 
 
 /***/ })
