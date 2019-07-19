@@ -1050,13 +1050,13 @@ class ApiWrapper{
                 'ends_on' => $ends_on,
                 'ends_at' => $entity->ends_at,
 
-                'attendance' => $entity->event_attendance,
+                'attendance' => $entity->attendance,
                 'reccurrence_string' => $entity->_reccurrence_string
             ];
 
             unset($entity->occurrence_id, $entity->event_id, $entity->starts_at, 
                   $entity->starts_on, $entity->ends_at, $entity->ends_on, 
-                  $entity->event_attendance, $entity->_reccurrence_string);
+                  $entity->attendance, $entity->event_attendance, $entity->_reccurrence_string);
         }
 
         if(isset($entity->createTimestamp)){
