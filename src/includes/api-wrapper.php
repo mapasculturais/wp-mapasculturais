@@ -963,7 +963,7 @@ class ApiWrapper{
                 $_result[$event->id]->occurrences[] = $event->occurrence;
             }
 
-            return $_result;
+            return array_values($_result);
         } else {
             return $result; 
         }
