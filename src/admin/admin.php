@@ -82,6 +82,11 @@ add_action('admin_enqueue_scripts', 'WPMapasCulturais\\admin_scripts');
 function admin_scripts(){
     wp_enqueue_script('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.js', ['jquery'], false, true);
     wp_enqueue_style('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.css');
+    
+    wp_localize_script('wp-mapasculturais-admin', 'mapas', [
+        'url' => Plugin::getOption('url'),
+        'publicKey' => Plugin::getOption('public_key')
+    ]);
 
     if(isset($_GET['post']) && isset($_SESSION['MAPAS:error:' . $_GET['post']])){
         $e = $_SESSION['MAPAS:error:' . $_GET['post']];
