@@ -6,7 +6,7 @@ get_header();
 the_post();
 ?>
 
-<div class="row" id="content">
+<div class="row pt-40" id="content">
     <?php the_content(); ?>
 </div>
 
