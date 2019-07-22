@@ -81,6 +81,7 @@
             occurrenceId: { type: Number, required: false },
             event: { type: Number, required: true },
             occurrence: { type: [Object, Boolean], default: false },
+            occurrences: { type: Array, default: []}
         },
         data () {
             const oc = this.$props.occurrence
@@ -175,16 +176,28 @@
         },
         methods: {
             save () {
+                var occurrences = this.$props.occurrences;
+                var occurrenceId = this.$props.occurrenceId;
                 if (this.$props.occurrence) {
                     this.$mc.EventRules.update(this.$props.occurrenceId, this.params)
-                        .then(() => console.log('Ocorrências atualizadas com sucesso'))
+                        .then((response) => {
+                            var index
+                            for(var i in occurrences){
+                                if(occurrences[i].id == occurrenceId){
+                                    index = i;
+                                }
+                            }
+                            occurrences[index].rule = response.data.rule;
+                        })
                         .catch(error => {
                             // window.alert('Ocorreu um erro')
                             console.error(error)
                         })
                 } else {
                     this.$mc.EventRules.create(this.params)
-                        .then(() => console.log('Ocorrências criadas com sucesso'))
+                        .then((response) => {
+                            occurrences.push(response.data);
+                        })
                         .catch(error => {
                             // window.alert('Ocorreu um erro')
                             console.error(error)

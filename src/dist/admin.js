@@ -2191,6 +2191,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     occurrence: {
       type: [Object, Boolean],
       "default": false
+    },
+    occurrences: {
+      type: Array,
+      "default": []
     }
   },
   data: function data() {
@@ -2315,16 +2319,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     save: function save() {
+      var occurrences = this.$props.occurrences;
+      var occurrenceId = this.$props.occurrenceId;
+
       if (this.$props.occurrence) {
-        this.$mc.EventRules.update(this.$props.occurrenceId, this.params).then(function () {
-          return console.log('Ocorrências atualizadas com sucesso');
+        this.$mc.EventRules.update(this.$props.occurrenceId, this.params).then(function (response) {
+          var index;
+
+          for (var i in occurrences) {
+            if (occurrences[i].id == occurrenceId) {
+              index = i;
+            }
+          }
+
+          occurrences[index].rule = response.data.rule;
         })["catch"](function (error) {
           // window.alert('Ocorreu um erro')
           console.error(error);
         });
       } else {
-        this.$mc.EventRules.create(this.params).then(function () {
-          return console.log('Ocorrências criadas com sucesso');
+        this.$mc.EventRules.create(this.params).then(function (response) {
+          occurrences.push(response.data);
         })["catch"](function (error) {
           // window.alert('Ocorreu um erro')
           console.error(error);
@@ -2411,9 +2426,11 @@ __webpack_require__.r(__webpack_exports__);
     removeOccurrence: function removeOccurrence(occurrence, index) {
       var _this2 = this;
 
-      this.$mc.EventRules["delete"](occurrence.id).then(function () {
-        _this2.occurrences.splice(index, 0);
-      });
+      if (confirm('Deletar a ocorrência "' + occurrence.rule.description + '"?')) {
+        this.$mc.EventRules["delete"](occurrence.id).then(function () {
+          _this2.occurrences.splice(index, 1);
+        });
+      }
     }
   }
 });
@@ -20970,7 +20987,7 @@ var render = function() {
               "ul",
               { staticClass: "mc-cmb-occurrences__list" },
               [
-                _vm._l(_vm.occurrences, function(oc) {
+                _vm._l(_vm.occurrences, function(oc, index) {
                   return _c("li", { key: oc.id }, [
                     _c("span", [_vm._v(_vm._s(oc.rule.description))]),
                     _vm._v(" "),
@@ -20990,7 +21007,15 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "a",
-                      { staticClass: "button", attrs: { role: "button" } },
+                      {
+                        staticClass: "button",
+                        attrs: { role: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.removeOccurrence(oc, index)
+                          }
+                        }
+                      },
                       [_vm._v("Remover")]
                     )
                   ])
@@ -21030,6 +21055,7 @@ var render = function() {
                 _c("OccurrenceForm", {
                   key: _vm.occurrence ? _vm.occurrence.id : -1,
                   attrs: {
+                    occurrences: _vm.occurrences,
                     occurrenceId: _vm.occurrence.id,
                     event: _vm.event,
                     occurrence: _vm.occurrence && _vm.occurrence.rule
