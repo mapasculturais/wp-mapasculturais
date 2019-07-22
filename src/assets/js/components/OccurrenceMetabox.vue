@@ -18,7 +18,7 @@
             <div class="mc-cmb-occurrences__form-wrapper">
                 <h3 v-if="occurrence === false">Criando nova ocorrência</h3>
                 <h3 v-else>Editando ocorrência {{ occurrence.id }}</h3>
-                <OccurrenceForm :key="occurrence ? occurrence.id : -1" :event="post" :occurrence="occurrence && occurrence.rule"/>
+                <OccurrenceForm :key="occurrence ? occurrence.id : -1" :occurrenceId="occurrence.id" :event="event" :occurrence="occurrence && occurrence.rule"/>
             </div>
         </template>
     </div>
