@@ -25,7 +25,7 @@
 
     var API = {
         importNewEntities: function(){
-            $.post( mapas.wpUrl + 'mcapi/import-entities/?skip-cron', {classes: ['agent', 'space', 'event']}).success(function(r){
+            $.post( mapas.wpUrl + '/mcapi/import-entities/?skip-cron', {classes: ['agent', 'space', 'event']}).success(function(r){
                 $('.js-mapas--api-output').html(r);
             });
         }
