@@ -1,0 +1,31 @@
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+.wp-block-cgb-block-mc-events {
+  background-color: #dcdcdc;
+  border-radius: 5px;
+  padding: 15px; }
+  .wp-block-cgb-block-mc-events .form-field {
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    -ms-flex-align: center;
+        align-items: center;
+    margin-bottom: 15px; }
+    .wp-block-cgb-block-mc-events .form-field:last-child {
+      margin-bottom: 0; }
+    .wp-block-cgb-block-mc-events .form-field label {
+      margin-right: 15px;
+      font-family: sans-serif;
+      color: #333;
+      font-size: 13px;
+      font-weight: bold; }

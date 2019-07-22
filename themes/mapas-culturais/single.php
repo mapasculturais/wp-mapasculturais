@@ -5,7 +5,7 @@ the_post();
 $authors_names = get_post_meta(get_the_ID(), 'author_names', true);
 ?>
 
-<div id="post-<?php the_ID(); ?>" <?php post_class('post-content'); ?>>
+<div id="content" <?php post_class('post-content'); ?>>
     <div class="row">
         <div id="single-the-title" class="column large-12 small-12 text-center mt-30">
             <div class="categories">
