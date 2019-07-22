@@ -14,7 +14,7 @@ $agent_types = $plugin->api->mapasApi->getEntityTypes('agent');
     <table class="form-table">
         <tr valign="top">
             <td colspan='2'>
-                <?php $sync = $plugin->getOption('agent:import') ?: 'mine'; ?>
+                <?php $sync = $plugin->getOption('agent:import', 'mine'); ?>
                 <strong><?php _e('Importar', 'wp-mapas') ?></strong><br>
                 <label><input type="radio" name="MAPAS:agent:import" value="mine" <?php if($sync == 'mine') echo 'checked="checked"' ?>/> <?php _e('Somente os meus agentes', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:agent:import" value="control" <?php if($sync == 'control') echo 'checked="checked"' ?>/> <?php _e('Somente os agentes que tenho permissão para editar', 'wp-mapas') ?></label><br>

@@ -16,7 +16,7 @@ sort($event_age_ratings);
     <table class="form-table">
         <tr valign="top">
             <td colspan='2'>
-                <?php $sync = $plugin->getOption('event:import') ?: 'mine' ; ?>
+                <?php $sync = $plugin->getOption('event:import', 'mine'); ?>
                 <strong><?php _e('Importar', 'wp-mapas') ?></strong><br>
                 <label><input type="radio" name="MAPAS:event:import" value="mine" <?php if($sync == 'mine') echo 'checked="checked"' ?>/> <?php _e('Somente os meus eventos', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:event:import" value="control" <?php if($sync == 'control') echo 'checked="checked"' ?>/> <?php _e('Somente os eventos que tenho permissão para editar', 'wp-mapas') ?></label><br>

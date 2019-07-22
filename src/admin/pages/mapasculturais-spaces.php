@@ -14,7 +14,7 @@ $space_types = $plugin->api->mapasApi->getEntityTypes('space');
     <table class="form-table">
         <tr valign="top">
             <td colspan='2'>
-                <?php $sync = $plugin->getOption('space:import') ?: 'mine'; ?>
+                <?php $sync = $plugin->getOption('space:import', 'mine'); ?>
                 <strong><?php _e('Importar', 'wp-mapas') ?></strong><br>
                 <label><input type="radio" name="MAPAS:space:import" value="mine" <?php if($sync == 'mine') echo 'checked="checked"' ?>/> <?php _e('Somente os meus espaços', 'wp-mapas') ?></label><br>
                 <label><input type="radio" name="MAPAS:space:import" value="control" <?php if($sync == 'control') echo 'checked="checked"' ?>/> <?php _e('Somente os espaços que tenho permissão para editar', 'wp-mapas') ?></label><br>

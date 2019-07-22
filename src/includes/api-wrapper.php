@@ -733,7 +733,7 @@ class ApiWrapper{
      * @return array
      */
     function prepareEventParams(array $params){
-        $_import = $this->getOption('event:import');
+        $_import = $this->getOption('event:import', 'mine');
         
         if($_import == 'mine'){
             $params['user'] = 'EQ(@me)';
@@ -770,7 +770,7 @@ class ApiWrapper{
     function prepareAgentParams(array $params){
 
         // @TODO: implementar os filtros no admin
-        $_import = $this->getOption('agent:import');
+        $_import = $this->getOption('agent:import', 'mine');
         
         if($_import == 'mine'){
             $params['user'] = 'EQ(@me)';
@@ -803,7 +803,7 @@ class ApiWrapper{
      */
     function prepareSpaceParams(array $params){
         // @TODO: implementar os filtros no admin
-        $_import = $this->getOption('space:import');
+        $_import = $this->getOption('space:import', 'mine');
         
         if($_import == 'mine'){
             $params['user'] = 'EQ(@me)';    
