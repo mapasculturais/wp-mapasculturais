@@ -302,23 +302,19 @@ var EventOccurrences = {
   }
 };
 var EventRules = {
-  create: function create(params) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/mcapi/createEventRule/', {
-      params: params
-    });
-  },
-  "delete": function _delete(id, params) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/mcapi/deleteEventRule/".concat(id, "/"), {
-      params: params
-    });
-  },
   get: function get(id, params) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/mcapi/eventRules/".concat(id, "/"), {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/mcapi/eventRule/find/".concat(id, "/"), {
       params: params
     });
+  },
+  create: function create(params) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/mcapi/eventRule/create', qs__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(params));
   },
   update: function update(id, params) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/mcapi/updateEventRules/".concat(id, "/"), params);
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/mcapi/eventRule/update/".concat(id, "/"), qs__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(params));
+  },
+  "delete": function _delete(id, params) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/mcapi/eventRule/delete/".concat(id, "/"));
   }
 };
 var Spaces = {
@@ -2177,11 +2173,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'OccurrenceForm',
   props: {
+    occurrenceId: {
+      type: Number,
+      required: false
+    },
     event: {
       type: Number,
       required: true
@@ -2189,6 +2191,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     occurrence: {
       type: [Object, Boolean],
       "default": false
+    },
+    occurrences: {
+      type: Array,
+      "default": []
     }
   },
   data: function data() {
@@ -2198,10 +2204,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       description: oc.description || '',
       duration: oc.duration || '',
       frequency: oc.frequency || 'once',
-      prices: oc.prices || '',
+      price: oc.price || '',
       spaceId: oc.spaceId || 0,
       spaces: [],
-      startDate: oc.startDate || '',
+      startsOn: oc.startsOn || '',
       startsAt: oc.startsAt || '',
       until: oc.until || ''
     };
@@ -2211,7 +2217,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       var days = {};
-      this.$options.months.forEach(function (date, index) {
+      this.$options.dates.forEach(function (date, index) {
         days["day[".concat(index, "]")] = _this.dates__.includes(date) ? 'on' : undefined;
       });
       return days;
@@ -2261,7 +2267,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     endsAt: function endsAt() {
       if (this.startsAt && this.duration) {
         var date = Object(date_fns__WEBPACK_IMPORTED_MODULE_0__["addMinutes"])(Object(date_fns__WEBPACK_IMPORTED_MODULE_0__["parse"])(this.startsAt, 'k:m', new Date()), parseInt(this.duration));
-        return Object(date_fns__WEBPACK_IMPORTED_MODULE_0__["format"])(date, 'kk:m', {
+        return Object(date_fns__WEBPACK_IMPORTED_MODULE_0__["format"])(date, 'kk:mm', {
           locale: date_fns_locale_pt_BR__WEBPACK_IMPORTED_MODULE_1___default.a
         });
       }
@@ -2313,24 +2319,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     save: function save() {
+      var occurrences = this.$props.occurrences;
+      var occurrenceId = this.$props.occurrenceId;
+
       if (this.$props.occurrence) {
-        this.$mc.EventRules.update(this.$props.occurrence.id, this.params).then(function () {
-          return window.alert('Ocorrências criadas com sucesso');
+        this.$mc.EventRules.update(this.$props.occurrenceId, this.params).then(function (response) {
+          var index;
+
+          for (var i in occurrences) {
+            if (occurrences[i].id == occurrenceId) {
+              index = i;
+            }
+          }
+
+          occurrences[index].rule = response.data.rule;
         })["catch"](function (error) {
-          window.alert('Ocorreu um erro');
+          // window.alert('Ocorreu um erro')
           console.error(error);
         });
       } else {
-        this.$mc.EventRules.create(this.params).then(function () {
-          return window.alert('Ocorrências criadas com sucesso');
+        this.$mc.EventRules.create(this.params).then(function (response) {
+          occurrences.push(response.data);
         })["catch"](function (error) {
-          window.alert('Ocorreu um erro');
+          // window.alert('Ocorreu um erro')
           console.error(error);
         });
       }
     }
   },
-  dates: ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'],
+  dates: ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'],
   months: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 });
 
@@ -2409,9 +2426,11 @@ __webpack_require__.r(__webpack_exports__);
     removeOccurrence: function removeOccurrence(occurrence, index) {
       var _this2 = this;
 
-      this.$mc.EventRules["delete"](occurrence.id).then(function () {
-        _this2.occurrences.splice(index, 0);
-      });
+      if (confirm('Deletar a ocorrência "' + occurrence.rule.description + '"?')) {
+        this.$mc.EventRules["delete"](occurrence.id).then(function () {
+          _this2.occurrences.splice(index, 1);
+        });
+      }
     }
   }
 });
@@ -20689,7 +20708,7 @@ var render = function() {
               expression: "duration"
             }
           ],
-          attrs: { type: "text", name: "duration", placeholder: "minutos" },
+          attrs: { type: "number", name: "duration", placeholder: "minutos" },
           domProps: { value: _vm.duration },
           on: {
             input: function($event) {
@@ -20706,7 +20725,7 @@ var render = function() {
         _c("span", [_vm._v("Horário final")]),
         _vm._v(" "),
         _c("input", {
-          attrs: { type: "text", name: "endsAt", placeholder: "00:00" },
+          attrs: { type: "time", name: "endsAt", placeholder: "00:00" },
           domProps: { value: _vm.endsAt }
         })
       ]),
@@ -20764,18 +20783,18 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.startDate,
-              expression: "startDate"
+              value: _vm.startsOn,
+              expression: "startsOn"
             }
           ],
           attrs: { type: "date", placeholder: "00/00/0000" },
-          domProps: { value: _vm.startDate },
+          domProps: { value: _vm.startsOn },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.startDate = $event.target.value
+              _vm.startsOn = $event.target.value
             }
           }
         })
@@ -20816,46 +20835,51 @@ var render = function() {
               "div",
               _vm._l(_vm.$options.dates, function(date) {
                 return _c("label", { key: date }, [
-                  _c("span", [_vm._v(_vm._s(date.slice(0, 1).toUpperCase()))]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.dates__,
-                        expression: "dates__"
-                      }
-                    ],
-                    attrs: { type: "checkbox" },
-                    domProps: {
-                      value: date,
-                      checked: Array.isArray(_vm.dates__)
-                        ? _vm._i(_vm.dates__, date) > -1
-                        : _vm.dates__
-                    },
-                    on: {
-                      change: function($event) {
-                        var $$a = _vm.dates__,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = date,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 && (_vm.dates__ = $$a.concat([$$v]))
+                  _c("span", { staticStyle: { "margin-right": "1em" } }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.dates__,
+                          expression: "dates__"
+                        }
+                      ],
+                      attrs: { type: "checkbox" },
+                      domProps: {
+                        value: date,
+                        checked: Array.isArray(_vm.dates__)
+                          ? _vm._i(_vm.dates__, date) > -1
+                          : _vm.dates__
+                      },
+                      on: {
+                        change: function($event) {
+                          var $$a = _vm.dates__,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = date,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 && (_vm.dates__ = $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.dates__ = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
                           } else {
-                            $$i > -1 &&
-                              (_vm.dates__ = $$a
-                                .slice(0, $$i)
-                                .concat($$a.slice($$i + 1)))
+                            _vm.dates__ = $$c
                           }
-                        } else {
-                          _vm.dates__ = $$c
                         }
                       }
-                    }
-                  })
+                    }),
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(date.slice(0, 3).toUpperCase()) +
+                        "\n                    "
+                    )
+                  ])
                 ])
               }),
               0
@@ -20963,7 +20987,7 @@ var render = function() {
               "ul",
               { staticClass: "mc-cmb-occurrences__list" },
               [
-                _vm._l(_vm.occurrences, function(oc) {
+                _vm._l(_vm.occurrences, function(oc, index) {
                   return _c("li", { key: oc.id }, [
                     _c("span", [_vm._v(_vm._s(oc.rule.description))]),
                     _vm._v(" "),
@@ -20983,7 +21007,15 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "a",
-                      { staticClass: "button", attrs: { role: "button" } },
+                      {
+                        staticClass: "button",
+                        attrs: { role: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.removeOccurrence(oc, index)
+                          }
+                        }
+                      },
                       [_vm._v("Remover")]
                     )
                   ])
@@ -21023,7 +21055,9 @@ var render = function() {
                 _c("OccurrenceForm", {
                   key: _vm.occurrence ? _vm.occurrence.id : -1,
                   attrs: {
-                    event: _vm.post,
+                    occurrences: _vm.occurrences,
+                    occurrenceId: _vm.occurrence.id,
+                    event: _vm.event,
                     occurrence: _vm.occurrence && _vm.occurrence.rule
                   }
                 })
@@ -33152,11 +33186,7 @@ module.exports = g;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-<<<<<<< HEAD
 module.exports = __webpack_require__(/*! /home/rafael/devel/wp-mapasculturais/src/assets/js/admin.js */"./assets/js/admin.js");
-=======
-module.exports = __webpack_require__(/*! /home/nreek/Development/wp-mc/src/assets/js/admin.js */"./assets/js/admin.js");
->>>>>>> 7f6d5f5180803a4793beeb60f94c09e2605afc69
 
 
 /***/ })

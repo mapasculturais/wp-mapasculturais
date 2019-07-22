@@ -15,11 +15,11 @@
             </label>
             <label>
                 <span>Duração</span>
-                <input type="text" name="duration" v-model="duration" placeholder="minutos">
+                <input type="number" name="duration" v-model="duration" placeholder="minutos">
             </label>
             <label>
                 <span>Horário final</span>
-                <input type="text" name="endsAt" :value="endsAt" placeholder="00:00">
+                <input type="time" name="endsAt" :value="endsAt" placeholder="00:00">
             </label>
             <label>
                 <span>Frequência</span>
@@ -33,7 +33,7 @@
         <div class="fields-row">
             <label>
                 <span>Data inicial</span>
-                <input type="date" v-model="startDate" placeholder="00/00/0000">
+                <input type="date" v-model="startsOn" placeholder="00/00/0000">
             </label>
             <label v-if="frequency !== 'once'">
                 <span>Data final</span>
@@ -43,8 +43,10 @@
                 <span>Repete</span>
                 <div>
                     <label v-for="date in $options.dates" :key="date">
-                        <span>{{ date.slice(0, 1).toUpperCase() }}</span>
-                        <input type="checkbox" v-model="dates__" :value="date">
+                        <span style="margin-right:1em;">
+                            <input type="checkbox" v-model="dates__" :value="date">
+                            {{ date.slice(0, 3).toUpperCase() }}
+                        </span>
                     </label>
                 </div>
             </label>
@@ -76,8 +78,10 @@
     export default {
         name: 'OccurrenceForm',
         props: {
+            occurrenceId: { type: Number, required: false },
             event: { type: Number, required: true },
-            occurrence: { type: [Object, Boolean], default: false }
+            occurrence: { type: [Object, Boolean], default: false },
+            occurrences: { type: Array, default: []}
         },
         data () {
             const oc = this.$props.occurrence
@@ -86,10 +90,10 @@
                 description: oc.description || '',
                 duration: oc.duration || '',
                 frequency: oc.frequency || 'once',
-                prices: oc.prices || '',
+                price: oc.price || '',
                 spaceId: oc.spaceId || 0,
                 spaces: [],
-                startDate: oc.startDate || '',
+                startsOn: oc.startsOn || '',
                 startsAt: oc.startsAt || '',
                 until: oc.until || ''
             }
@@ -97,7 +101,7 @@
         computed: {
             daysParams () {
                 const days = {}
-                this.$options.months.forEach((date, index) => {
+                this.$options.dates.forEach((date, index) => {
                     days[`day[${index}]`] = this.dates__.includes(date) ? 'on' : undefined
                 })
                 return days
@@ -131,7 +135,7 @@
             endsAt () {
                 if (this.startsAt && this.duration) {
                     const date = addMinutes(parseDate(this.startsAt, 'k:m', new Date()), parseInt(this.duration))
-                    return formatDate(date, 'kk:m', { locale })
+                    return formatDate(date, 'kk:mm', { locale })
                 }
                 return ''
             },
@@ -172,25 +176,37 @@
         },
         methods: {
             save () {
+                var occurrences = this.$props.occurrences;
+                var occurrenceId = this.$props.occurrenceId;
                 if (this.$props.occurrence) {
-                    this.$mc.EventRules.update(this.$props.occurrence.id, this.params)
-                        .then(() => window.alert('Ocorrências criadas com sucesso'))
+                    this.$mc.EventRules.update(this.$props.occurrenceId, this.params)
+                        .then((response) => {
+                            var index
+                            for(var i in occurrences){
+                                if(occurrences[i].id == occurrenceId){
+                                    index = i;
+                                }
+                            }
+                            occurrences[index].rule = response.data.rule;
+                        })
                         .catch(error => {
-                            window.alert('Ocorreu um erro')
+                            // window.alert('Ocorreu um erro')
                             console.error(error)
                         })
                 } else {
                     this.$mc.EventRules.create(this.params)
-                        .then(() => window.alert('Ocorrências criadas com sucesso'))
+                        .then((response) => {
+                            occurrences.push(response.data);
+                        })
                         .catch(error => {
-                            window.alert('Ocorreu um erro')
+                            // window.alert('Ocorreu um erro')
                             console.error(error)
                         })
                 }
 
             }
         },
-        dates: ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'],
+        dates: [ 'domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'],
         months: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
     }
 </script>

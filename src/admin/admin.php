@@ -84,6 +84,7 @@ function admin_scripts(){
     wp_enqueue_style('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.css');
     
     wp_localize_script('wp-mapasculturais-admin', 'mapas', [
+        'wpUrl' => get_bloginfo('url'),
         'url' => Plugin::getOption('url'),
         'publicKey' => Plugin::getOption('public_key')
     ]);

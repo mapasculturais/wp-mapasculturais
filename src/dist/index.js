@@ -1256,23 +1256,19 @@ var EventOccurrences = {
   }
 };
 var EventRules = {
-  create: function create(params) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/mcapi/createEventRule/', {
-      params: params
-    });
-  },
-  "delete": function _delete(id, params) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/mcapi/deleteEventRule/".concat(id, "/"), {
-      params: params
-    });
-  },
   get: function get(id, params) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/mcapi/eventRules/".concat(id, "/"), {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/mcapi/eventRule/find/".concat(id, "/"), {
       params: params
     });
+  },
+  create: function create(params) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/mcapi/eventRule/create', qs__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(params));
   },
   update: function update(id, params) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/mcapi/updateEventRules/".concat(id, "/"), params);
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/mcapi/eventRule/update/".concat(id, "/"), qs__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(params));
+  },
+  "delete": function _delete(id, params) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/mcapi/eventRule/delete/".concat(id, "/"));
   }
 };
 var Spaces = {

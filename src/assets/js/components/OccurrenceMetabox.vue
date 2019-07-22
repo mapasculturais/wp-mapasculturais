@@ -5,10 +5,10 @@
         </p>
         <template v-else>
             <ul class="mc-cmb-occurrences__list">
-                <li v-for="oc in occurrences" :key="oc.id">
+                <li v-for="(oc, index) in occurrences" :key="oc.id">
                     <span>{{ oc.rule.description }}</span>
                     <a class="button" role="button" @click="occurrence = oc">Editar</a>
-                    <a class="button" role="button">Remover</a>
+                    <a class="button" role="button" @click="removeOccurrence(oc, index)">Remover</a>
                 </li>
                 <li>
                     <span>Mais ocorrências?</span>
@@ -18,7 +18,7 @@
             <div class="mc-cmb-occurrences__form-wrapper">
                 <h3 v-if="occurrence === false">Criando nova ocorrência</h3>
                 <h3 v-else>Editando ocorrência {{ occurrence.id }}</h3>
-                <OccurrenceForm :key="occurrence ? occurrence.id : -1" :event="post" :occurrence="occurrence && occurrence.rule"/>
+                <OccurrenceForm :key="occurrence ? occurrence.id : -1" :occurrences="occurrences" :occurrenceId="occurrence.id" :event="event" :occurrence="occurrence && occurrence.rule"/>
             </div>
         </template>
     </div>
@@ -52,9 +52,11 @@
         },
         methods: {
             removeOccurrence (occurrence, index) {
-                this.$mc.EventRules.delete(occurrence.id).then(() => {
-                    this.occurrences.splice(index, 0)
-                })
+                if(confirm('Deletar a ocorrência "' + occurrence.rule.description + '"?')){
+                    this.$mc.EventRules.delete(occurrence.id).then(() => {
+                        this.occurrences.splice(index, 1)
+                    })
+                }
             }
         }
     }

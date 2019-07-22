@@ -34,17 +34,17 @@ export const EventOccurrences = {
 }
 
 export const EventRules = {
-    create (params) {
-        return axios.post('/mcapi/createEventRule/', { params })
-    },
-    delete (id, params) {
-        return axios.post(`/mcapi/deleteEventRule/${id}/`, { params })
-    },
     get (id, params) {
-        return axios.get(`/mcapi/eventRules/${id}/`, { params })
+        return axios.get(`/mcapi/eventRule/find/${id}/`, { params })
+    },
+    create (params) {
+        return axios.post('/mcapi/eventRule/create', qs.stringify(params) )
     },
     update (id, params) {
-        return axios.post(`/mcapi/updateEventRules/${id}/`, params)
+        return axios.post(`/mcapi/eventRule/update/${id}/`, qs.stringify(params))
+    },
+    delete (id, params) {
+        return axios.post(`/mcapi/eventRule/delete/${id}/`)
     }
 }
 
