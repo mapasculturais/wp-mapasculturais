@@ -379,15 +379,53 @@ class Plugin{
                 }
                 break;
 
-            case 'eventRules': 
-                $event_id = get_query_var('mcarg1');
-                if(empty($event_id)){
-                    $this->output_error('fué');
+            case 'eventRule':
+                $api = $this->api->mapasApi;
+                $action = get_query_var('mcarg1');
+                switch($action){
+                    case 'find':
+                        $event_id = get_query_var('mcarg2');
+                        if(!$event_id){
+                            $this->output_error(__('id do evento não informado', 'wp-mapas'));
+                        }
+                        $result = $api->findEntities('eventOccurrence',['*'],['event' => "EQ({$event_id})"]);
+                        $this->output_success($result);
+                        break;
+
+                    case 'findOne':
+                        $occurrence_id = get_query_var('mcarg2');
+                        if(!$occurrence_id){
+                            $this->output_error(__('id da ocurrência não informado', 'wp-mapas'));
+                        }
+                        $result = $api->findEntity('eventOccurrence', $occurrence_id, ['*']);
+                        $this->output_success($result);
+                        break;
+
+                    case 'create':
+                        try{
+                            $result = $api->createEntity('eventOccurrence', $_POST);
+                            $this->output_success($result);
+                        } catch(\MapasSDK\Exceptions\ValidationError $e) {
+                            $this->output_error($e->curl->response->data);
+                        }
+                        break;
+
+                    case 'update':
+                        try{
+                            $occurrence_id = get_query_var('mcarg2');
+                            $result = $api->updateEntity('eventOccurrence', $occurrence_id, $_POST);
+                            $this->output_success($result);
+                        } catch(\MapasSDK\Exceptions\ValidationError $e) {
+                            $this->output_error($e->curl->response->data);
+                        }
+                        break;
+
+                    case 'delete':
+                        $occurrence_id = get_query_var('mcarg2');
+                        $response = $api->deleteEntity('eventOccurrence', $occurrence_id);
+                        $this->output_success($response);
+                        break;
                 }
-
-                $result = $this->api->mapasApi->findEntities('eventOccurrence',['*'],['event' => "EQ({$event_id})"]);
-
-                $this->output_success($result);
                 break;
             case 'agent':
             case 'space':
