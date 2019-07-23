@@ -47,6 +47,10 @@ function events_shortcodes( $atts ) {
 		'view' => 'calendar'
     ), $atts );
 
+    if( strtolower($a['filters']) === 'no' || strtolower($a['filters']) === 'false' ){
+        $a['filters'] = false;
+    }
+
     $filename = WP_MAPAS__VIEWS_PATH . $a['view'] . '.php';
 
     if(file_exists($filename)){
@@ -57,6 +61,33 @@ function events_shortcodes( $atts ) {
     }
 }
 add_shortcode( 'events', 'WPMapasCulturais\\events_shortcodes' );
+
+add_shortcode( 'events-agenda', function($atts){
+    $atts = (array) $atts;
+    $atts['view'] = 'agenda';
+    return events_shortcodes($atts);
+} );
+add_shortcode( 'events-calendar', function($atts){
+    $atts = (array) $atts;
+    $atts['view'] = 'calendar';
+    return events_shortcodes($atts);
+} );
+add_shortcode( 'events-day', function($atts){
+    $atts = (array) $atts;
+    $atts['view'] = 'day';
+    return events_shortcodes($atts);
+} );
+add_shortcode( 'events-list', function($atts){
+    $atts = (array) $atts;
+    $atts['view'] = 'list';
+    return events_shortcodes($atts);
+} );
+add_shortcode( 'events-now', function($atts){
+    $atts = (array) $atts;
+    $atts['view'] = 'now';
+    return events_shortcodes($atts);
+} );
+
 
 function mc_enqueue_scripts () {
     // @todo usar método mais elegante para a url
