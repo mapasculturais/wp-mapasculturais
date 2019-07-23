@@ -23,6 +23,9 @@ $agent_types = $plugin->api->mapasApi->getEntityTypes('agent');
         </tr>
     </table>
 
+    <?php $auto_import = $plugin->getOption('agent:auto_import') ?>
+    <label><input type="checkbox" name="MAPAS:agent:auto_import" <?php if($auto_import) echo 'checked' ?> /> <strong><?php _e("Importar agentes automaticamente") ?></strong> </label>
+    
     <?php /* @todo enquanto não implementar a atribuição de selos às entidades não é possível utilizar o filtro abaixo
     <?php $verified = $plugin->getOption('agent:verified') ?>
     <label><input type="checkbox" name="MAPAS:agent:verified" <?php if($verified) echo 'checked' ?> /> <strong><?php _e("Somente agentes com selos verificadores") ?></strong> </label>

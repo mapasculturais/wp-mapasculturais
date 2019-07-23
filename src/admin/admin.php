@@ -62,16 +62,19 @@ function register_settings(){
     register_setting( 'mapasculturais', 'MAPAS:public_key' );
     register_setting( 'mapasculturais', 'MAPAS:import-entities-interval' );
 
+    register_setting( 'mapasculturais_agents', 'MAPAS:agent:auto_import' );
     register_setting( 'mapasculturais_agents', 'MAPAS:agent:import' );
     register_setting( 'mapasculturais_agents', 'MAPAS:agent:verified' );
     register_setting( 'mapasculturais_agents', 'MAPAS:agent:types' );
     register_setting( 'mapasculturais_agents', 'MAPAS:agent:areas' );
 
+    register_setting( 'mapasculturais_spaces', 'MAPAS:space:auto_import' );
     register_setting( 'mapasculturais_spaces', 'MAPAS:space:import' );
     register_setting( 'mapasculturais_spaces', 'MAPAS:space:verified' );
     register_setting( 'mapasculturais_spaces', 'MAPAS:space:types' );
     register_setting( 'mapasculturais_spaces', 'MAPAS:space:areas' );
     
+    register_setting( 'mapasculturais_events', 'MAPAS:event:auto_import' );
     register_setting( 'mapasculturais_events', 'MAPAS:event:import' );
     register_setting( 'mapasculturais_events', 'MAPAS:event:verified' );
     register_setting( 'mapasculturais_events', 'MAPAS:event:age_ratings' );

@@ -76,7 +76,7 @@ class Plugin{
     }
 
     function cron_importEntities(){
-        $this->async_http_request(get_bloginfo('url') . '/mcapi/import-entities/?skip-cron');
+        $this->async_http_request(get_bloginfo('url') . '/mcapi/import-entities/?skip-cron&cron=1');
     }
 
     function async_http_request($url, $params = [], $method = 'GET') {
@@ -287,13 +287,22 @@ class Plugin{
 
     function importEntities(){
         $api = $this->api;
+        $result = [];
+        
+        if($this->getOption('agent:auto_import') || !isset($_GET['cron'])){
+            $agents = $api->importAgents();
+            $result['agents'] = $agents;
+        }
 
-        $agents = $api->importAgents();
-        $spaces = $api->importSpaces();
-        $events = $api->importEvents();
-        $result['agents'] = $agents;
-        $result['spaces'] = $spaces;
-        $result['events'] = $events;
+        if($this->getOption('space:auto_import') || !isset($_GET['cron'])){
+            $spaces = $api->importSpaces();
+            $result['spaces'] = $spaces;
+        }
+
+        if($this->getOption('space:auto_import') || !isset($_GET['cron'])){
+            $events = $api->importEvents();
+            $result['events'] = $events;
+        }
 
         return $result;
     }

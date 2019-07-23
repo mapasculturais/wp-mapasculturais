@@ -23,6 +23,9 @@ $space_types = $plugin->api->mapasApi->getEntityTypes('space');
             </td>
         </tr>
     </table>
+    
+    <?php $auto_import = $plugin->getOption('space:auto_import') ?>
+    <label><input type="checkbox" name="MAPAS:space:auto_import" <?php if($auto_import) echo 'checked' ?> /> <strong><?php _e("Importar espaços automaticamente") ?></strong> </label>
 
     <?php /* @todo enquanto não implementar a atribuição de selos às entidades não é possível utilizar o filtro abaixo
     <?php $verified = $plugin->getOption('space:verified') ?>

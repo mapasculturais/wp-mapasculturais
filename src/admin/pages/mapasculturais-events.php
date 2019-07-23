@@ -26,6 +26,9 @@ sort($event_age_ratings);
         </tr>
     </table>
 
+    <?php $auto_import = $plugin->getOption('event:auto_import') ?>
+    <label><input type="checkbox" name="MAPAS:event:auto_import" <?php if($auto_import) echo 'checked' ?> /> <strong><?php _e("Importar eventos automaticamente") ?></strong> </label>
+    
     <?php /* @todo enquanto não implementar a atribuição de selos às entidades não é possível utilizar o filtro abaixo
     <?php $verified = $plugin->getOption('event:verified') ?>
     <label><input type="checkbox" name="MAPAS:event:verified" <?php if($verified) echo 'checked' ?> /> <strong><?php _e("Somente eventos com selos verificadores") ?></strong> </label>
