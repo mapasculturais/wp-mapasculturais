@@ -18,9 +18,9 @@ O plugin se utiliza da plataforma Mapas Culturais para ler e escrever as informa
 1. Faça login na plataforma Mapas Culturais.
 2. No painel do usuário, clique no menu **Meus Apps**.
 3. Clique no botão **Adicionar novo app**.
-4. Dê um nome como `Meu site`.
+4. Dê um nome como **Meu site**.
 5. Após a criação clique no link com o nome do app criado.
-6. Clique no pondo de exclamação ao lado do campo `Chave Privada` para que o conteúdo seja exibido.
+6. Clique no pondo de exclamação ao lado do campo **Chave Privada** para que o conteúdo seja exibido.
 
 ## Configuração do endereço e das chaves
 1. No painel de seu site navegue até **Mapas Culturais** -> **Configurações**.
