@@ -25,6 +25,7 @@ function mapasculturais_register_post_types() {
 		'public'             => true,
 		'publicly_queryable' => true,
 		'show_ui'            => true,
+		'show_in_rest' 		 => true,
 		'show_in_menu'       => true,
 		'query_var'          => true,
 		'rewrite'            => [ 'slug' => 'agent' ],
@@ -63,6 +64,7 @@ function mapasculturais_register_post_types() {
 		'public'             => true,
 		'publicly_queryable' => true,
 		'show_ui'            => true,
+		'show_in_rest' 		 => true,
 		'show_in_menu'       => true,
 		'query_var'          => true,
 		'rewrite'            => [ 'slug' => 'space' ],
@@ -101,6 +103,7 @@ function mapasculturais_register_post_types() {
 		'public'             => true,
 		'publicly_queryable' => true,
 		'show_ui'            => true,
+		'show_in_rest' 		 => true,
 		'show_in_menu'       => true,
 		'query_var'          => true,
 		'rewrite'            => [ 'slug' => 'event' ],
@@ -165,6 +168,7 @@ function mapasculturais_register_post_types() {
 		'labels'            => $labels,
 		'show_admin_column' => true,
 		'show_in_nav_menus' => false,
+		'show_in_rest'		=> true,
 		'show_tagcloud'     => false,
 		'query_var'         => true,
 		'rewrite'           => array( 'slug' => 'agent_type' ),
@@ -262,3 +266,16 @@ function mapasculturais_register_post_types() {
 	}
 }
 
+add_action( 'rest_api_init', function () {
+    register_rest_field( 'space', 'MAPAS:entity_id', array(
+        'get_callback' => function( $post_arr ) {
+            return get_post_meta( $post_arr['id'], 'MAPAS:entity_id', true );
+        },
+	) );
+	
+	register_rest_field( 'agent', 'MAPAS:entity_id', array(
+        'get_callback' => function( $post_arr ) {
+            return get_post_meta( $post_arr['id'], 'MAPAS:entity_id', true );
+        },
+    ) );
+} );
