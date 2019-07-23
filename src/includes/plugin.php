@@ -76,26 +76,7 @@ class Plugin{
     }
 
     function cron_importEntities(){
-        $this->async_http_request(get_bloginfo('url') . '/mcapi/import-entities/?skip-cron&cron=1');
-    }
-
-    function async_http_request($url, $params = [], $method = 'GET') {
-        $params = http_build_query($params);
-// var_Dump($url); die;
-        $url_parts = parse_url($url);
-        $fp = fsockopen($url_parts['host'], isset($url_parts['port']) ? $url_parts['port']: 80, $errno, $errstr, 30);
-
-        strtoupper($method);
-
-        $out = "$method ".$url_parts['path']." HTTP/1.1\r\n";
-        $out .= "Host: ".$url_parts['host']."\r\n";
-        $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $out .= "Content-Length: ".strlen($params)."\r\n";
-        $out .= "Connection: Close\r\n\r\n";
-        $out.= $params;
-
-        fwrite($fp, $out);
-        fclose($fp);
+        wp_remote_get(get_bloginfo('url') . '/mcapi/import-entities/?skip-cron&mapas-cron=1');
     }
 
     /**
@@ -374,6 +355,9 @@ class Plugin{
         $api = $this->api;
         switch($action){
             case 'import-entities':
+                if(isset($_GET['mapas-cron'])){
+                    header("Connection: close");
+                }
                 $result = $this->importEntities();
                 $this->output_success($result);
                 break;
