@@ -90,8 +90,7 @@ add_shortcode( 'events-now', function($atts){
 
 
 function mc_enqueue_scripts () {
-    // @todo usar método mais elegante para a url
-    $plugin_url = get_bloginfo('url') . '/wp-content/plugins/wp-mapasculturais/';
+    $plugin_url = plugin_dir_url(__FILE__);
     
     wp_enqueue_script('jquery');
     wp_enqueue_script('js-cookies', $plugin_url . 'assets/js/js-cookies.js', [], false, true);
