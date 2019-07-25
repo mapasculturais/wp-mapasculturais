@@ -1,7 +1,9 @@
 <?php
-add_action( 'init', 'mapasculturais_register_post_types' );
+namespace WPMapasCulturais;
 
-function mapasculturais_register_post_types() {
+add_action( 'init', 'WPMapasCulturais\\register_post_types' );
+
+function register_post_types() {
 	$labels_agent = [
 		'name'               => __( 'Agentes', 'wp-mapasculturais' ),
 		'singular_name'      => __( 'Agente', 'wp-mapasculturais' ),
