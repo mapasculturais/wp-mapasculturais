@@ -36,7 +36,6 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - db-data:/var/lib/mysql
-      - ./wordpress-dump.sql:/docker-entrypoint-initdb.d/wordpress-dump.sql
 
 
   mapas-nginx:
@@ -51,7 +50,7 @@ services:
       - mapasculturais
 
   mapasculturais:
-    image: mapasculturais/mapasculturais:develop
+    image: hacklab/mapasculturais:develop
     ports:
       - "9000:9000"
     environment:
@@ -61,15 +60,12 @@ services:
       - DB_PASS=mapas
       - APP_LCODE=pt_BR
       - APP_MODE=production
-      - PENDING_PCACHE_RECREATION_INTERVAL=10
+      - PENDING_PCACHE_RECREATION_INTERVAL=30
+      - JOBS_INTERVAL=30
     volumes:
-      - ./compose/local/mapas.config.php:/var/www/html/protected/application/conf/config.d/z.dev.php
       - mapas-assets:/var/www/html/assets
       - mapas-public-files:/var/www/html/files
       - mapas-private-files:/var/www/private-files
-      - ../mapasculturais/src/protected/application/lib:/var/www/html/protected/application/lib
-      - ../mapasculturais/src/protected/db-updates.php:/var/www/html/protected/db-updates.php
-      - ../mapasculturais/src/protected/application/themes/:/var/www/html/protected/application/themes/
 
     depends_on:
       - db-mapas
