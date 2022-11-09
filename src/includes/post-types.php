@@ -182,7 +182,7 @@ function register_post_types() {
 		),
 	);
 	register_taxonomy( 'agent_type', 'agent', $args );
-	
+
 
 		// Add new taxonomy, make it hierarchical (like categories)
 	$labels = array(
@@ -251,7 +251,7 @@ function register_post_types() {
 	foreach(['agent', 'space', 'event'] as $post_type){
 		// registra o metabox para definição da imagem de header
 		if (class_exists('MultiPostThumbnails')) {
-			new MultiPostThumbnails(
+			new \MultiPostThumbnails(
 				array(
 					'label' => __( 'Imagem do header', 'wp-mapas'),
 					'id' => 'header-image',
@@ -259,12 +259,6 @@ function register_post_types() {
 				)
 			);
 		}
-
-		// renomeia o metabox da imagem destacada
-		add_action('do_meta_boxes', function () use ($post_type) {
-			remove_meta_box( 'postimagediv', $post_type, 'side' );
-			add_meta_box('postimagediv', __('Imagem principal', 'wp-mapas'), 'post_thumbnail_meta_box', $post_type, 'normal', 'high');
-		});
 	}
 }
 
@@ -274,7 +268,7 @@ add_action( 'rest_api_init', function () {
             return get_post_meta( $post_arr['id'], 'MAPAS:entity_id', true );
         },
 	) );
-	
+
 	register_rest_field( 'agent', 'MAPAS:entity_id', array(
         'get_callback' => function( $post_arr ) {
             return get_post_meta( $post_arr['id'], 'MAPAS:entity_id', true );

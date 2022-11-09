@@ -24,7 +24,7 @@ add_action('admin_menu', function(){
     add_submenu_page('wp-mapasculturais', 'Configurações', 'Configurações', 'manage_options', 'wp-mapasculturais', 'WPMapasCulturais\\config_page');
     add_submenu_page('wp-mapasculturais', 'Agentes', 'Agentes', 'manage_options', 'wp-mapasculturais-agents', 'WPMapasCulturais\\config_agents');
     add_submenu_page('wp-mapasculturais', 'Espaços', 'Espaços', 'manage_options', 'wp-mapasculturais-spaces', 'WPMapasCulturais\\config_spaces');
-    add_submenu_page('wp-mapasculturais', 'Agentes', 'Events', 'manage_options', 'wp-mapasculturais-events', 'WPMapasCulturais\\config_events');
+    add_submenu_page('wp-mapasculturais', 'Eventos', 'Eventos', 'manage_options', 'wp-mapasculturais-events', 'WPMapasCulturais\\config_events');
 });
 
 function config_page(){
@@ -73,7 +73,7 @@ function register_settings(){
     register_setting( 'mapasculturais_spaces', 'MAPAS:space:verified' );
     register_setting( 'mapasculturais_spaces', 'MAPAS:space:types' );
     register_setting( 'mapasculturais_spaces', 'MAPAS:space:areas' );
-    
+
     register_setting( 'mapasculturais_events', 'MAPAS:event:auto_import' );
     register_setting( 'mapasculturais_events', 'MAPAS:event:import' );
     register_setting( 'mapasculturais_events', 'MAPAS:event:verified' );
@@ -85,7 +85,7 @@ add_action('admin_enqueue_scripts', 'WPMapasCulturais\\admin_scripts');
 function admin_scripts(){
     wp_enqueue_script('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.js', ['jquery'], false, true);
     wp_enqueue_style('wp-mapasculturais-admin', plugin_dir_url(__FILE__) . '/assets/admin.css');
-    
+
     wp_localize_script('wp-mapasculturais-admin', 'mapas', [
         'wpUrl' => get_bloginfo('url'),
         'url' => Plugin::getOption('url'),

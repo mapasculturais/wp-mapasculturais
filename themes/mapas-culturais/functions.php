@@ -5,7 +5,6 @@ require __DIR__ . '/library/images.php';
 require __DIR__ . '/library/templates.php';
 require __DIR__ . '/library/pagebuilder.php';
 require __DIR__ . '/library/metaboxes.php';
-require __DIR__ . '/library/api.php';
 
 add_theme_support( 'custom-logo', array(
 	'height'      => 100,
@@ -67,7 +66,7 @@ function the_social_networks_menu($color = false){
         'youtube' => 'Youtube',
         'instagram' => 'Instagram',
     ];
-    
+
     foreach($menu_items as $item){
         if($color){
             $html = '<img src="'.$icons_color_dir.$icons_color[sanitize_title($item->post_title)].'.svg'.'">';
@@ -233,7 +232,7 @@ function mapas_culturais_settings_register_fields()
     register_setting('general', 'contact', 'esc_attr');
     add_settings_field('contact', '<label for="contact">'.__('Contato' , 'mapas-culturais' ).'</label>' , 'mapas_culturais_settings_contact_html', 'general');
 }
- 
+
 function mapas_culturais_settings_contact_html() {
     $value = get_option( 'contact', '' );
     echo '<div><textarea type="text" id="contact" name="contact" />' . $value . '</textarea><div>';
@@ -261,7 +260,7 @@ function get_the_meta_author($field = ''){
 
 add_filter( 'walker_nav_menu_start_el', 'add_arrow',10,4);
 function add_arrow( $output, $item, $depth, $args ){
- 
+
 //Only add class to 'top level' items on the 'primary' menu.
 if($depth === 0 ){
     if (in_array("menu-item-has-children", $item->classes)) {
