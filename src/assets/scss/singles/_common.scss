@@ -51,7 +51,7 @@
 
         .title {
             color: $primary-color;
-            color: var(--primary-color, $primary-color);
+            color: var(--mc-primary-color, $primary-color);
             font-weight: bold;
             font-size: 30px;
             line-height: 1.3;
@@ -59,7 +59,7 @@
 
         .subtitle {
             color: $primary-color;
-            color: var(--primary-color, $primary-color);
+            color: var(--mc-primary-color, $primary-color);
             font-weight: bold;
         }
     }
@@ -71,7 +71,7 @@
         .tab {
             @include primary-color;
             border-bottom-color: $primary-color;
-            border-bottom: 1px solid var(--primary-color, $primary-color);
+            border-bottom: 1px solid var(--mc-primary-color, $primary-color);
             display: flex;
             flex: 1;
             justify-content: center;
@@ -149,9 +149,9 @@
         &.contact {
             padding: 10px 5px;
             border-bottom-color: $primary-color;
-            border-bottom: 1px solid var(--primary-color, $primary-color, --primary-color);
+            border-bottom: 1px solid var(--mc-primary-color, $primary-color, --mc-primary-color);
             border-top-color: $primary-color;
-            border-top: 1px solid var(--primary-color, $primary-color);
+            border-top: 1px solid var(--mc-primary-color, $primary-color);
 
             @media screen and (min-width: 800px) {
                 .mc-s__slot {

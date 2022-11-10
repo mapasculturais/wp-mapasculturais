@@ -6,7 +6,7 @@
     &__event {
 
         @include desktop {
-            border-top: 1px solid var(--secondary-color, $secondary-color);
+            border-top: 1px solid var(--mc-secondary-color, $secondary-color);
             padding: 10px 0;
         }
 

@@ -2,7 +2,7 @@
 
 .mc-w {
     @extend %mc-w;
-    border-bottom: 3px solid var(--secondary-color, $secondary-color);
+    border-bottom: 3px solid var(--mc-secondary-color, $secondary-color);
     min-width: 100%;
 
     &__header {

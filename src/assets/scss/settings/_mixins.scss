@@ -2,26 +2,26 @@
 
 @mixin primary-color {
     color: $primary-color;
-    color: var(--primary-color, $primary-color);
+    color: var(--mc-primary-color, $primary-color);
 }
 
 @mixin primary-inverse {
     background-color: $primary-color;
-    background-color: var(--primary-color, $primary-color);
+    background-color: var(--mc-primary-color, $primary-color);
     color: $primary-icolor;
-    color: var(--primary-inverse, $primary-icolor);
+    color: var(--mc-primary-inverse, $primary-icolor);
 }
 
 @mixin secondary-color {
     color: $secondary-color;
-    color: var(--secondary-color, $secondary-color);
+    color: var(--mc-secondary-color, $secondary-color);
 }
 
 @mixin secondary-inverse {
     background-color: $secondary-color;
-    background-color: var(--secondary-color, $secondary-color);
+    background-color: var(--mc-secondary-color, $secondary-color);
     color: $secondary-icolor;
-    color: var(--secondary-inverse, $secondary-icolor);
+    color: var(--mc-secondary-inverse, $secondary-icolor);
 }
 
 // Media queries //

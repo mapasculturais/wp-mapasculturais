@@ -5,7 +5,7 @@
         position: relative;
 
         &.maximized {
-            border-bottom: 3px solid var(--secondary-color, $secondary-color);
+            border-bottom: 3px solid var(--mc-secondary-color, $secondary-color);
 
             &:last-of-type {
                 border-bottom: 0;
@@ -60,7 +60,7 @@
     }
 
     &__day {
-        border-color: var(--secondary-color, $secondary-color);
+        border-color: var(--mc-secondary-color, $secondary-color);
         border-style: solid;
         border-width: 0 0 1px;
         display: flex;

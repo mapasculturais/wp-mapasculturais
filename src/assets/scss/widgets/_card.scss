@@ -38,7 +38,7 @@
             padding: 0 5px;
 
             & + .toolbar {
-                border-left: 1px solid var(--secondary-inverse, $secondary-icolor);
+                border-left: 1px solid var(--mc-secondary-inverse, $secondary-icolor);
             }
 
             &.faded {

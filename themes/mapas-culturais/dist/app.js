@@ -1,9 +1,1 @@
-(function( $ ) {
-    $('[data-set-index]').click(function(){
-        let $parent = $(this).parents('.slider');
-        let index = $(this).data('set-index');
-        
-        $parent.children(`.slide`).removeClass('active');
-        $parent.find(`.slide:eq('${index}')`).addClass('active');
-    })
-})( jQuery );
+!function(e){e("[data-set-index]").click(function(){let i=e(this).parents(".slider"),s=e(this).data("set-index");i.children(".slide").removeClass("active"),i.find(`.slide:eq('${s}')`).addClass("active")})}(jQuery);
