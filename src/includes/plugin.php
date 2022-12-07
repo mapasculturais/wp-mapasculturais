@@ -1,6 +1,7 @@
 <?php
 namespace WPMapasCulturais;
 
+use Exception;
 
 class Plugin{
     const POST_TYPES = ['agent', 'space', 'event'];
@@ -53,6 +54,8 @@ class Plugin{
         add_action('save_post', [$this, 'action__save_post'], 1000);
 
         add_action('wp_insert_post', [$this, 'action__wp_insert_post'], 10, 3);
+
+        add_action('pre_post_update', [$this, 'prevent_post_save'], 10, 2);
 
         add_filter('query_vars', [$this, 'filter__query_vars'] );
 
@@ -322,6 +325,38 @@ class Plugin{
         $qvars[] = 'mcarg1';
         $qvars[] = 'mcarg2';
         return $qvars;
+    }
+
+    function prevent_post_save($post_id, $data) {
+        $postType = get_post_type($post_id);
+        if (!in_array($postType, self::POST_TYPES)){
+            return;
+        }
+        var_dump($data);
+
+        // if (empty($data['post_title'])) {
+        //     throw new Exception('title');
+        // } else if (empty($data['post_content'])) {
+        //     throw new Exception('content');
+        // } else if (empty($data['post_excerpt'])) {
+        //     throw new Exception('excerpt');
+        // }
+
+        $descriptions = $this->api->entityDescriptions[$postType];
+        $baseFields = $this->api->getBaseEntityFields();
+
+        foreach ($descriptions as $field => $description) {
+            if (isset($description->required) && $description->required && !in_array($field, $baseFields)) {
+                $meta = get_post_meta($post_id, $field, true);
+                var_dump($field, $meta);
+                if (empty($meta)) {
+                    var_dump($field);
+                }
+            }
+        }
+
+        // var_dump($data);
+        throw new Exception('foo');
     }
 
     /**
