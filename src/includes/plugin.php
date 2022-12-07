@@ -332,31 +332,35 @@ class Plugin{
         if (!in_array($postType, self::POST_TYPES)){
             return;
         }
-        var_dump($data);
 
-        // if (empty($data['post_title'])) {
-        //     throw new Exception('title');
-        // } else if (empty($data['post_content'])) {
-        //     throw new Exception('content');
-        // } else if (empty($data['post_excerpt'])) {
-        //     throw new Exception('excerpt');
-        // }
+        if (get_post_status($post_id) === 'publish' || $data['post_status'] === 'publish') {
+            $exception = null;
 
-        $descriptions = $this->api->entityDescriptions[$postType];
-        $baseFields = $this->api->getBaseEntityFields();
+            if (empty($data['post_title'])) {
+                $exception = 'Título não preenchido';
+            } else if (empty($data['post_content'])) {
+                $exception = 'Conteúdo não preenchido';
+            } else if (empty($data['post_excerpt'])) {
+                $exception = 'Resumo não preenchido';
+            } else {
+                $descriptions = $this->api->entityDescriptions[$postType];
+                $baseFields = $this->api->getBaseEntityFields();
 
-        foreach ($descriptions as $field => $description) {
-            if (isset($description->required) && $description->required && !in_array($field, $baseFields)) {
-                $meta = get_post_meta($post_id, $field, true);
-                var_dump($field, $meta);
-                if (empty($meta)) {
-                    var_dump($field);
+                foreach ($descriptions as $field => $description) {
+                    if (isset($description->required) && $description->required && !in_array($field, $baseFields)) {
+                        $meta = get_post_meta($post_id, $field, true);
+                        if (empty($meta)) {
+                            $exception = 'Campo "'.$description->label.'" não preenchido';
+                            break;
+                        }
+                    }
                 }
             }
-        }
 
-        // var_dump($data);
-        throw new Exception('foo');
+            if (!empty($exception)) {
+                throw new Exception($exception);
+            }
+        }
     }
 
     /**
