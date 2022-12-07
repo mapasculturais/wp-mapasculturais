@@ -53,9 +53,9 @@ class Plugin{
 
         add_action('save_post', [$this, 'action__save_post'], 1000);
 
-        add_action('wp_insert_post', [$this, 'action__wp_insert_post'], 10, 3);
-
         add_action('pre_post_update', [$this, 'prevent_post_save'], 10, 2);
+
+        add_action('wp_insert_post', [$this, 'action__wp_insert_post'], 10, 3);
 
         add_filter('query_vars', [$this, 'filter__query_vars'] );
 
@@ -272,7 +272,7 @@ class Plugin{
     function importEntities(){
         $api = $this->api;
         $result = [];
-        
+
         if($this->getOption('agent:auto_import') || !isset($_GET['cron'])){
             $agents = $api->importAgents();
             $result['agents'] = $agents;
@@ -334,31 +334,37 @@ class Plugin{
         }
 
         if (get_post_status($post_id) === 'publish' || $data['post_status'] === 'publish') {
-            $exception = null;
+            $exceptions = [];
 
             if (empty($data['post_title'])) {
-                $exception = 'Título não preenchido';
-            } else if (empty($data['post_content'])) {
-                $exception = 'Conteúdo não preenchido';
-            } else if (empty($data['post_excerpt'])) {
-                $exception = 'Resumo não preenchido';
-            } else {
-                $descriptions = $this->api->entityDescriptions[$postType];
-                $baseFields = $this->api->getBaseEntityFields();
+                $exceptions[] = 'Título';
+            }
+            if (empty($data['post_content'])) {
+                $exceptions[] = 'Conteúdo';
+            }
+            if (empty($data['post_excerpt'])) {
+                $exceptions[] = 'Resumo';
+            }
 
-                foreach ($descriptions as $field => $description) {
-                    if (isset($description->required) && $description->required && !in_array($field, $baseFields)) {
-                        $meta = get_post_meta($post_id, $field, true);
-                        if (empty($meta)) {
-                            $exception = 'Campo "'.$description->label.'" não preenchido';
-                            break;
-                        }
+            $descriptions = $this->api->entityDescriptions[$postType];
+            $baseFields = $this->api->getBaseEntityFields();
+
+            foreach ($descriptions as $field => $description) {
+                if (isset($description->required) && $description->required && !in_array($field, $baseFields)) {
+                    $meta = get_post_meta($post_id, $field, true);
+                    if (empty($meta)) {
+                        $exceptions[] = $description->label;
                     }
                 }
             }
 
-            if (!empty($exception)) {
-                throw new Exception($exception);
+            if (!empty($exceptions)) {
+                http_response_code(400);
+                echo json_encode([
+                    'error' => true,
+                    'message' => 'Campos obrigatórios não preenchidos: ' . implode(', ', $exceptions) . '.'
+                ]);
+                die();
             }
         }
     }
