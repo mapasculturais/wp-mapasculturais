@@ -47,13 +47,13 @@ class Plugin{
 
         add_action('wp', [$this, 'import_terms']);
 
+        add_action('admin_init', [$this, 'action__admin_init']);
+
         add_action('init', [$this, 'action__rewrite_rules']);
 
         add_action('template_redirect', [$this, 'action__template_redirects']);
 
         add_action('save_post', [$this, 'action__save_post'], 1000);
-
-        add_action('pre_post_update', [$this, 'prevent_post_save'], 10, 2);
 
         add_action('wp_insert_post', [$this, 'action__wp_insert_post'], 10, 3);
 
@@ -327,44 +327,17 @@ class Plugin{
         return $qvars;
     }
 
-    function prevent_post_save($post_id, $data) {
-        $postType = get_post_type($post_id);
-        if (!in_array($postType, self::POST_TYPES)){
-            return;
-        }
+    function action__admin_init() {
+        global $pagenow;
 
-        if (get_post_status($post_id) === 'publish' || $data['post_status'] === 'publish') {
-            $exceptions = [];
+        if ($pagenow === 'post.php' && isset($_GET['post'])) {
+            $validationErrors = get_post_meta((int) $_GET['post'], 'MAPAS:__validation_errors', true);
 
-            if (empty($data['post_title'])) {
-                $exceptions[] = 'Título';
-            }
-            if (empty($data['post_content'])) {
-                $exceptions[] = 'Conteúdo';
-            }
-            if (empty($data['post_excerpt'])) {
-                $exceptions[] = 'Resumo';
-            }
-
-            $descriptions = $this->api->entityDescriptions[$postType];
-            $baseFields = $this->api->getBaseEntityFields();
-
-            foreach ($descriptions as $field => $description) {
-                if (isset($description->required) && $description->required && !in_array($field, $baseFields)) {
-                    $meta = get_post_meta($post_id, $field, true);
-                    if (empty($meta)) {
-                        $exceptions[] = $description->label;
-                    }
-                }
-            }
-
-            if (!empty($exceptions)) {
-                http_response_code(400);
-                echo json_encode([
-                    'error' => true,
-                    'message' => 'Campos obrigatórios não preenchidos: ' . implode(', ', $exceptions) . '.'
+            if (!empty($validationErrors)) {
+                wp_enqueue_script('wp-mapasculturais-admin-notices', plugin_dir_url(__FILE__) . '../../dist/admin-notices.js');
+                wp_localize_script('wp-mapasculturais-admin-notices', 'MapasNotices', [
+                    'text' => implode('. ', $validationErrors),
                 ]);
-                die();
             }
         }
     }

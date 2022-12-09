@@ -392,6 +392,7 @@ class ApiWrapper{
                 update_post_meta($post_id, 'MAPAS:entity_id', $entity->id);
                 update_post_meta($post_id, 'MAPAS:permission_to_modify', $entity->permissionTo->modify);
                 delete_post_meta($post_id, 'MAPAS:__new_post');
+                delete_post_meta($post_id, 'MAPAS:__validation_errors');
 
                 if(in_array($class, ['agent', 'space'])){
                     wp_set_post_terms($post_id, [$entity->type->name], $class . '_type');
@@ -601,9 +602,12 @@ class ApiWrapper{
             http_response_code(400);
             $_SESSION['MAPAS:error:' . $post_id] = $e;
             $messages = [];
-            foreach ($e->curl->response->data as $field => $msgs) {
-                $messages = array_merge($messages, $msgs);
+            if (!empty($e->curl->response->data)) {
+                foreach ($e->curl->response->data as $field => $msgs) {
+                    $messages = array_merge($messages, $msgs);
+                }
             }
+            update_post_meta($post_id, 'MAPAS:__validation_errors', $messages);
             echo json_encode([ 'error' => true, 'message' => implode('; ', $messages) ]);
             die();
         }

@@ -7,3 +7,6 @@ mix.js('assets/js/index.js', 'dist')
 mix.js('assets/js/admin.js', 'dist')
    .sass('assets/scss/admin.scss', 'dist')
    .setPublicPath('dist')
+
+mix.js('assets/js/admin-notices.js', 'dist')
+   .setPublicPath('dist')

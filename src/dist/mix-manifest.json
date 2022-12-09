@@ -1,5 +1,6 @@
 {
     "/admin.js": "/admin.js",
+    "/admin-notices.js": "/admin-notices.js",
     "/index.js": "/index.js",
     "/index.css": "/index.css",
     "/admin.css": "/admin.css"
