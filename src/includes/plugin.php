@@ -62,7 +62,7 @@ class Plugin{
         add_filter('single_template', [$this, 'filter__single_template']);
 
         $interval = $this->getOption('import-entities-interval', 60);
-        $this->cron('import-entities', $interval, [$this, 'cron_importEntities']);
+        $this->cron('import-entities', 1, [$this, 'cron_importEntities']);
     }
 
     function cron($name, $interval, $function){
@@ -334,7 +334,8 @@ class Plugin{
             $validationErrors = get_post_meta((int) $_GET['post'], 'MAPAS:__validation_errors', true);
 
             if (!empty($validationErrors)) {
-                wp_enqueue_script('wp-mapasculturais-admin-notices', plugin_dir_url(__FILE__) . '../../dist/admin-notices.js');
+                wp_enqueue_script('wp-mapasculturais-admin-notices', plugin_dir_url(__FILE__) . '../../dist/admin-notices.js', ['wp-block-editor', 'wp-data']);
+
                 wp_localize_script('wp-mapasculturais-admin-notices', 'MapasNotices', [
                     'text' => implode('. ', $validationErrors),
                 ]);
