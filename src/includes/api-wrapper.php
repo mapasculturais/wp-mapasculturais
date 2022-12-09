@@ -598,6 +598,8 @@ class ApiWrapper{
 
             }
 
+            delete_post_meta($post_id, 'MAPAS:__validation_errors');
+
         } catch (\Exception $e){
             http_response_code(400);
             $_SESSION['MAPAS:error:' . $post_id] = $e;
