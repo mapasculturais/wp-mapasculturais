@@ -62,7 +62,7 @@ class Plugin{
         add_filter('single_template', [$this, 'filter__single_template']);
 
         $interval = $this->getOption('import-entities-interval', 60);
-        $this->cron('import-entities', 1, [$this, 'cron_importEntities']);
+        $this->cron('import-entities', $interval, [$this, 'cron_importEntities']);
     }
 
     function cron($name, $interval, $function){

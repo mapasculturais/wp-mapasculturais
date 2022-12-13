@@ -544,7 +544,7 @@ class ApiWrapper{
 
         if(in_array($class, ['agent', 'space'])){
             $_types = wp_get_post_terms($post_id, $class . '_type');
-            if(is_array($_types)){
+            if(!empty($_types) && is_array($_types)){
                 $types = $this->getEntityTypes($class);
                 $type = array_search($_types[0]->name, $types);
             }
@@ -564,11 +564,12 @@ class ApiWrapper{
             if($def->type == 'boolean'){
                 $val = (bool) $val;
             } else if ($def->type == 'point'){
-                if(is_array($val)){
-                    $val = [$val['lng'],$val['lat']];
-                } else {
-                    continue;
-                }
+                // if(is_array($val)){
+                //     $val = [$val['lng'],$val['lat']];
+                // } else {
+                //     continue;
+                // }
+                continue;
             }
             $data[$field] = $val;
         }
