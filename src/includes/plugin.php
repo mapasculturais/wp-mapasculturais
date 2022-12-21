@@ -334,7 +334,7 @@ class Plugin{
             $validationErrors = get_post_meta((int) $_GET['post'], 'MAPAS:__validation_errors', true);
 
             if (!empty($validationErrors)) {
-                wp_enqueue_script('wp-mapasculturais-admin-notices', plugin_dir_url(__FILE__) . '../../dist/admin-notices.js', ['wp-block-editor', 'wp-data']);
+                wp_enqueue_script('wp-mapasculturais-admin-notices', plugin_dir_url(__FILE__) . '../dist/admin-notices.js', ['wp-block-editor', 'wp-data']);
 
                 wp_localize_script('wp-mapasculturais-admin-notices', 'MapasNotices', [
                     'text' => implode('. ', $validationErrors),

@@ -1,6 +1,6 @@
 (function (wp, notices) {
     wp.data.dispatch('core/notices').createNotice(
-        'warning',
+        'error',
         notices.text,
         {
             __unstableHTML: true,
