@@ -587,16 +587,19 @@ class ApiWrapper{
 
                 if(get_post_meta($post_id, 'MAPAS:entity_avatar_attachment_id', true) != $avatar_attachment_id){
                     $filename = get_attached_file($avatar_attachment_id);
-                    $this->mapasApi->uploadFile($class, $result->id, 'avatar', $filename);
-                    add_post_meta($post_id, 'MAPAS:entity_avatar_attachment_id', $avatar_attachment_id);
+                    if (!empty($filename)) {
+                        $this->mapasApi->uploadFile($class, $result->id, 'avatar', $filename);
+                        add_post_meta($post_id, 'MAPAS:entity_avatar_attachment_id', $avatar_attachment_id);
+                    }
                 }
 
                 if(get_post_meta($post_id, 'MAPAS:entity_header_attachment_id', true) != $header_attachment_id){
                     $filename = get_attached_file($header_attachment_id);
-                    $this->mapasApi->uploadFile($class, $result->id, 'header', $filename);
-                    add_post_meta($post_id, 'MAPAS:entity_header_attachment_id', $header_attachment_id);
+                    if (!empty($filename)) {
+                        $this->mapasApi->uploadFile($class, $result->id, 'header', $filename);
+                        add_post_meta($post_id, 'MAPAS:entity_header_attachment_id', $header_attachment_id);
+                    }
                 }
-
             }
 
             delete_post_meta($post_id, 'MAPAS:__validation_errors');
