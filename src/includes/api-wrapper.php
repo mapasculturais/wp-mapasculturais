@@ -564,12 +564,11 @@ class ApiWrapper{
             if($def->type == 'boolean'){
                 $val = (bool) $val;
             } else if ($def->type == 'point'){
-                // if(is_array($val)){
-                //     $val = [$val['lng'],$val['lat']];
-                // } else {
-                //     continue;
-                // }
-                continue;
+                if(is_array($val)){
+                    $val = [floatval($val['lng']), floatval($val['lat'])];
+                } else {
+                    continue;
+                }
             }
             $data[$field] = $val;
         }
