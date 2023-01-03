@@ -18,11 +18,14 @@ Vue.component('mc-w-list', WidgetList)
 Vue.component('mc-w-now', WidgetNow)
 Vue.component('mc-w-schedule', WidgetSchedule)
 
+const query = document.querySelector.bind(document)
+const vueRoot = query('#content') ?? query('.wp-site-blocks') ?? query('main')
+
 new Vue({
-    el: '#content',
+    el: vueRoot,
     data () {
         return {
-            tab: 0
+            tab: 0,
         }
     }
 })
