@@ -22,7 +22,7 @@
                     <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                 </div>
                 <div class="text address">
-                    <div class="name">{{ event.space.name }}</div>
+                    <div class="name" v-html="event.space.name"/>
                     <div class="location">{{ address }}</div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 this.$mc.EventAttendance.delete(this.event.occurrence.attendance).then(() => {
                     this.event.occurrence.attendance = null
                 });
-            }, 
+            },
             attendEvent () {
                 var event = this.event
                 if(!event.occurrence.attendance || event.occurrence.attendance.type != 'confirmation'){

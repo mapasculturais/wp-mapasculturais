@@ -6,7 +6,7 @@
             <template class="mc-w-calendar__date" #cell-content="{ cell, view, events, goNarrower }">
                 <div class="day"><span>{{ cell.content }}</span></div>
                 <div class="mc-w-calendar__events" v-if="events.length > 0">
-                    <div class="mc-w-calendar__event" role="button" v-for="event in events" :key="event.raw.id" @click="openEventModal(event.raw)">{{ event.raw.name }}</div>
+                    <div class="mc-w-calendar__event" role="button" v-for="event in events" :key="event.raw.id" @click="openEventModal(event.raw)" v-html="event.raw.name"/>
                 </div>
                 <div class="mc-w-calendar__dots" v-if="events.length > 0">
                     <div class="mc-w-calendar__dot" role="button" v-for="event in events" :key="event.raw.id" @click="openEventModal(event.raw)"/>

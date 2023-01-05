@@ -4,7 +4,7 @@
             <label>
                 <span>Espaço</span>
                 <select name="spaceId" v-model="spaceId">
-                    <option v-for="space in spaces" :key="space.id" :value="space.id">{{ space.name }}</option>
+                    <option v-for="space in spaces" :key="space.id" :value="space.id" v-html="space.name"/>
                 </select>
             </label>
         </div>

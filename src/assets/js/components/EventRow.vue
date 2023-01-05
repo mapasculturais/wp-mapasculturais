@@ -11,8 +11,8 @@
             <i v-if="star" class="fas fa-star"></i>
             <i v-else-if="check" class="fas fa-check"></i>
             -->
-            <a class="name" role="button" @click="$emit('selectEvent', event)">{{ event.name }}</a>
-            <a class="space" role="button" @click="$emit('selectSpace', event.space)">{{ event.space.name }}</a>
+            <a class="name" role="button" @click="$emit('selectEvent', event)" v-html="event.name"/>
+            <a class="space" role="button" @click="$emit('selectSpace', event.space)" v-html="event.space.name"/>
         </div>
     </div>
 </template>

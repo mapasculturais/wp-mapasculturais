@@ -11,7 +11,7 @@
                 <div class="mc-w__card-slot">
                     <div class="icon"><i class="fas fa-circle"></i></div>
                     <div class="text">
-                        <div class="name">{{ name }}</div>
+                        <div class="name" v-html="name"/>
                         <div class="category">{{ category }}</div>
                     </div>
                 </div>

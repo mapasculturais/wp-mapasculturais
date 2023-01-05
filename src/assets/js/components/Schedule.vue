@@ -7,7 +7,7 @@
                     <a @click="displayFilters = !displayFilters" class="small-link mt-5 d-block"><i class="fas fa-filter"></i>&nbsp; Filtrar Resultados</a>
                 </div>
             </div>
-            
+
             <div class="column large-12">
                 <FiltersBar v-if="displayFilters" @change="updateFilters"/>
             </div>
@@ -20,7 +20,7 @@
                         <i class="card--icon fas fa-bookmark"></i>
                         <div class="card--block">
                             <a tabindex="-1" :href="event.permalink">
-                                <div class="card--title" v-html="event.name"></div>
+                                <div class="card--title" v-html="event.name"/>
                             </a>
 
                             <div class="card--taxonomy">
@@ -31,7 +31,7 @@
 
                     <div class="card--footer">
                         <div class="card--info fz-12" v-if="event.occurrences.length > 0">
-                            <i class="far fa-calendar-alt"></i> 
+                            <i class="far fa-calendar-alt"></i>
                             <p v-html="event.occurrences[0].description"></p>
                         </div>
                     </div>
